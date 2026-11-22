@@ -11,9 +11,9 @@
 
 ---
 
-## 一、只做一次：建仓库 + 生成签名
+## 一、只做一次：建仓库 + 签名
 
-### 1. 建私有仓库并推送
+### 1. 建仓库并推送
 
 在 GitHub 新建**私有**仓库（例如 `rosenthal-family`），把工作区推上去：
 
@@ -28,35 +28,39 @@ git push -u origin main
 > 根 `.gitignore` 已排除 `node_modules/`、`mobile/www/`、`mobile/android/app/src/main/assets/public/`、`*.keystore` 等；**不要**把 keystore 提交进仓库。
 > 仓库里必须包含 `miniprogram/utils/`（引擎源码）、`single/`（单文件版与回归）、`mobile/`（Android 工程）、`.github/workflows/`；不要只推 `mobile/`，否则 CI 第一步就找不到引擎。
 
-### 2. 跑一次「一次性生成 Android 签名」
+### 2. 固定签名
 
-GitHub → **Actions** → 「一次性生成 Android 签名」→ **Run workflow**。
+固定签名 = 一个 keystore 文件 + 4 个值。两种来源任选：
 
-跑完下载 artifact `rosenthal-keystore-PLEASE-SAVE`，里面有：
+**推荐：本地生成（keystore 不经过任何服务器）**
+```bash
+openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 10000 -nodes \
+  -subj "/CN=Rosenthal Family/OU=Family/O=Rosenthal/L=Home/ST=Home/C=CN"
+openssl pkcs12 -export -in cert.pem -inkey key.pem \
+  -out rosenthal-release.keystore -name rosenthal -passout pass:<随机密码>
+```
+然后把 `rosenthal-release.keystore` 转 base64，连同两个密码、`rosenthal` 一起填进 GitHub Secrets。
+（本项目已经这样做好了：`.secrets/secrets.txt` 里就是 4 个值，keystore 文件也在里面。）
 
-| 文件 | 用途 |
-| --- | --- |
-| `secrets.txt` | 4 个值，逐条填进仓库 Secrets |
-| `rosenthal-release.keystore` | **离线备份**（U 盘 / 密码管理器） |
-| `keystore.base64.txt` | `KEYSTORE_BASE64` 的单行文本 |
+**备选：GitHub Actions 生成**
+跑「一次性生成 Android 签名」workflow，从 artifact 里拿 4 个值，存完 Secrets 后**删掉那次 run/artifact**。
 
 ### 3. 存 4 个 Secrets
 
-仓库 → **Settings → Secrets and variables → Actions → New repository secret**，按 `secrets.txt` 建 4 条：
+仓库 → **Settings → Secrets and variables → Actions → New repository secret**：
 
 ```
-KEYSTORE_BASE64   = keystore.base64.txt 的内容
-STORE_PASSWORD    = secrets.txt 里的 STORE_PASSWORD
+KEYSTORE_BASE64   = keystore 的 base64（单行）
+STORE_PASSWORD    = 生成时设的密码
 KEY_ALIAS         = rosenthal
-KEY_PASSWORD      = secrets.txt 里的 KEY_PASSWORD
+KEY_PASSWORD      = 生成时设的密码
 ```
 
-### 4. 清理
+### 4. 离线备份
 
-**删掉那次 workflow run / artifact**（里面含私钥），并把 `rosenthal-release.keystore` 存到离线的地方。
-
-> ⚠️ **keystore 丢了 = 以后无法覆盖升级**：Android 要求同签名才能升级，只能卸载重装，而卸载会清掉本机数据。
-> 所以除了离线备份，也请养成在 App 里「家长 → 导出全量备份 JSON」的习惯。
+**keystore 丢了 = 以后无法覆盖升级**（只能卸载重装，本机数据会清）。
+把 `.secrets/rosenthal-release.keystore` 和 `.secrets/secrets.txt` 备份到 U 盘 / 密码管理器；
+同时养成在 App 里「家长 → 导出全量备份 JSON」的习惯。
 
 ---
 

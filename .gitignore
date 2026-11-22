@@ -13,6 +13,7 @@ website/coverage/
 coverage/
 
 # 私钥与本地配置 —— 绝不提交
+.secrets/
 *.keystore
 *.base64
 *.base64.txt
