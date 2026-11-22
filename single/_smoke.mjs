@@ -204,6 +204,13 @@ for (const m of ['data-act="checkin"', 'guarded(', 'print-today', 'print-week', 
   ok(appSrc.includes(m), 'F ' + m);
 }
 
+/* 手机排版防回归：奖励名称不能被 4 个按钮挤成竖排单字，底栏不能盖住最后一块内容。
+   这两条曾在真机上出问题，故对 CSS 规则做静态断言。 */
+const cssSrc = fs.readFileSync(new URL('./src/style.css', import.meta.url), 'utf8');
+ok(/\.row\s*\{[^}]*flex-wrap:\s*wrap/.test(cssSrc), 'F-layout1 行布局允许换行');
+ok(/\.rowmain\s*\{[^}]*min-width:\s*170px/.test(cssSrc), 'F-layout2 名称列有最小宽度');
+ok(/\.tabbar\s*\{[^}]*position:\s*sticky/.test(cssSrc), 'F-layout3 底栏 sticky 不遮挡内容');
+
 /* ============ G. 真实 DOM 交互（jsdom 跑构建产物，点击链路全通） ============ */
 console.log('G. 真实 DOM 交互');
 {
