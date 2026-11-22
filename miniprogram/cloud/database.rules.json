@@ -1,0 +1,76 @@
+{
+  "description": "罗森塔尔 · 云开发数据库安全规则。这是 cloud/authz.js 的等价云侧写法；改任何一边都必须同步另一边（_smoke_s1.js 有对拍断言）。部署位置：微信开发者工具 → 云开发 → 数据库 → 安全规则。",
+  "rules": {
+    "stage_template": {
+      ".read": true,
+      ".write": false
+    },
+    "family": {
+      ".read": "doc.members.indexOf(auth.uid) >= 0",
+      ".write": false
+    },
+    "user": {
+      ".read": "doc.family_id == auth.openid.family_id",
+      ".write": "doc._openid == auth.openid",
+      "role": { ".validate": "newData.val() == 'child' || newData.val() == 'parent' || newData.val() == 'member'" }
+    },
+    "behavior_item": {
+      ".read": "doc.family_id == auth.openid.family_id",
+      ".write": "doc.created_by == auth.openid",
+      "points": { ".validate": "newData.isNumber() && newData.val() > 0" },
+      "daily_limit": { ".validate": "newData.isNumber() && newData.val() >= 1" }
+    },
+    "check_in": {
+      ".read": "doc.family_id == auth.openid.family_id && (!doc.is_private || doc.user_id == auth.uid)",
+      ".write": "doc.user_id == auth.uid",
+      "points": { ".validate": "newData.isNumber() && newData.val() > 0" }
+    },
+    "point_ledger": {
+      ".read": "doc.family_id == auth.openid.family_id",
+      ".write": "!doc.exists()",
+      ".validate": "newData.hasChildren(['user_id','delta','reason','created_at'])",
+      "delta": { ".validate": "newData.isNumber() && newData.val() > 0" }
+    },
+    "weekly_review": {
+      ".read": "doc.family_id == auth.openid.family_id",
+      ".write": "doc.user_id == auth.uid",
+      "highlights": { ".validate": "newData.isArray() && newData.val().length <= 3" }
+    },
+    "reward": {
+      ".read": "doc.family_id == auth.openid.family_id",
+      ".write": "doc.custom_by == auth.openid",
+      "cost": { ".validate": "newData.isNumber() && newData.val() > 0" }
+    },
+    "redemption": {
+      ".read": "doc.family_id == auth.openid.family_id",
+      ".write": "(!doc.exists() && newData.child('user_id').val() == auth.uid) || (doc.exists() && !data.exists())",
+      ".validate": "!doc.exists() || (newData.child('cost').val() == data.child('cost').val() && newData.child('coupon_code').val() == data.child('coupon_code').val())",
+      "status": { ".validate": "newData.val() == 'pending' || newData.val() == 'issued' || newData.val() == 'used' || newData.val() == 'expired'" }
+    },
+    "repair_action": {
+      ".read": "doc.family_id == auth.openid.family_id",
+      ".write": "doc.user_id == auth.uid",
+      "points_awarded": { ".validate": "newData.isNumber() && newData.val() >= 0" }
+    },
+    "surprise_card": {
+      ".read": "doc.family_id == auth.openid.family_id",
+      ".write": "doc.created_by == auth.openid"
+    },
+    "card_draw": {
+      ".read": "doc.family_id == auth.openid.family_id",
+      ".write": "doc.user_id == auth.uid"
+    },
+    "rule_version": {
+      ".read": "doc.family_id == auth.openid.family_id",
+      ".write": "doc.family_id == auth.openid.family_id",
+      ".validate": "!newData.child('effective_at').exists() || (newData.child('signed_by_child_at').exists() && newData.child('signed_by_parent_at').exists())",
+      "signed_by_child_at": { ".validate": "!data.exists() || newData.val() == data.val()" },
+      "signed_by_parent_at": { ".validate": "!data.exists() || newData.val() == data.val()" }
+    },
+    "milestone": {
+      ".read": "doc.family_id == auth.openid.family_id",
+      ".write": "doc.user_id == auth.uid",
+      ".validate": "!doc.exists() || newData.val() == data.val()"
+    }
+  }
+}

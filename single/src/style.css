@@ -1,0 +1,194 @@
+/* ============================================================
+   罗森塔尔 · 单文件家庭版 · 样式
+   暖纸底色 + 圆角卡片，与产品整体的温和语气一致。
+   打印时只显示 #print-root。
+   ============================================================ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --paper: #f7f4ee;
+  --card: #ffffff;
+  --ink: #3d3a34;
+  --muted: #8a857c;
+  --line: #ece7dd;
+  --green: #2f7d6d;
+  --green-soft: #e7f2ee;
+  --amber: #b97e2c;
+  --amber-soft: #fbf3e4;
+  --danger: #b04a3a;
+  --radius: 14px;
+}
+html, body { height: 100%; }
+body {
+  font-family: system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.55;
+  padding-bottom: 76px;
+}
+button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+input, select, textarea {
+  font: inherit; color: inherit;
+  border: 1px solid var(--line); border-radius: 10px;
+  padding: 9px 12px; background: #fffdf9; outline: none; width: 100%;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--green); }
+
+/* —— 页头 —— */
+.top {
+  position: sticky; top: 0; z-index: 5;
+  background: var(--paper); border-bottom: 1px solid var(--line);
+  padding: 12px 16px 10px;
+}
+.top-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.who { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.stats { text-align: right; color: var(--muted); font-size: 12.5px; }
+.stats b { color: var(--ink); font-size: 15px; }
+.chip {
+  display: inline-block; font-size: 11.5px; font-weight: 500;
+  background: var(--green-soft); color: var(--green);
+  border-radius: 999px; padding: 2px 9px; vertical-align: 2px;
+}
+.chip.gray { background: #eeeae2; color: var(--muted); }
+.chip.on { background: var(--green); color: #fff; }
+
+/* —— 主体 —— */
+.tabs-body { padding: 12px 12px 4px; display: grid; gap: 12px; max-width: 560px; margin: 0 auto; }
+.card {
+  background: var(--card); border-radius: var(--radius);
+  padding: 14px 14px 12px; box-shadow: 0 1px 3px rgba(61, 58, 52, .06);
+}
+.card h3 { font-size: 14px; color: var(--muted); font-weight: 600; margin-bottom: 8px; }
+.row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px dashed var(--line); }
+.row:first-of-type { border-top: none; }
+.rowmain { flex: 1; min-width: 0; }
+.rname { font-weight: 600; }
+.rmeta { font-size: 12.5px; color: var(--muted); margin-top: 1px; }
+.rpraise { font-size: 13px; color: var(--green); margin-top: 3px; }
+.rowops { display: flex; gap: 6px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
+.muted { color: var(--muted); font-size: 13px; }
+.tiny { color: var(--muted); font-size: 12px; margin-top: 8px; }
+b { font-weight: 700; }
+
+/* —— 按钮 —— */
+.btn {
+  border-radius: 10px; padding: 8px 14px; font-size: 14px;
+  background: #f1ede5; color: var(--ink); border: 1px solid var(--line);
+  white-space: nowrap;
+}
+.btn.primary { background: var(--green); color: #fff; border-color: var(--green); }
+.btn.danger { background: #fbeeec; color: var(--danger); border-color: #ecd3cf; }
+.btn.small { padding: 5px 11px; font-size: 13px; border-radius: 9px; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btnrow { display: flex; gap: 10px; margin-top: 14px; }
+.btnrow .btn { flex: 1; }
+.printrow { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.inrow { display: flex; gap: 8px; margin-top: 6px; }
+.inrow input, .inrow select { flex: 1; min-width: 0; }
+
+/* —— 横幅 / 余额 —— */
+.banner { border-radius: 12px; padding: 10px 13px; font-size: 13px; }
+.banner.ok { background: var(--green-soft); color: var(--green); }
+.banner.warn { background: var(--amber-soft); color: var(--amber); }
+.balancecard {
+  background: var(--green); color: #fff; border-radius: var(--radius);
+  padding: 18px; text-align: center;
+}
+.bal-n { font-size: 42px; font-weight: 800; line-height: 1.1; }
+.bal-t { font-size: 12.5px; opacity: .85; margin-top: 2px; }
+
+/* —— 首次使用 —— */
+.onboard { max-width: 560px; margin: 0 auto; padding: 40px 20px 30px; }
+.onboard h1 { font-size: 30px; letter-spacing: 2px; }
+.lead { color: var(--muted); margin: 10px 0 24px; font-size: 14.5px; }
+.onboard h3 { font-size: 15px; margin-bottom: 10px; }
+.stagegrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.stagecard {
+  text-align: left; background: var(--card); border: 2px solid var(--line);
+  border-radius: var(--radius); padding: 13px;
+}
+.stagecard.on { border-color: var(--green); }
+.sc-n { font-weight: 700; font-size: 16px; }
+.sc-g { font-size: 12px; color: var(--muted); margin-top: 1px; }
+.sc-sub { font-size: 12.5px; margin-top: 7px; }
+.sc-perm { font-size: 11.5px; color: var(--green); margin-top: 5px; }
+
+/* —— 周复盘候选 —— */
+.chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.chips .chip { padding: 6px 12px; font-size: 13px; background: #f1ede5; color: var(--ink); border: 1px solid var(--line); border-radius: 999px; }
+.chips .chip.on { background: var(--green); color: #fff; border-color: var(--green); }
+
+/* —— 底部标签栏 —— */
+.tabbar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 5;
+  display: flex; justify-content: center; gap: 2px;
+  background: var(--card); border-top: 1px solid var(--line);
+  padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+}
+.tab {
+  flex: 1; max-width: 110px; text-align: center; padding: 8px 0;
+  border-radius: 10px; font-size: 13.5px; color: var(--muted);
+}
+.tab.on { background: var(--green-soft); color: var(--green); font-weight: 700; }
+
+/* —— 模态框 —— */
+.mask {
+  position: fixed; inset: 0; z-index: 20;
+  background: rgba(50, 45, 38, .45);
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+}
+.modal {
+  background: var(--card); border-radius: var(--radius);
+  padding: 20px 18px 16px; width: 100%; max-width: 380px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, .18);
+}
+.modal h3 { font-size: 17px; margin-bottom: 8px; }
+.modal .muted { margin-bottom: 10px; }
+.modal input { margin-top: 8px; }
+.err { color: var(--danger); font-size: 13px; margin-top: 8px; min-height: 1em; }
+.reccode {
+  font-family: ui-monospace, Consolas, monospace; font-size: 22px; letter-spacing: 2px;
+  background: var(--amber-soft); color: var(--amber);
+  border-radius: 10px; padding: 14px; text-align: center; margin-top: 6px; user-select: all;
+}
+
+/* —— 提示条 —— */
+#toast {
+  position: fixed; left: 50%; bottom: 92px; transform: translateX(-50%) translateY(8px);
+  background: rgba(61, 58, 52, .92); color: #fff;
+  border-radius: 999px; padding: 9px 18px; font-size: 13.5px;
+  opacity: 0; pointer-events: none; transition: all .22s; z-index: 30;
+  max-width: 86vw; text-align: center;
+}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ---------------- 打印版面 ---------------- */
+#print-root { display: none; }
+.pt-page { max-width: 700px; margin: 0 auto; color: #222; }
+.pt-head { border-bottom: 2px solid #333; padding-bottom: 8px; margin-bottom: 12px; }
+.pt-title { font-size: 22px; font-weight: 800; letter-spacing: 1px; }
+.pt-sub { font-size: 13px; color: #555; margin-top: 3px; }
+.pt-stats { margin: 8px 0; font-size: 14px; }
+.pt-sec { font-weight: 700; margin: 14px 0 6px; font-size: 15px; }
+.pt-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.pt-table th, .pt-table td { border: 1px solid #bbb; padding: 5px 8px; text-align: left; }
+.pt-table th { background: #f0efe9; }
+.pt-num { text-align: right; white-space: nowrap; }
+.pt-list { list-style: none; }
+.pt-list li { padding: 5px 0; border-bottom: 1px dashed #ccc; font-size: 13.5px; }
+.pt-time { color: #666; font-size: 12px; margin-right: 6px; }
+.pt-pr { color: #2f7d6d; margin-top: 2px; padding-left: 4px; }
+.pt-chips .pt-chip {
+  display: inline-block; border: 1px solid #bbb; border-radius: 999px;
+  padding: 3px 10px; font-size: 12.5px; margin: 2px 4px 2px 0;
+}
+.pt-muted { color: #888; font-size: 13px; }
+.pt-blank { border: 1px dashed #aaa; border-radius: 6px; min-height: 52px; padding: 8px; color: #999; font-size: 13px; }
+.pt-sign { margin-top: 18px; font-size: 13px; }
+.pt-signrow { margin-top: 10px; }
+.pt-quote { margin-top: 16px; padding: 10px 12px; background: #f0efe9; border-radius: 8px; font-size: 13px; color: #444; }
+@media print {
+  #root, #toast, .tabbar, #modal-root { display: none !important; }
+  body { background: #fff; padding: 0; }
+  #print-root { display: block !important; }
+}

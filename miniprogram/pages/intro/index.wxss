@@ -1,0 +1,18 @@
+/* 罗森塔尔 · pages/intro/index.wxss（关于罗森塔尔 · 首次介绍页） */
+.intro{ padding: var(--sp-4) var(--sp-3) var(--sp-6); }
+.intro__k{
+  font-size: 20rpx; letter-spacing: .16em; color: var(--ink-3);
+  text-transform: uppercase;
+}
+.intro__t{
+  font-family: var(--f-display); font-size: 48rpx; line-height: 1.25;
+  margin: 10rpx 0 var(--sp-2);
+}
+.intro__lead{
+  font-size: 28rpx; line-height: 1.7; color: var(--ink-2);
+  margin-bottom: var(--sp-3);
+}
+.intro__foot{
+  margin-top: var(--sp-3); text-align: center;
+  font-size: 21rpx; color: var(--ink-3); line-height: 1.7;
+}

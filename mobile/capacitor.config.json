@@ -1,0 +1,11 @@
+{
+  "appId": "com.rosenthal.family",
+  "appName": "罗森塔尔",
+  "webDir": "www",
+  "loggingBehavior": "none",
+  "android": {
+    "allowMixedContent": false,
+    "webContentsDebuggingEnabled": false,
+    "androidScheme": "https"
+  }
+}

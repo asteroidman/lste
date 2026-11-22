@@ -1,0 +1,131 @@
+<!-- ============================================================
+     罗森塔尔 · pages/today/index.wxml（今天）
+     由原型 index.html 的 #p-today 段落移植：innerHTML 拼串 → 数据驱动 wx:for。
+     得分环用 <ring-progress> 组件（Canvas 2D，移植指南 §四方案 1）。
+     ============================================================ -->
+<view wx:if="{{onboarded}}" class="page-root stage-{{stage}}">
+
+  <!-- 今日概览 -->
+  <view class="hero">
+    <view class="hero__top">
+      <ring-progress id="ring" score="{{score}}" cap="{{cap}}" size="{{ringPx}}" stroke="{{9}}"></ring-progress>
+      <view class="hero__words">
+        <view class="hero__hello">今天好，{{nick}}</view>
+        <view class="hero__sub">{{boostText}}</view>
+      </view>
+    </view>
+
+    <view class="hero__stats">
+      <view class="stat">
+        <view class="stat__n">{{streak}}</view>
+        <view class="stat__l">连续有记录（天）</view>
+      </view>
+      <view class="stat">
+        <view class="stat__n">{{weekScore}}</view>
+        <view class="stat__l">本周得分</view>
+      </view>
+      <view class="stat">
+        <view class="stat__n">{{lifeScore}}</view>
+        <view class="stat__l">累计获得</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 低段：孩子还小、按不动手机 → 把「让妈妈来记」摆出来 -->
+  <view wx:if="{{canRecord}}" class="card card--flat">
+    <view class="row row--between">
+      <view>
+        <view class="card__t">还小，按不动手机？</view>
+        <view class="card__d">让妈妈帮你记 —— 记完一样算进你的今天。</view>
+      </view>
+      <button class="btn btn--sm btn--ghost" bindtap="goParent">让妈妈来记</button>
+    </view>
+  </view>
+
+  <!-- 今日闪光点 -->
+  <view class="card">
+    <view class="card__t">今日闪光点</view>
+    <view class="card__d">今天的你，最想被记住的是哪一件小事？</view>
+    <textarea class="field mt-3" value="{{flashText}}" maxlength="120" auto-height
+              placeholder="例：数学最后一题我自己想出来了"
+              bindinput="onFlashInput"></textarea>
+    <view class="row row--between mt-3">
+      <text class="chip">{{flashSaved ? '已保存' : '未填写'}}</text>
+      <button class="btn btn--sm btn--ghost" bindtap="onFlashSave">保存</button>
+    </view>
+  </view>
+
+  <!-- 加分行为：按维度分组，全部条目都在这儿 -->
+  <view wx:for="{{dims}}" wx:key="k" class="card dim-card {{item.cls}}">
+    <view class="row row--between">
+      <view class="dim__n">{{item.n}}</view>
+      <text class="chip">每日上限 {{item.cap}} 分</text>
+    </view>
+
+    <view class="items mt-3">
+      <button wx:for="{{item.items}}" wx:for-item="row" wx:key="id"
+              class="item {{row.maxed ? 'item--done' : ''}} {{row.locked ? 'item--locked' : ''}}"
+              data-id="{{row.id}}" bindtap="onTapItem">
+        <view class="item__p">+{{row.points}}</view>
+        <view class="item__b">
+          <text class="item__n">{{row.name}}</text>
+          <text class="item__m">{{row.countTxt}} 次{{row.maxed ? ' · 今天这条够了' : ''}}</text>
+        </view>
+        <view class="item__go">{{row.maxed ? '✓' : '＋'}}</view>
+      </button>
+    </view>
+  </view>
+
+  <!-- 卡住了 → 修复行动（不扣分） -->
+  <view class="card card--flat">
+    <view class="row row--between">
+      <view>
+        <view class="card__t">卡住了？</view>
+        <view class="card__d">没做到不用扣分，我们只调方法。</view>
+      </view>
+      <button class="btn btn--sm btn--ghost" bindtap="goRepair">修复行动</button>
+    </view>
+  </view>
+
+  <!-- 我的规则入口 -->
+  <view class="card card--flat">
+    <view class="row row--between">
+      <view>
+        <view class="card__t">我的规则</view>
+        <view class="card__d">{{ruleHint}} · 谁改的都有记录</view>
+      </view>
+      <button class="btn btn--sm btn--ghost" bindtap="goRules">去看看</button>
+    </view>
+  </view>
+
+</view>
+
+<!-- ============================================================
+     具体肯定卡：对应原型 praiseSheet()
+     这是文案引擎的出口 —— 每一条加分都必须落成一句具体反馈，
+     强制「我看到你……这说明你……」句式（PRD §1.2 德韦克成长型思维）。
+     ============================================================ -->
+<view wx:if="{{sheet}}" class="mask" bindtap="closePraise"></view>
+<view class="sheet {{sheet ? 'sheet--on' : ''}}" catchtap="noop">
+  <view class="sheet__grab"></view>
+  <view class="sheet__body">
+    <view class="sheet__tag">今天这一条 · {{dimName}}</view>
+    <view class="praise">我看到你<text class="praise__em">{{fact}}</text>，这说明<text class="praise__em">{{trait}}</text>。</view>
+
+    <view class="sheet__btnrow">
+      <button class="btn btn--sm btn--ghost" bindtap="onAnother">换一句</button>
+      <button class="btn btn--sm btn--ghost" bindtap="onSelfOpen">我自己说一句</button>
+      <button class="btn btn--sm btn--primary sheet__ok" bindtap="onPraiseOk">好，收下</button>
+    </view>
+
+    <block wx:if="{{selfOpen}}">
+      <textarea class="field mt-3" value="{{selfText}}" maxlength="60" auto-height
+                placeholder="我自己说：我今天……" bindinput="onSelfInput"></textarea>
+      <button class="btn btn--sm btn--ghost mt-2" bindtap="onSelfSave">存到这条记录里</button>
+    </block>
+
+    <view class="card__d mt-3">
+      +{{points}} 分已入账<text wx:if="{{overflow > 0}}">（今天到上限了，多做的 {{overflow}} 分不计入，但已经看见）</text>。
+    </view>
+  </view>
+</view>

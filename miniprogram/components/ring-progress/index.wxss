@@ -1,0 +1,29 @@
+/* 罗森塔尔 · components/ring-progress/index.wxss
+   环本体画在 canvas 上，这里只管中心数字与兜底底色。
+   注意：不能用 aspect-ratio（老基础库不稳），尺寸由 WXML 的 style 给死。 */
+.ring{
+  position: relative;
+  flex: none;
+}
+.ring__cv{ display: block; }
+.ring__fallback{
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  border-style: solid;
+  border-color: rgba(35,38,46,.10);
+  box-sizing: border-box;
+}
+.ring__c{
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  pointer-events: none;
+}
+.ring__n{
+  font-family: var(--f-num);
+  font-size: 65rpx;                 /* 34px */
+  line-height: 1.05;
+  color: var(--amber);
+}
+.ring__m{ font-size: 26rpx; color: var(--ink-3); }
+.ring__l{ font-size: 21rpx; color: var(--ink-3); margin-top: 2rpx; }

@@ -1,0 +1,124 @@
+<!-- 罗森塔尔 · pages/growth/index.wxml（成长） -->
+<view wx:if="{{onboarded}}" class="page-root stage-{{stage}}">
+
+  <view class="page__hint">这一页只用来告诉你一件事：你做到过的，都被留下来了。</view>
+
+  <view class="row row--between g__bar">
+    <text class="card__d">想留一份纸质的？导出一周一页。</text>
+    <view class="g__acts">
+      <button class="btn btn--sm btn--ghost" bindtap="onExport">一周一页</button>
+      <button class="btn btn--sm btn--ghost" bindtap="onExportCsv">流水表</button>
+    </view>
+  </view>
+
+  <!-- 这个月 -->
+  <view class="card">
+    <view class="row row--between">
+      <view class="card__t">{{monthLabel}}</view>
+      <text class="chip chip--amber">{{monthSum}} 分</text>
+    </view>
+
+    <view class="heat__w mt-3">
+      <text>一</text><text>二</text><text>三</text><text>四</text><text>五</text><text>六</text><text>日</text>
+    </view>
+    <view class="heat">
+      <view wx:for="{{heat}}" wx:key="key"
+            class="heat__c {{item.pad ? 'heat__c--pad' : 'heat--' + item.lv}} {{item.today ? 'heat__c--today' : ''}}">
+        <block wx:if="{{!item.pad}}">
+          <text class="heat__d">{{item.d}}</text>
+          <text class="heat__m">{{item.mark}}</text>
+        </block>
+      </view>
+    </view>
+
+    <view class="legend">
+      <text>少</text>
+      <view class="legend__i heat--1"></view>
+      <view class="legend__i heat--2"></view>
+      <view class="legend__i heat--3"></view>
+      <view class="legend__i heat--4"></view>
+      <text>多</text>
+      <text class="legend__note">空白 = 那天在休息，不是失败</text>
+    </view>
+  </view>
+
+  <!-- 走过的路：数字概览 + 里程碑徽章 -->
+  <view class="card">
+    <view class="card__t">走过的路</view>
+    <view class="miles mt-3">
+      <view class="mile">
+        <view class="mile__n">{{streak}}</view>
+        <view class="mile__l">连续有记录（天）</view>
+      </view>
+      <view class="mile">
+        <view class="mile__n">{{monthDays}}</view>
+        <view class="mile__l">这个月有记录（天）</view>
+      </view>
+      <view class="mile">
+        <view class="mile__n">{{activeDays}}</view>
+        <view class="mile__l">累计记录（天）</view>
+      </view>
+      <view class="mile">
+        <view class="mile__n">{{lifetime}}</view>
+        <view class="mile__l">累计获得（分）</view>
+      </view>
+    </view>
+    <view class="card__d mt-3">这里没有排名，也没有「别人家的孩子」。只有你自己的痕迹。</view>
+  </view>
+
+  <!-- 里程碑徽章：高中段整块隐藏（app.wxss 的 .stage-high .miles） -->
+  <view class="card">
+    <view class="row row--between">
+      <view class="card__t">里程碑</view>
+      <text class="chip">已得 {{mileEarned}} / {{milestones.length}} 枚</text>
+    </view>
+    <view class="miles mt-3">
+      <view wx:for="{{milestones}}" wx:key="k" class="mile mile--badge {{item.earned ? 'mile--on' : ''}}">
+        <view class="mile__n">{{item.earned ? '✦' : '○'}}</view>
+        <view class="mile__l">{{item.n}}</view>
+        <view class="mile__d">{{item.earned ? item.d + (item.earnedAt ? ' · ' + item.earnedAt : '') : item.d}}</view>
+      </view>
+    </view>
+    <view class="card__d mt-3">徽章不能兑换、也不加分 —— 它只是把「你走到过哪儿」记下来。</view>
+  </view>
+
+  <!-- 记录流水 -->
+  <view class="card">
+    <view class="row row--between">
+      <view class="card__t">记录流水</view>
+      <text class="chip">24 小时内可撤销</text>
+    </view>
+
+    <view wx:if="{{timeline.length === 0}}" class="card__d mt-3">
+      还没有记录。去「今天」挑一件最想做的事，记下来就算数。
+    </view>
+
+    <view class="tl mt-3">
+      <view wx:for="{{timeline}}" wx:key="uid" class="tl__row {{item.reversed ? 'tl__row--off' : ''}}">
+        <view class="tl__dot"></view>
+        <view class="tl__b">
+          <view class="tl__t">{{item.name}}</view>
+          <view class="tl__m">{{item.dim}} · {{item.dateTxt}}</view>
+          <view wx:if="{{item.praise}}" class="tl__p">{{item.praise}}</view>
+        </view>
+        <view class="tl__r">
+          <view class="tl__p2">+{{item.points}}</view>
+          <text wx:if="{{item.reversed}}" class="chip">已撤销</text>
+          <text wx:if="{{item.byParent}}" class="chip">家长代记</text>
+          <text wx:if="{{item.isPrivate}}" class="chip chip--jade">仅自己可见</text>
+          <view wx:if="{{!item.reversed}}" class="tl__acts">
+            <button wx:if="{{item.canUndo}}" class="btn btn--sm btn--ghost"
+                    data-uid="{{item.uid}}" bindtap="onUndo">撤销这条</button>
+            <button class="btn btn--sm btn--ghost"
+                    data-uid="{{item.uid}}" bindtap="onTogglePrivate">{{item.isPrivate ? '让家长看到' : '只给自己看'}}</button>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="todo">
+    热力图、连续天数、累计获得、24 小时内撤销、隐私标记、里程碑徽章与两种导出都已接真实数据。
+    月报（按月的 PDF）与服务端 PDF 接口属于后续版本；徽章在高中段由 CSS 整块隐藏。
+  </view>
+</view>

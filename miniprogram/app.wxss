@@ -1,0 +1,279 @@
+/* ============================================================
+   罗森塔尔 Rosenthal · app.wxss（全局样式 + 设计令牌）
+   由 prototype/app.css 移植，换算关系 rpx = px × 750 / 390 ≈ px × 1.923
+   对应 README-小程序移植指南 §二「设计令牌：px → rpx」。
+
+   与原型的三处**必要**差异（都是小程序能力限制，不是设计改动）：
+   1. :root 不存在 → 令牌挂在 page 选择器上（小程序支持 CSS 变量）；
+   2. 属性选择器 [data-stage] 无 WXML 等价物 → 改为 .stage-p12 / .stage-high 类；
+   3. 删除 .rail / .phone 舞台层、color-mix、backdrop-filter、媒体查询、@media print。
+   设计基调不变：暖纸底 + 墨色字，零红色、零羞耻色。
+   ============================================================ */
+
+page{
+  /* ---- 色彩令牌 ---- */
+  --paper:      #F6F1E8;
+  --paper-hi:   #FFFCF7;
+  --paper-lo:   #EFE7DA;
+  --ink:        #23262E;
+  --ink-2:      #5C6069;
+  --ink-3:      #9498A0;
+  --line:       rgba(35,38,46,.09);
+  --line-2:     rgba(35,38,46,.16);
+
+  --amber:      #D97A3D;
+  --amber-hi:   #F0A868;
+  --amber-soft: #F7E2D0;
+  --jade:       #4F7A68;
+  --jade-soft:  #DCE9E2;
+  --indigo:     #45597F;
+  --indigo-soft:#DDE3EE;
+  --plum:       #8B5A72;
+  --plum-soft:  #EFDFE7;
+  --gold:       #B98A2E;
+  --gold-soft:  #F2E7CC;
+
+  --dim-study:  var(--amber);
+  --dim-life:   var(--jade);
+  --dim-body:   var(--indigo);
+  --dim-social: var(--plum);
+  --dim-self:   var(--gold);
+
+  /* ---- 尺度令牌 ---- */
+  --sp-1: 8rpx;  --sp-2: 16rpx; --sp-3: 24rpx;
+  --sp-4: 32rpx; --sp-5: 42rpx; --sp-6: 58rpx;
+  --r-sm: 20rpx; --r-md: 32rpx; --r-lg: 42rpx; --r-xl: 58rpx; --r-pill: 999rpx;
+
+  --sh-1: 0 2rpx 4rpx rgba(35,38,46,.05);
+  --sh-2: 0 12rpx 34rpx -16rpx rgba(35,38,46,.18);
+  --sh-3: 0 34rpx 88rpx -42rpx rgba(35,38,46,.34);
+
+  /* ---- 字体（小程序不保证有宋体，也拿不到 system-ui；三处替换都记在 README 里） ---- */
+  --f-display: "Songti SC","STSong","Noto Serif SC",serif;
+  --f-body: "PingFang SC","HarmonyOS Sans SC","Microsoft YaHei",sans-serif;
+  --f-num: "Optima","Palatino Linotype","Songti SC",serif;
+
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: 26rpx;          /* 正文 13.5px */
+  line-height: 1.55;
+}
+
+view, text, button, input, textarea{ box-sizing: border-box; }
+
+/* ============================================================
+   学段适配：视觉成熟度分层（原型 #screen[data-stage] → .stage-*）
+   小学更大更圆更暖，高中更紧更静更克制
+   ============================================================ */
+.stage-p12{
+  --r-sm: 28rpx; --r-md: 40rpx; --r-lg: 50rpx; --r-xl: 66rpx;
+  background: #FBF6EC;
+}
+.stage-p12 .item__n{ font-size: 30rpx; }        /* 15px */
+.stage-p12 .item__p{ width: 74rpx; height: 74rpx; font-size: 30rpx; }
+.stage-p12 .dim__n,
+.stage-p12 .card__t{ font-size: 32rpx; }        /* 16px */
+.stage-p12 .hero__hello{ font-size: 40rpx; }
+.stage-p12 .hero__sub{ font-size: 24rpx; }
+.stage-p12 .item{ padding: 28rpx 26rpx; }
+
+.stage-high{
+  --r-sm: 16rpx; --r-md: 24rpx; --r-lg: 32rpx; --r-xl: 40rpx;
+  --paper: #F4F3F0; --paper-hi: #FCFCFA; --paper-lo: #EAE9E5;
+  --ink: #1D1F24; --ink-2: #55585F; --ink-3: #8C9098;
+  --amber: #B8642F; --amber-hi: #D08A55; --amber-soft: #F0E2D6;
+  background: var(--paper);
+}
+.stage-high .hero{ padding: 36rpx 32rpx 32rpx; }
+.stage-high .hero__hello{ font-size: 34rpx; letter-spacing: .01em; }
+.stage-high .item{ padding: 22rpx 24rpx; }
+.stage-high .item__p{ width: 58rpx; height: 58rpx; border-radius: 16rpx; font-size: 26rpx; }
+.stage-high .item__n{ font-size: 26rpx; }
+.stage-high .card{ padding: 28rpx; }
+.stage-high .dim__n{ letter-spacing: .04em; }
+.stage-high .miles{ display: none; }            /* 高中不做徽章，去游戏化 */
+.stage-high .quote{ font-size: 28rpx; }
+
+/* ============================================================
+   页面骨架
+   ============================================================ */
+.page-root{
+  min-height: 100vh;
+  padding: var(--sp-4) var(--sp-4) 120rpx;
+  background: var(--paper);
+}
+
+.page__hint{
+  color: var(--ink-2);
+  font-size: 24rpx;
+  line-height: 1.7;
+  margin: 0 var(--sp-1) var(--sp-4);
+}
+
+/* 卡片 */
+.card{
+  background: var(--paper-hi);
+  border: 2rpx solid var(--line);
+  border-radius: var(--r-md);
+  padding: var(--sp-5);
+  box-shadow: var(--sh-1);
+  margin-bottom: var(--sp-4);
+}
+.card--flat{ background: transparent; box-shadow: none; border-style: dashed; }
+.card__t{
+  font-family: var(--f-display);
+  font-size: 35rpx;                            /* 18px */
+  font-weight: 600;
+  letter-spacing: .02em;
+  margin: 0 0 var(--sp-2);
+}
+.card__d{ color: var(--ink-2); font-size: 24rpx; line-height: 1.7; margin: 0; }
+
+/* 行与间距工具类 */
+.row{ display: flex; align-items: center; gap: var(--sp-3); }
+.row--between{ justify-content: space-between; }
+.mt-1{ margin-top: var(--sp-1); } .mt-2{ margin-top: var(--sp-2); }
+.mt-3{ margin-top: var(--sp-3); } .mt-4{ margin-top: var(--sp-4); }
+
+/* 徽标 / chip */
+.chip{
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  border-radius: var(--r-pill);
+  background: var(--paper-lo);
+  color: var(--ink-2);
+  font-size: 22rpx;                            /* 11px */
+  line-height: 1.6;
+}
+.chip--amber{ background: var(--amber-soft); color: #8C4315; }
+.chip--jade{ background: var(--jade-soft); color: #2F5A4A; }
+
+/* 按钮：点击目标 ≥ 85rpx（44px） */
+.btn{
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 85rpx; padding: 0 34rpx;
+  border-radius: var(--r-pill);
+  border: 2rpx solid var(--line-2);
+  background: var(--paper-hi);
+  color: var(--ink);
+  font-size: 26rpx;
+  line-height: 1;
+}
+.btn--sm{ min-height: 66rpx; padding: 0 26rpx; font-size: 24rpx; }
+.btn--primary{
+  background: var(--amber); border-color: var(--amber); color: #FFF8F0;
+  font-weight: 600;
+}
+.btn--ghost{ background: transparent; }
+.btn--block{ display: flex; width: 100%; }
+.btn[disabled]{ opacity: .45; }
+
+.item{
+  display: flex; align-items: center; gap: var(--sp-3);
+  width: 100%; text-align: left;
+  padding: 24rpx 24rpx;
+  background: var(--paper-hi);
+  border: 2rpx solid var(--line);
+  border-radius: var(--r-md);
+}
+.item__p{
+  flex: none; display: flex; align-items: center; justify-content: center;
+  width: 60rpx; height: 60rpx;                /* 31px */
+  border-radius: var(--r-sm);
+  background: var(--paper-lo);
+  font-size: 26rpx;
+}
+.item__b{ flex: 1; min-width: 0; }
+.item__n{ display: block; font-size: 28rpx; font-weight: 500; }
+.item__m{ display: block; color: var(--ink-3); font-size: 22rpx; margin-top: 4rpx; }
+
+/* 维度色（原型用 --dim 内联变量 + color-mix，这里预计算成 rgba 常量，见移植指南 §三） */
+.dim--study  .item__p{ background: rgba(217,122,61,.13);  color: #A85624; }
+.dim--life   .item__p{ background: rgba(79,122,104,.13);  color: #3D6152; }
+.dim--body   .item__p{ background: rgba(69,89,127,.13);   color: #37496A; }
+.dim--social .item__p{ background: rgba(139,90,114,.13);  color: #71475C; }
+.dim--self   .item__p{ background: rgba(185,138,46,.13);  color: #8A6620; }
+
+/* 输入 */
+.field{
+  width: 100%;
+  min-height: 100rpx;
+  padding: var(--sp-3);
+  background: var(--paper-lo);
+  border: 2rpx solid var(--line);
+  border-radius: var(--r-sm);
+  color: var(--ink);
+  font-size: 26rpx;
+  line-height: 1.6;
+}
+
+/* 进度条 */
+.bar{ height: 14rpx; border-radius: var(--r-pill); background: var(--paper-lo); overflow: hidden; }
+.bar > view{ height: 100%; background: var(--amber); border-radius: var(--r-pill); }
+
+/* 说明性引言 */
+.quote{
+  font-family: var(--f-display);
+  color: var(--ink-2);
+  font-size: 26rpx;
+  line-height: 1.9;
+  text-align: center;
+  text-align-last: center;
+}
+
+/* 骨架期占位：明确标注「待 S2/S3 落地」，避免看起来像成品 */
+.todo{
+  border: 2rpx dashed var(--line-2);
+  border-radius: var(--r-sm);
+  padding: var(--sp-3);
+  color: var(--ink-3);
+  font-size: 23rpx;
+  line-height: 1.7;
+  background: rgba(255,255,255,.5);
+}
+
+/* ============================================================
+   底部弹层（对应原型的 .mask / .sheet）
+   注意：遮罩用不透明的 rgba，不用 backdrop-filter（部分机型无效，移植指南 §三）。
+   ============================================================ */
+.mask{
+  position: fixed; inset: 0; z-index: 60;
+  background: rgba(28,24,20,.44);
+}
+.sheet{
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 61;
+  background: var(--paper-hi);
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+  padding: var(--sp-3) var(--sp-5) calc(var(--sp-5) + env(safe-area-inset-bottom));
+  box-shadow: var(--sh-3);
+  transform: translateY(102%);
+  transition: transform .26s ease;
+}
+.sheet--on{ transform: translateY(0); }
+.sheet__grab{
+  width: 76rpx; height: 8rpx; margin: 0 auto var(--sp-3);
+  border-radius: var(--r-pill);
+  background: var(--line-2);
+}
+.sheet__tag{
+  font-size: 22rpx; letter-spacing: .16em;
+  color: var(--ink-3); text-transform: uppercase;
+}
+.sheet__btnrow{ display: flex; align-items: center; gap: var(--sp-2); margin-top: var(--sp-4); }
+.sheet__ok{ flex: 1; }
+
+/* 具体肯定卡的主句：事实与特质分色，句式不可改 */
+.praise{
+  margin-top: var(--sp-3);
+  font-family: var(--f-display);
+  font-size: 36rpx;
+  line-height: 1.75;
+  letter-spacing: .01em;
+}
+.praise__em{
+  color: var(--amber);
+  font-weight: 600;
+  padding: 0 2rpx;
+}
+

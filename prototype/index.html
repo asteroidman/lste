@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#F6F1E8">
+<title>罗森塔尔 Rosenthal · 高保真网页原型</title>
+<!-- 本文件等价于小程序的 pages/*.wxml + app.json（页面栈与 tabBar 结构） -->
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<!-- ============ 图标精灵（小程序内改为 image/icon 组件，base64 内联） ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="i-today" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v3M12 18.4v3M2.6 12h3M18.4 12h3M5.4 5.4l2.1 2.1M16.5 16.5l2.1 2.1M18.6 5.4l-2.1 2.1M7.5 16.5l-2.1 2.1"/></symbol>
+  <symbol id="i-growth" viewBox="0 0 24 24"><path d="M3 20h18"/><path d="M4 16.5l4.5-5 3.5 3 7-8.5"/><path d="M15.5 6H19v3.5"/></symbol>
+  <symbol id="i-week" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/><path d="M8.5 14.5l2 2 4-4.5"/></symbol>
+  <symbol id="i-shop" viewBox="0 0 24 24"><path d="M4 8.5h16l-1.2 10a2.5 2.5 0 0 1-2.5 2.2H7.7A2.5 2.5 0 0 1 5.2 18.5z"/><path d="M8.6 8.5V7a3.4 3.4 0 0 1 6.8 0v1.5"/></symbol>
+  <symbol id="i-me" viewBox="0 0 24 24"><circle cx="12" cy="8.4" r="3.9"/><path d="M4.6 20.4c1.2-3.9 4-5.9 7.4-5.9s6.2 2 7.4 5.9"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M14.5 5l-7 7 7 7"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4.5 12.5l5 5 10-11"/></symbol>
+  <symbol id="i-more" viewBox="0 0 24 24"><circle cx="6" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="18" cy="12" r="1.4"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></symbol>
+  <symbol id="i-print" viewBox="0 0 24 24"><path d="M7 9V4.5h10V9"/><rect x="4" y="9" width="16" height="7.5" rx="2.2"/><path d="M7 14.5h10v5H7z"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6.5 16.5V11a5.5 5.5 0 0 1 11 0v5.5l1.5 2H5z"/><path d="M10 19.5a2 2 0 0 0 4 0"/></symbol>
+  <symbol id="i-scroll" viewBox="0 0 24 24"><path d="M6 4.5h9a2.5 2.5 0 0 1 2.5 2.5v11a2 2 0 0 0 2 2H8a2 2 0 0 1-2-2z"/><path d="M9 9h6M9 12.5h6"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-9.4A4.1 4.1 0 0 1 12 7.6a4.1 4.1 0 0 1 7 3c0 5-7 9.4-7 9.4z"/></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24"><path d="M4.5 9.5h9a5.5 5.5 0 1 1 0 11H8"/><path d="M8 5.5l-3.5 4 3.5 4"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.6 6 .8-4.4 4.2 1.1 6.1L12 17.3l-5.3 2.9 1.1-6.1L3.4 9.9l6-.8z"/></symbol>
+</defs></svg>
+
+<div class="stage">
+
+  <!-- ================= 舞台侧栏（仅原型评审用，小程序无此层） ================= -->
+  <aside class="rail">
+    <h1 class="rail__brand">罗森塔尔</h1>
+    <p class="rail__sub">Rosenthal · 正向期待型自我管理产品<br>高保真网页原型 v0.9 —— 为微信小程序移植做准备</p>
+
+    <div class="rail__h">演示流程</div>
+    <button class="rail__btn" data-flow="onboard"><b>① 首次初始化 · 必改 3 项</b><span>不改满 3 处，系统不给开始</span></button>
+    <button class="rail__btn" data-flow="checkin"><b>② 打卡 → 具体肯定卡</b><span>点行为卡，看文案引擎</span></button>
+    <button class="rail__btn" data-flow="limit"><b>③ 触达每日分值上限</b><span>限额随学段变，超额只被看见</span></button>
+    <button class="rail__btn" data-flow="redeem"><b>④ 兑换 → 生成权益券</b><span>券一发，家长无法撤销</span></button>
+    <button class="rail__btn" data-flow="week"><b>⑤ 周复盘 → 结算 + 周报</b><span>5 步向导，只改一件小事</span></button>
+    <button class="rail__btn" data-flow="repair"><b>⑥ 修复行动（不是扣分）</b><span>4 类模板，完成反而给分</span></button>
+    <button class="rail__btn" data-flow="parent"><b>⑦ 家长端 · 确认与鼓励</b><span>只读正向数据 + 禁用词拦截</span></button>
+    <button class="rail__btn" data-flow="toast-print"><b>⑧ 打印 / 下载表格</b><span>规则表 + 一周一页（四学段）</span></button>
+    <button class="rail__btn" data-flow="intro"><b>⑨ 关于罗森塔尔</b><span>首次进入的理论介绍页</span></button>
+
+    <div class="rail__h">学段（小学 → 高中）</div>
+    <button class="rail__btn" data-gostage="p12"><b>小学低段 · 1–3 年级</b><span>上限 8 分 · 家长陪记 · 13 条</span></button>
+    <button class="rail__btn" data-gostage="p36"><b>小学高段 · 4–6 年级</b><span>上限 10 分 · 开始自己安排 · 16 条</span></button>
+    <button class="rail__btn" data-gostage="mid"><b>初中 · 7–9 年级</b><span>上限 12 分 · 自主 + 不比较 · 26 条</span></button>
+    <button class="rail__btn" data-gostage="high"><b>高中 · 10–12 年级</b><span>上限 12 分 · 目标与压力 · 18 条</span></button>
+
+    <div class="rail__h">角色</div>
+    <button class="rail__btn" data-role="child"><b>孩子端</b><span>数据主人</span></button>
+    <button class="rail__btn" data-role="parent"><b>家长端</b><span>共建者 / 结算者</span></button>
+
+    <div class="rail__h">数据</div>
+    <button class="rail__btn rail__btn--warn" data-flow="reset"><b>重置演示数据</b><span>清空本地记录，回到初始状态</span></button>
+
+    <div class="rail__note">
+      <b>两条红线已写进代码：</b><br>
+      1. 计分接口只接受正数，全站无扣分入口；<br>
+      2. 已生成的权益券，家长端没有删除能力。
+    </div>
+  </aside>
+
+  <!-- ================= 手机 ================= -->
+  <div class="phone-wrap">
+  <div class="phone"><div class="phone__screen" id="screen">
+
+    <div class="statusbar">
+      <span>9:41</span>
+      <span class="statusbar__icons">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M2 17h3v4H2zM7.5 13h3v8h-3zM13 9h3v12h-3zM18.5 5h3v16h-3z"/></svg>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="17" height="10" rx="3" opacity=".45"/><rect x="4" y="9" width="12" height="6" rx="1.6"/><rect x="20.5" y="10" width="2" height="4" rx="1"/></svg>
+      </span>
+    </div>
+
+    <header class="nav">
+      <button class="nav__back" id="navBack" hidden><svg width="17" height="17"><use href="#i-back"/></svg></button>
+      <div class="nav__title" id="navTitle">今天</div>
+      <div class="nav__right">
+        <button class="nav__role" id="roleBtn"><i id="roleAvatar">月</i><span id="roleName">月亮</span></button>
+      </div>
+    </header>
+
+    <main class="viewport" id="viewport">
+
+      <!-- ========== 今日 ========== -->
+      <section class="page is-active" id="p-today" data-tab="today">
+        <div class="hero">
+          <div class="hero__grid">
+            <div class="ring">
+              <svg width="112" height="112" viewBox="0 0 112 112">
+                <defs>
+                  <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#F0A868"/><stop offset="100%" stop-color="#C4662C"/>
+                  </linearGradient>
+                </defs>
+                <circle class="ring__bg" cx="56" cy="56" r="48" fill="none" stroke-width="9"/>
+                <circle class="ring__fg" id="ringFg" cx="56" cy="56" r="48" fill="none" stroke-width="9"
+                        stroke-dasharray="301.6" stroke-dashoffset="301.6"/>
+              </svg>
+              <div class="ring__c">
+                <div class="ring__n"><span id="ringNum">0</span><small>/<span id="ringMax">12</span></small></div>
+                <div class="ring__l">今日已得</div>
+              </div>
+            </div>
+            <div>
+              <p class="hero__hello" id="heroHello">早上好，月亮</p>
+              <p class="hero__sub" id="heroSub">今天不用做完全部，挑你最重要的那几件就好。</p>
+            </div>
+          </div>
+          <div class="hero__stats">
+            <div><div class="stat__n" id="statStreak">0</div><div class="stat__l">连续有记录（天）</div></div>
+            <div><div class="stat__n" id="statWeek">0</div><div class="stat__l">本周得分</div></div>
+            <div><div class="stat__n" id="statLife">0</div><div class="stat__l">累计获得</div></div>
+          </div>
+          <div class="hero__carry" id="carry" hidden></div>
+        </div>
+
+        <!-- 今日闪光点 -->
+        <div class="card" id="flashCard">
+          <h3 class="card__t">今日闪光点</h3>
+          <p class="card__d" id="flashHint">今天的你，最想被记住的是哪一件小事？</p>
+          <textarea class="field mt-3" id="flashInput" rows="2" placeholder="例：数学最后一题我自己想出来了"></textarea>
+          <div class="row row--between mt-3">
+            <span class="chip" id="flashState">未填写</span>
+            <button class="btn btn--sm btn--ghost" id="flashSave">保存</button>
+          </div>
+        </div>
+
+        <!-- 加分行为（按维度渲染） -->
+        <div id="dims"></div>
+
+        <div class="card card--flat">
+          <div class="row row--between">
+            <div><h3 class="card__t">卡住了？</h3><p class="card__d">没做到不用扣分，我们只调方法。</p></div>
+            <button class="btn btn--sm btn--ghost" data-nav="p-repair">修复行动</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== 成长 ========== -->
+      <section class="page" id="p-growth" data-tab="growth">
+        <p class="page__hint">这一页只用来告诉你一件事：你做到过的，都被留下来了。</p>
+        <div class="card">
+          <div class="row row--between">
+            <h3 class="card__t">这个月</h3>
+            <span class="chip chip--amber" id="monthSum">0 分</span>
+          </div>
+          <div class="heat__w mt-3"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
+          <div class="heat" id="heat"></div>
+          <div class="legend"><span>少</span><i style="background:#F4E1CE"></i><i style="background:#EBC49B"></i><i style="background:#E0A167"></i><i style="background:#C87832"></i><span>多</span><span style="margin-left:auto">空白 = 那天在休息，不是失败</span></div>
+        </div>
+
+        <div class="card">
+          <h3 class="card__t">走过的路</h3>
+          <div class="miles mt-3" id="miles"></div>
+        </div>
+
+        <div class="card">
+          <div class="row row--between">
+            <h3 class="card__t">记录流水</h3>
+            <span class="chip">24 小时内可撤销</span>
+          </div>
+          <div class="tl mt-3" id="timeline"></div>
+        </div>
+      </section>
+
+      <!-- ========== 周复盘 ========== -->
+      <section class="page" id="p-week" data-tab="week">
+        <div class="steps" id="steps"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+        <div id="weekBody"></div>
+      </section>
+
+      <!-- ========== 兑换 ========== -->
+      <section class="page" id="p-shop" data-tab="shop">
+        <div class="wallet">
+          <div><b id="walBal">0</b><span>可用余额</span></div>
+          <div><b id="walLife">0</b><span>累计获得（不会因兑换变少）</span></div>
+        </div>
+        <div class="card">
+          <div class="row row--between">
+            <h3 class="card__t">离下一档还差</h3>
+            <span class="chip chip--amber" id="nextTxt">—</span>
+          </div>
+          <div class="bar mt-2"><i id="nextBar" style="width:0%"></i></div>
+          <p class="card__d mt-2">奖励由你选，定了就不改；家长不能临时加码，也不能反悔。</p>
+        </div>
+        <div id="rewards"></div>
+        <h3 class="card__t mt-4" style="margin-left:2px">我的券</h3>
+        <div id="coupons"></div>
+      </section>
+
+      <!-- ========== 我的 ========== -->
+      <section class="page" id="p-me" data-tab="me">
+        <div class="card">
+          <div class="row">
+            <div class="item__p" style="--dim:var(--amber); width:46px;height:46px;font-size:18px" id="meAvatar">月</div>
+            <div style="flex:1">
+              <h3 class="card__t" id="meNick" style="margin:0">月亮</h3>
+              <p class="card__d" style="margin:2px 0 0"><span id="meGrade">初中 · 7–9 年级</span> · 规则由我和你一起定</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="row row--between">
+            <h3 class="card__t" id="stageName">初中版规则</h3>
+            <span class="chip chip--amber" id="stageChip">每日上限 12 分</span>
+          </div>
+          <p class="card__d mt-2">同一套内核，四种尺度：小学到高中，变的是自主权、抽象层级和分值上限，不变的是「只加分」。</p>
+          <button class="btn btn--sm btn--ghost mt-3" data-flow="stage">切换学段看差异</button>
+        </div>
+
+        <div class="card">
+          <div class="row row--between">
+            <h3 class="card__t">规则共建</h3>
+            <span class="chip chip--jade" id="amendChip">已改 0 / 3 处</span>
+          </div>
+          <p class="card__d mt-2">规则里必须有你自己改过的地方。改不满 3 处，这份表就还是大人的表。</p>
+          <button class="btn btn--sm btn--ghost mt-3" data-flow="onboard">去看看我可以改什么</button>
+        </div>
+
+        <div class="card" style="padding:6px 4px">
+          <button class="item" data-nav="p-rules" style="margin-bottom:6px"><span class="item__p" style="--dim:var(--jade)"><svg width="16" height="16"><use href="#i-scroll"/></svg></span><span class="item__b"><span class="item__n">我的规则</span><span class="item__m" id="rulesHint">26 条行为 · 8 档奖励 · 谁改的都有记录</span></span></button>
+          <button class="item" data-flow="repair" style="margin-bottom:6px"><span class="item__p" style="--dim:var(--indigo)"><svg width="16" height="16"><use href="#i-heart"/></svg></span><span class="item__b"><span class="item__n">修复行动</span><span class="item__m">手机超时 / 发脾气 / 拖延 / 没做到约定</span></span></button>
+          <button class="item" data-flow="surprise" style="margin-bottom:6px"><span class="item__p" style="--dim:var(--gold)"><svg width="16" height="16"><use href="#i-star"/></svg></span><span class="item__b"><span class="item__n">惊喜卡</span><span class="item__m" id="surpriseState">连续 7 天有记录可领 1 张</span></span></button>
+          <button class="item" data-flow="toast-print" style="margin-bottom:6px"><span class="item__p" style="--dim:var(--plum)"><svg width="16" height="16"><use href="#i-print"/></svg></span><span class="item__b"><span class="item__n">打印 / 导出</span><span class="item__m">一周一页 · Excel 记账版</span></span></button>
+          <button class="item" data-flow="parent"><span class="item__p" style="--dim:var(--amber)"><svg width="16" height="16"><use href="#i-me"/></svg></span><span class="item__b"><span class="item__n">家长端</span><span class="item__m">她只能看到你做到的，看不到你没做的</span></span></button>
+          <button class="item" data-flow="intro" style="margin-top:6px"><span class="item__p" style="--dim:var(--indigo)"><svg width="16" height="16"><use href="#i-star"/></svg></span><span class="item__b"><span class="item__n">关于罗森塔尔</span><span class="item__m">期望的力量 · 随时再看一遍</span></span></button>
+        </div>
+
+        <p class="page__hint" style="text-align:center;margin-top:18px">
+          “你不是被积分管住的人，你是在练习管理自己。<br>每一次小做到，都在证明：我可以。”
+        </p>
+      </section>
+
+      <!-- ========== 家长端（非 tab，navigateTo） ========== -->
+      <section class="page" id="p-parent" data-non-tab="1">
+        <div class="subtabs" id="parentTabs">
+          <button class="on" data-ptab="todo">待确认 <span id="todoDot" class="chip chip--amber" style="padding:1px 6px">0</span></button>
+          <button data-ptab="praise">鼓励</button>
+          <button data-ptab="report">报告</button>
+        </div>
+        <div id="parentBody"></div>
+      </section>
+
+      <!-- ========== 修复行动 ========== -->
+      <section class="page" id="p-repair" data-non-tab="1">
+        <p class="page__hint">这里不扣分。没做到，我们只调方法，或者约一个更小的一步。</p>
+        <div id="repairBody"></div>
+      </section>
+
+      <!-- ========== 我的规则 ========== -->
+      <section class="page" id="p-rules" data-non-tab="1">
+        <p class="page__hint">每一条后面都能看到“是谁定的、什么时候定的”。</p>
+        <div id="rulesBody"></div>
+      </section>
+
+    </main>
+
+    <!-- ============ tabBar（app.json tabBar 5 项，最多 5 个） ============ -->
+    <nav class="tabbar" id="tabbar">
+      <button class="tab is-on" data-tab="today"><svg><use href="#i-today"/></svg>今天</button>
+      <button class="tab" data-tab="growth"><svg><use href="#i-growth"/></svg>成长</button>
+      <button class="tab" data-tab="week"><svg><use href="#i-week"/></svg>周复盘</button>
+      <button class="tab" data-tab="shop"><svg><use href="#i-shop"/></svg>兑换</button>
+      <button class="tab" data-tab="me"><svg><use href="#i-me"/></svg>我的</button>
+    </nav>
+
+    <!-- ============ 弹层 ============ -->
+    <div class="mask" id="mask"></div>
+    <div class="sheet" id="sheet"><div class="sheet__grab"></div><div id="sheetBody"></div></div>
+    <div class="toast" id="toast"></div>
+
+    <!-- ============ 首次介绍页：关于罗森塔尔（罗森塔尔效应） ============ -->
+    <div class="build" id="intro">
+      <div class="statusbar"><span>9:41</span><span class="statusbar__icons"></span></div>
+      <header class="nav">
+        <div class="nav__title">关于罗森塔尔</div>
+      </header>
+      <div class="build__body" id="introBody"></div>
+      <div class="build__foot">
+        <button class="btn btn--primary btn--block" id="introEnter">开始，我陪她一起</button>
+      </div>
+    </div>
+
+    <!-- ============ 首次初始化：规则共建（必改 3 项） ============ -->
+    <div class="build" id="build">
+      <div class="statusbar"><span>9:41</span><span class="statusbar__icons"></span></div>
+      <header class="nav">
+        <div class="nav__title">规则共建</div>
+        <div class="nav__right"><button class="linkbtn" id="buildSkip">先去看看</button></div>
+      </header>
+      <div class="build__body" id="buildBody"></div>
+      <div class="build__foot">
+        <div class="tally">
+          <div id="tA"><b>0</b><span>改分值</span></div>
+          <div id="tB"><b>0</b><span>改行为项</span></div>
+          <div id="tC"><b>0</b><span>改奖励</span></div>
+        </div>
+        <button class="btn btn--primary btn--block mt-3" id="buildDone" disabled>改满 3 处就能开始</button>
+      </div>
+    </div>
+
+  </div></div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

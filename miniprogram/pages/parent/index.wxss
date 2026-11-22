@@ -1,0 +1,83 @@
+/* 罗森塔尔 · pages/parent/index.wxss（家长端）
+   家长端刻意更「素」：没有奖励视觉、没有进度庆祝，只做确认与鼓励。 */
+.subtabs{
+  display: flex; gap: var(--sp-2);
+  background: var(--paper-lo);
+  border-radius: var(--r-pill);
+  padding: 6rpx;
+  margin-bottom: var(--sp-4);
+}
+.subtabs__i{
+  flex: 1; text-align: center;
+  padding: 16rpx 0;
+  border-radius: var(--r-pill);
+  color: var(--ink-2);
+  font-size: 25rpx;
+}
+.subtabs__i.on{ background: var(--paper-hi); color: var(--ink); box-shadow: var(--sh-1); }
+.subtabs__dot{
+  display: inline-block; min-width: 30rpx;
+  margin-left: 8rpx; padding: 0 8rpx;
+  border-radius: var(--r-pill);
+  background: var(--amber-soft); color: #8C4315;
+  font-size: 20rpx;
+}
+
+.p__bar{ margin-bottom: var(--sp-3); }
+.p__praise{
+  margin-top: var(--sp-3);
+  padding: var(--sp-3);
+  border-radius: var(--r-sm);
+  background: var(--jade-soft);
+  color: #2F5A4A;
+  font-size: 25rpx;
+  line-height: 1.7;
+}
+.p__no{ color: var(--ink); font-weight: 600; }
+.p__add{
+  flex: none; width: 64rpx; height: 64rpx; line-height: 64rpx; text-align: center;
+  border-radius: 50%; background: var(--amber-soft); color: #8C4315; font-size: 34rpx;
+}
+
+.banned{ display: flex; flex-wrap: wrap; gap: 10rpx; }
+.banned__w{
+  padding: 6rpx 16rpx;
+  border-radius: var(--r-pill);
+  background: var(--paper-lo);
+  color: var(--ink-3);
+  font-size: 22rpx;
+  text-decoration: line-through;
+}
+
+.r__grid{ display: flex; flex-wrap: wrap; gap: var(--sp-3); }
+.r__c{ flex: 1 1 44%; background: var(--paper-lo); border-radius: var(--r-sm); padding: var(--sp-3); }
+.r__n{ font-family: var(--f-num); font-size: 44rpx; color: var(--amber); }
+.r__l{ font-size: 21rpx; color: var(--ink-2); }
+
+.r__row{ display: flex; align-items: center; gap: var(--sp-2); margin-top: var(--sp-3); }
+.r__k{ width: 120rpx; font-size: 24rpx; color: var(--ink-2); }
+.r__bar{ flex: 1; }
+.r__v{ width: 60rpx; text-align: right; font-family: var(--f-num); font-size: 26rpx; }
+
+.r__week{ display: flex; gap: 8rpx; }
+.r__day{ flex: 1; text-align: center; background: var(--paper-lo); border-radius: var(--r-sm); padding: var(--sp-2) 0; }
+.r__dn{ font-family: var(--f-num); font-size: 32rpx; }
+.r__dd{ font-size: 18rpx; color: var(--ink-3); margin-top: 2rpx; }
+
+/* 规则双签：签字前要看清楚自己同意的是什么 */
+.sig__list{ display: flex; flex-direction: column; gap: var(--sp-2); }
+.sig__i{
+  display: flex; align-items: flex-start; gap: var(--sp-2);
+  padding: var(--sp-3);
+  border-radius: var(--r-sm);
+  background: var(--paper-lo);
+}
+.sig__k{
+  flex: none;
+  padding: 2rpx 14rpx;
+  border-radius: var(--r-pill);
+  background: var(--paper-hi);
+  color: var(--ink-3);
+  font-size: 20rpx;
+}
+.sig__t{ flex: 1; min-width: 0; font-size: 25rpx; line-height: 1.6; }

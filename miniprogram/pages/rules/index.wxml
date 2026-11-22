@@ -1,0 +1,89 @@
+<!-- 罗森塔尔 · pages/rules/index.wxml（我的规则）
+     每一条后面都能看到「是谁定的、什么时候定的」——这是双签留痕的最小形态。 -->
+<view class="page-root stage-{{stage}}">
+
+  <!-- 共建进度 -->
+  <view class="card">
+    <view class="row row--between">
+      <view class="card__t">规则共建 · 必改 3 项</view>
+      <text class="chip {{amended >= 3 ? 'chip--jade' : 'chip--amber'}}">{{amendChip}}</text>
+    </view>
+    <view class="card__d mt-2">规则里必须有你自己改过的地方。改不满 3 处，这份表就还是大人的表。</view>
+    <view class="tally mt-3">
+      <view class="{{amend.point > 0 ? 'on' : ''}}"><text class="tally__n">{{amend.point > 0 ? 1 : 0}}</text><text class="tally__l">改分值</text></view>
+      <view class="{{amend.item > 0 ? 'on' : ''}}"><text class="tally__n">{{amend.item > 0 ? 1 : 0}}</text><text class="tally__l">改行为项</text></view>
+      <view class="{{amend.reward > 0 ? 'on' : ''}}"><text class="tally__n">{{amend.reward > 0 ? 1 : 0}}</text><text class="tally__l">改奖励</text></view>
+    </view>
+    <button class="btn btn--primary btn--block mt-3" disabled="{{!canFinish}}" bindtap="onFinish">{{finishTxt}}</button>
+    <view class="card__d mt-2">{{sigText}}</view>
+  </view>
+
+  <!-- 加一条自己的行为项（属于第 2 改） -->
+  <view class="card">
+    <view class="card__t">加一条你自己想要的</view>
+    <view class="card__d mt-2">分值你定。写具体动作，别写「好好学习」这种。</view>
+    <input class="field mt-3" value="{{newItemName}}" maxlength="40"
+           placeholder="例：练吉他 20 分钟" bindinput="onNewItemInput" />
+    <view class="row row--between mt-2">
+      <picker mode="selector" range="{{scores}}" value="{{newItemPointsIdx}}" bindchange="onNewItemPoints">
+        <view class="chip chip--amber">分值：{{newItemPointsLabel}}</view>
+      </picker>
+      <button class="btn btn--sm btn--ghost" bindtap="onAddItem">加到自主力</button>
+    </view>
+  </view>
+
+  <!-- 行为项：按维度列出，每条可改分值 / 可删 -->
+  <view wx:for="{{dims}}" wx:key="k" class="card {{item.cls}}">
+    <view class="card__t">{{item.n}}</view>
+    <view class="items mt-3">
+      <view wx:for="{{item.items}}" wx:for-item="row" wx:key="id" class="rule">
+        <view class="item__p">+{{row.points}}</view>
+        <view class="rule__b">
+          <text class="rule__n">{{row.name}}</text>
+          <text class="rule__m">{{row.who}} · 每天最多 {{row.limit}} 次</text>
+        </view>
+        <picker mode="selector" range="{{scores}}" data-id="{{row.id}}" bindchange="onPickScore">
+          <view class="rule__btn">改分</view>
+        </picker>
+        <view class="rule__btn rule__btn--warn" data-id="{{row.id}}" bindtap="onRemoveItem">删</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 奖励档位：分值 / 内容 可改，可新增可删 -->
+  <view class="card">
+    <view class="card__t">奖励档位</view>
+    <view class="card__d mt-2">分值、内容都随你改；也能自己加一档、删掉不想要的。改过的那档会留痕。</view>
+    <view class="rules-rewards mt-3">
+      <view wx:for="{{rewards}}" wx:key="cost" class="rw">
+        <view class="rw__c">{{item.cost}}</view>
+        <view class="rw__b">
+          <text class="rw__t">{{item.title}}</text>
+          <text class="rw__m">{{item.tier}} · {{item.who}}</text>
+        </view>
+        <view class="rw__ops">
+          <view class="rule__btn" data-cost="{{item.cost}}" bindtap="onPickReward">改</view>
+          <view class="rule__btn" data-cost="{{item.cost}}" bindtap="onSetCost">分</view>
+          <view class="rule__btn rule__btn--warn" data-cost="{{item.cost}}" bindtap="onRemoveReward">删</view>
+        </view>
+      </view>
+    </view>
+    <button class="btn btn--sm btn--ghost mt-3" bindtap="onAddReward">加一档奖励（自己定分值和内容）</button>
+  </view>
+
+  <!-- 打印 / 下载这张规则表（四学段通用） -->
+  <view class="card">
+    <view class="card__t">打印 / 下载这张表</view>
+    <view class="card__d mt-2">把当前学段的规则表导出来：可以打印贴墙，也可以存成 Excel 记账。</view>
+    <view class="rules-print mt-3">
+      <button class="btn btn--sm btn--ghost" bindtap="onPrintRuleTable">打印 / 复制规则表</button>
+      <button class="btn btn--sm btn--ghost" bindtap="onExportRuleCsv">下载规则表 Excel</button>
+    </view>
+  </view>
+
+  <view class="todo">
+    改分值 / 删行为项 / 加行为项 / 改奖励内容 四个动作都已接 store，
+    并各自计入「必改 3 项」；finishBuild() 在 store 层拒绝未改满 3 处的调用。
+    双签时间戳（家长共同签署）、规则版本历史回看属于 S4。
+  </view>
+</view>

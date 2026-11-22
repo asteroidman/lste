@@ -1,0 +1,13 @@
+node_modules/
+www/
+android/app/src/main/assets/public/
+android/app/src/main/assets/capacitor.config.json
+*.keystore
+*.base64
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/.idea/
+android/captures/
+android/.cxx/

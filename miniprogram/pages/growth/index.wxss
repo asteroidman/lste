@@ -1,0 +1,79 @@
+/* 罗森塔尔 · pages/growth/index.wxss（成长）
+   热力等级色是预计算的 rgba 常量：小程序对 color-mix() 支持不稳（移植指南 §三），
+   所以这里把原型的 color-mix(dim 13%) 直接写成等价值。 */
+.g__bar{ margin: 0 var(--sp-1) var(--sp-3); align-items: center; }
+.g__acts{ display: flex; gap: 8rpx; flex: none; }
+
+.mile--badge{ flex: 1 1 30%; text-align: center; }
+.mile--badge .mile__n{ font-size: 36rpx; color: var(--ink-3); }
+.mile--badge.mile--on{ background: var(--gold-soft); }
+.mile--badge.mile--on .mile__n{ color: var(--gold); }
+.mile__d{ font-size: 19rpx; color: var(--ink-3); margin-top: 4rpx; line-height: 1.5; }
+
+.heat__w{  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8rpx;
+  color: var(--ink-3);
+  font-size: 20rpx;
+  text-align: center;
+}
+.heat{
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8rpx;
+  margin-top: 8rpx;
+}
+.heat__c{
+  height: 76rpx;                 /* 固定高度：不用 aspect-ratio（老基础库不稳） */
+  border-radius: 14rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper-lo);
+}
+.heat__c--pad{ background: transparent; }
+.heat__c--today{ border: 2rpx solid var(--amber); }
+.heat__d{ font-size: 20rpx; color: var(--ink-2); }
+.heat--0 .heat__d{ color: var(--ink-3); }
+.heat__m{ font-size: 18rpx; color: #FFF8F0; line-height: 1; }
+
+.heat--0{ background: var(--paper-lo); }
+.heat--1{ background: #F4E1CE; }
+.heat--2{ background: #EBC49B; }
+.heat--3{ background: #E0A167; }
+.heat--4{ background: #C87832; }
+.heat--4 .heat__d{ color: #FFF8F0; }
+
+.legend{
+  display: flex; align-items: center; gap: 8rpx;
+  margin-top: var(--sp-3); color: var(--ink-3); font-size: 20rpx;
+}
+.legend__i{ width: 26rpx; height: 26rpx; border-radius: 8rpx; }
+.legend__note{ margin-left: auto; }
+
+.miles{ display: flex; flex-wrap: wrap; gap: var(--sp-3); }
+.mile{
+  flex: 1 1 44%;
+  background: var(--paper-lo);
+  border-radius: var(--r-sm);
+  padding: var(--sp-3);
+}
+.mile__n{ font-family: var(--f-num); font-size: 44rpx; color: var(--amber); }
+.mile__l{ font-size: 21rpx; color: var(--ink-2); margin-top: 2rpx; }
+
+.tl{ display: flex; flex-direction: column; gap: var(--sp-3); }
+.tl__row{ display: flex; align-items: flex-start; gap: var(--sp-2); }
+.tl__row--off{ opacity: .5; }
+.tl__dot{
+  flex: none; width: 16rpx; height: 16rpx; margin-top: 12rpx;
+  border-radius: 50%; background: var(--amber);
+}
+.tl__row--off .tl__dot{ background: var(--ink-3); }
+.tl__b{ flex: 1; min-width: 0; }
+.tl__t{ font-size: 27rpx; }
+.tl__m{ font-size: 21rpx; color: var(--ink-3); margin-top: 2rpx; }
+.tl__p{ font-size: 23rpx; color: var(--jade); margin-top: 6rpx; line-height: 1.6; }
+.tl__r{ flex: none; text-align: right; }
+.tl__p2{ font-family: var(--f-num); font-size: 34rpx; color: var(--amber); }
+.tl__acts{ display: flex; flex-direction: column; align-items: flex-end; gap: 8rpx; margin-top: 8rpx; }

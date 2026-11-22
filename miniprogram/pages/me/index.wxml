@@ -1,0 +1,122 @@
+<!-- 罗森塔尔 · pages/me/index.wxml（我的） -->
+<view wx:if="{{onboarded}}" class="page-root stage-{{stage}}">
+
+  <!-- 身份 -->
+  <view class="card">
+    <view class="row">
+      <view class="avatar">{{initial}}</view>
+      <view class="me__id">
+        <view class="me__nick">{{nick}}</view>
+        <view class="card__d">{{grade}} · 规则由我和你一起定</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 学段 -->
+  <view class="card">
+    <view class="row row--between">
+      <view class="card__t">{{stageName}}</view>
+      <text class="chip chip--amber">{{stageChip}}</text>
+    </view>
+    <view class="card__d mt-2">{{stageSub}}</view>
+    <view class="card__d mt-1">权限：{{stagePerm}}</view>
+    <picker mode="selector" range="{{stageNames}}" bindchange="onPickStage">
+      <view class="btn btn--sm btn--ghost mt-3">切换学段（小学低段 → 高中）</view>
+    </picker>
+    <view class="card__d mt-2">同一套内核，四种尺度；变的是自主权与分值上限，不变的是「只加分」。</view>
+  </view>
+
+  <!-- 规则共建：必改 3 项 -->
+  <view class="card">
+    <view class="row row--between">
+      <view class="card__t">规则共建</view>
+      <text class="chip chip--jade">{{amendChip}}</text>
+    </view>
+    <view class="card__d mt-2">规则里必须有你自己改过的地方。改不满 3 处，这份表就还是大人的表。</view>
+    <view class="card__d mt-2">{{ruleHint}}</view>
+    <view class="row row--between mt-3">
+      <text class="chip {{sigOk ? 'chip--jade' : 'chip--amber'}}">{{sigChip}}</text>
+    </view>
+    <view class="card__d mt-1">{{sigText}}</view>
+    <button class="btn btn--sm btn--ghost mt-3" bindtap="goRules">去看看我可以改什么</button>
+  </view>
+
+  <!-- 入口 -->
+  <view class="card me__menu">
+    <view wx:for="{{menu}}" wx:key="key" class="item me__item" data-url="{{item.url}}" bindtap="onNav">
+      <view class="item__p">{{item.icon}}</view>
+      <view class="item__b">
+        <text class="item__n">{{item.label}}</text>
+        <text class="item__m">{{item.sub}}</text>
+      </view>
+    </view>
+
+    <!-- 惊喜卡：连续 7 天达成 → 自己挑一张（零随机，不是抽奖） -->
+    <view class="item me__item {{surpriseCanDraw ? 'me__item--ready' : ''}}" bindtap="onSurprise">
+      <view class="item__p">✦</view>
+      <view class="item__b">
+        <text class="item__n">惊喜卡</text>
+        <text class="item__m">{{surpriseTxt}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 数据：导出 / 指标 / 彻底删除（PRD §7 非功能需求） -->
+  <view class="card">
+    <view class="card__t">我的数据</view>
+    <view class="card__d mt-2">
+      这些记录是你自己的：可以随时导出一份带走，也可以随时彻底删掉。
+      家长那边删不了，但你自己说了算。
+    </view>
+    <view class="data__row mt-3">
+      <button class="btn btn--sm btn--ghost data__btn" bindtap="onExportAll">导出全部数据</button>
+      <button class="btn btn--sm btn--ghost data__btn" bindtap="onMetrics">看看数据</button>
+    </view>
+    <button class="btn btn--sm btn--ghost data__danger mt-2" bindtap="onWipeAll">彻底删除全部数据</button>
+  </view>
+
+  <!-- 打印 / 下载：规则表 + 一周一页（四学段通用） -->
+  <view class="card">
+    <view class="card__t">打印 / 下载</view>
+    <view class="card__d mt-2">
+      规则表可以打印贴墙，也可以存成 Excel；一周一页是这一周的记录（含双签栏）。
+    </view>
+    <view class="data__row mt-3">
+      <button class="btn btn--sm btn--ghost data__btn" bindtap="onPrintRuleTable">打印规则表</button>
+      <button class="btn btn--sm btn--ghost data__btn" bindtap="onExportRuleCsv">下载规则表 Excel</button>
+    </view>
+    <button class="btn btn--sm btn--ghost data__btn mt-2" bindtap="onPrintWeekPage">复制一周一页</button>
+  </view>
+
+  <view class="quote mt-4">
+    “你不是被积分管住的人，你是在练习管理自己。每一次小做到，都在证明：我可以。”
+  </view>
+
+  <view class="todo">
+    学段切换、共建计数与双签状态、入口导航、惊喜卡（连续 7 天自选）都已接真实状态。
+    主题与昵称自定义属于后续版本；打印/导出已可用（见成长页），服务端 PDF 待接口。
+  </view>
+</view>
+
+<!-- ============================================================
+     惊喜卡弹层：连续 7 天达成后**自己挑一张**。
+     合规红线：零随机、零概率，不做抽奖（移植指南 §八、PRD §4 M6 修订）。
+     ============================================================ -->
+<view wx:if="{{surpriseOpen}}" class="mask" bindtap="onCloseSurprise"></view>
+<view class="sheet {{surpriseOpen ? 'sheet--on' : ''}}" catchtap="noop">
+  <view class="sheet__grab"></view>
+  <view class="sheet__body">
+    <view class="sheet__tag">连续 7 天达成 · 任选一张</view>
+    <view class="praise">不是抽奖，是自选 —— 你坚持到了，就由你来挑。</view>
+
+    <view class="cards mt-3">
+      <view wx:for="{{surpriseCards}}" wx:key="idx" class="cards__i"
+            data-idx="{{item.idx}}" bindtap="onPickCard">
+        <text class="cards__t">{{item.title}}</text>
+        <text class="cards__m">{{item.desc}} · 有效期 {{item.exp}} 天</text>
+      </view>
+    </view>
+
+    <view class="card__d mt-3">这张卡不扣分：它换的是你连续 7 天的记录，不是你的余额。</view>
+  </view>
+</view>

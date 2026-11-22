@@ -1,0 +1,23 @@
+{
+  "name": "rosenthal-android",
+  "version": "1.0.0",
+  "private": true,
+  "description": "罗森塔尔 · 单文件家庭版的 Android 壳（Capacitor，零联网）",
+  "scripts": {
+    "web": "node scripts/sync-web.mjs",
+    "verify": "node scripts/verify-web.mjs",
+    "preflight": "node ../single/_smoke.mjs && node ../single/build.mjs && npm run web && npm run verify",
+    "assets": "npx capacitor-assets generate --android && node scripts/fix-adaptive-icons.mjs",
+    "sync": "npm run web && npm run verify && npx cap sync android"
+  },
+  "dependencies": {
+    "@capacitor/app": "^6.0.0",
+    "@capacitor/core": "^6.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/assets": "^3.0.0",
+    "@capacitor/cli": "^6.0.0",
+    "jsdom": "^24.1.0"
+  }
+}

@@ -1,0 +1,12 @@
+# 微信开发者工具的本机私有配置：各人的编译模式、调试基础库、urlCheck 开关等
+project.private.config.json
+
+# 依赖与构建产物（本工程零依赖，出现这些说明有人误装了东西）
+node_modules/
+miniprogram_npm/
+dist/
+
+# 开发期工具产生的缓存与临时输出
+tools/__pycache__/
+*.pyc
+_smoke_out.txt

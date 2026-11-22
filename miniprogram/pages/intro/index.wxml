@@ -1,0 +1,33 @@
+<!-- ============================================================
+     罗森塔尔 · pages/intro/index.wxml（关于罗森塔尔 · 首次介绍页）
+     先讲清「期望的力量」，再放人进入。首次冷启动出现一次；
+     之后可从「我的 → 关于罗森塔尔」重看。
+     ============================================================ -->
+<view class="page-root stage-{{stage}}">
+  <view class="intro">
+    <view class="intro__k">ROSENTHAL · 期望的力量</view>
+    <view class="intro__t">罗森塔尔效应</view>
+    <view class="intro__lead">你怎么看一个人，他就可能慢慢长成那个样子。</view>
+
+    <view class="card">
+      <view class="card__t">那次实验</view>
+      <view class="card__d mt-2">1968 年，心理学家罗森塔尔随机挑了几个学生，却告诉老师「这几个孩子很有潜力」。一学期后，这几个孩子真的进步得更多。</view>
+      <view class="card__d mt-2">变化其实不在孩子身上，而在老师身上：老师更耐心了，给的机会更多了，也更相信他们了。这份期待，被孩子接住了。</view>
+    </view>
+
+    <view class="card">
+      <view class="card__t">所以这一版不做什么</view>
+      <view class="card__d mt-2">· 只加分，不扣分 —— 没做到时我们换方法，不写差评；</view>
+      <view class="card__d">· 不拿你和谁比，只和你自己的昨天比；</view>
+      <view class="card__d">· 看到的是「做到了什么」，不给人贴标签。</view>
+    </view>
+
+    <view class="card">
+      <view class="card__t">它想做的事</view>
+      <view class="card__d mt-2">把「我相信你能做到」变成每天一句看得见的具体的话，陪她慢慢长成她自己想成为的样子。</view>
+    </view>
+
+    <button class="btn btn--primary btn--block mt-4" bindtap="onEnter">{{cta}}</button>
+    <view class="intro__foot">首次进入先看这一页；之后可以在「我的 → 关于罗森塔尔」随时重看。</view>
+  </view>
+</view>

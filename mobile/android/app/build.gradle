@@ -1,0 +1,74 @@
+apply plugin: 'com.android.application'
+
+android {
+    namespace "com.rosenthal.family"
+    compileSdk rootProject.ext.compileSdkVersion
+    defaultConfig {
+        applicationId "com.rosenthal.family"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        /* CI 出包时传 -PversionCode=<run_number> -PversionName=<tag>；本地默认 1 / 1.0 */
+        versionCode project.hasProperty('versionCode') ? project.property('versionCode').toInteger() : 1
+        versionName project.hasProperty('versionName') ? project.property('versionName').toString() : "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        aaptOptions {
+             // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
+             // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
+            ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
+        }
+    }
+    /* 固定签名：同一个 keystore 才能覆盖安装升级（卸载会清掉 WebView 本地数据）。
+       CI 把 Secrets 解码到 ROSENTHAL_KEYSTORE_PATH，并用 STORE_PASSWORD / KEY_ALIAS /
+       KEY_PASSWORD 四个环境变量传入。没有签名信息时退化成 debug 签名，便于本地试构建。 */
+    signingConfigs {
+        release {
+            def ksPath = System.getenv('ROSENTHAL_KEYSTORE_PATH')
+            if (ksPath && file(ksPath).exists()) {
+                storeFile file(ksPath)
+                storePassword System.getenv('STORE_PASSWORD')
+                keyAlias System.getenv('KEY_ALIAS')
+                keyPassword System.getenv('KEY_PASSWORD')
+            }
+        }
+    }
+    buildTypes {
+        release {
+            if (System.getenv('ROSENTHAL_KEYSTORE_PATH') && file(System.getenv('ROSENTHAL_KEYSTORE_PATH')).exists()) {
+                signingConfig signingConfigs.release
+            } else {
+                signingConfig signingConfigs.debug
+            }
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+repositories {
+    flatDir{
+        dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
+    implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
+    implementation project(':capacitor-android')
+    testImplementation "junit:junit:$junitVersion"
+    androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
+    implementation project(':capacitor-cordova-android-plugins')
+}
+
+apply from: 'capacitor.build.gradle'
+
+try {
+    def servicesJSON = file('google-services.json')
+    if (servicesJSON.text) {
+        apply plugin: 'com.google.gms.google-services'
+    }
+} catch(Exception e) {
+    logger.info("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
+}

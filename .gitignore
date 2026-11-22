@@ -1,0 +1,29 @@
+# 依赖与构建产物（CI 用 package-lock 还原，不提交 node_modules）
+node_modules/
+**/node_modules/
+mobile/www/
+mobile/android/.gradle/
+mobile/android/build/
+mobile/android/app/build/
+mobile/android/local.properties
+mobile/android/captures/
+mobile/android/.idea/
+website/logs/
+website/coverage/
+coverage/
+
+# 私钥与本地配置 —— 绝不提交
+*.keystore
+*.base64
+*.base64.txt
+.env
+mobile/android/google-services.json
+
+# 历史存档（不是代码）
+session.v4.jsonl
+dsh-session-session-*.zip
+
+# 编辑器 / 系统
+.DS_Store
+Thumbs.db
+*.log

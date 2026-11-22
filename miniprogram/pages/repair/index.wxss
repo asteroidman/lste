@@ -1,0 +1,22 @@
+/* 罗森塔尔 · pages/repair/index.wxss（修复行动） */
+.tpls{ display: flex; flex-direction: column; gap: var(--sp-2); }
+.tpl{
+  padding: var(--sp-3);
+  border: 2rpx solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--paper-hi);
+}
+.tpl--on{ border-color: var(--amber); background: var(--amber-soft); }
+.tpl__t{ font-size: 28rpx; font-weight: 500; }
+.tpl__d{ font-size: 23rpx; color: var(--ink-2); line-height: 1.7; margin-top: 6rpx; }
+
+.fix{
+  display: flex; align-items: center; gap: var(--sp-3);
+  padding: var(--sp-3) 0;
+  border-bottom: 2rpx solid var(--line);
+}
+.fix:last-child{ border-bottom: 0; }
+.fix--done{ opacity: .65; }
+.fix__b{ flex: 1; min-width: 0; }
+.fix__t{ font-size: 27rpx; }
+.fix__m{ font-size: 21rpx; color: var(--ink-3); margin-top: 4rpx; line-height: 1.6; }

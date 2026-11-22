@@ -1,0 +1,105 @@
+<!-- ============================================================
+     罗森塔尔 · pages/onboarding/index.wxml（规则共建 · 必改 3 项）
+     这一页盖住整个应用：三处各改一次，才允许「开始使用」。
+     ============================================================ -->
+<view class="page-root stage-{{stage}} ob">
+
+  <view class="ob__head">
+    <view class="ob__t">规则共建</view>
+    <button class="btn btn--sm btn--ghost" bindtap="onSkip">先去看看</button>
+  </view>
+
+  <view class="page__hint">
+    这份表里有 {{itemCount}} 条行为和 {{rewardCount}} 档奖励。它现在还是大人写的版本 ——
+    <text class="ob__em">你至少要改 3 处</text>，它才算你的。
+    <view>改分值、改行为项、改奖励，各改一处。</view>
+  </view>
+
+  <!-- ① 改分值 -->
+  <view class="card">
+    <view class="row row--between">
+      <view class="card__t">① 改分值</view>
+      <text class="chip {{amend.point > 0 ? 'chip--amber' : ''}}">{{amend.point > 0 ? '已改' : '待改'}}</text>
+    </view>
+    <view class="card__d mt-2">哪条给少了、哪条给多了？直接点加减（1–5 分）。</view>
+
+    <view class="items mt-3">
+      <view wx:for="{{pointItems}}" wx:key="id" class="item">
+        <view class="item__p">+{{item.points}}</view>
+        <view class="item__b">
+          <text class="item__n">{{item.name}}</text>
+          <text class="item__m">{{item.changed ? '你改过' : '模板值'}}</text>
+        </view>
+        <view class="ob__pm">
+          <view class="ob__pmbtn {{item.canMinus ? '' : 'ob__pmbtn--off'}}"
+                data-id="{{item.id}}" bindtap="onMinus">−</view>
+          <view class="ob__pmbtn {{item.canPlus ? '' : 'ob__pmbtn--off'}}"
+                data-id="{{item.id}}" bindtap="onPlus">＋</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ② 改行为项 -->
+  <view class="card">
+    <view class="row row--between">
+      <view class="card__t">② 改行为项</view>
+      <text class="chip {{amend.item > 0 ? 'chip--jade' : ''}}">{{amend.item > 0 ? '已改' : '待改'}}</text>
+    </view>
+    <view class="card__d mt-2">看不顺眼的可以删掉；你正在做的事，可以自己加进来。</view>
+
+    <view class="pick mt-3">
+      <view wx:for="{{delItems}}" wx:key="id" class="pick__i"
+            data-id="{{item.id}}" bindtap="onDelete">删掉「{{item.name}}」</view>
+    </view>
+
+    <input class="field mt-3" value="{{newName}}" maxlength="40"
+           placeholder="我自己想加的一条：例 练吉他 20 分钟"
+           bindinput="onNewNameInput" />
+    <view class="row row--between mt-2">
+      <picker mode="selector" range="{{scores}}" value="{{newPointsIdx}}" bindchange="onNewPoints">
+        <view class="chip chip--amber">分值：{{newPointsLabel}}</view>
+      </picker>
+      <button class="btn btn--sm btn--primary" bindtap="onAddItem">加入</button>
+    </view>
+  </view>
+
+  <!-- ③ 改奖励 -->
+  <view class="card">
+    <view class="row row--between">
+      <view class="card__t">③ 改奖励</view>
+      <text class="chip {{amend.reward > 0 ? 'chip--amber' : ''}}">{{amend.reward > 0 ? '已改' : '待改'}}</text>
+    </view>
+    <view class="card__d mt-2">把奖励换成你真正想要的。想要什么就写什么，家长只能确认能不能做到。</view>
+
+    <view class="ob__rewards mt-3">
+      <view wx:for="{{rewards}}" wx:key="cost" class="ob__rw">
+        <text class="chip">{{item.cost}} 分</text>
+        <block wx:if="{{editingCost === item.cost}}">
+          <input class="field ob__rwin" value="{{editingTitle}}" maxlength="40"
+                 focus bindinput="onRewardInput" />
+          <view class="ob__rwbtn" bindtap="onSaveReward">记下</view>
+          <view class="ob__rwbtn ob__rwbtn--off" bindtap="onCancelReward">取消</view>
+        </block>
+        <block wx:else>
+          <text class="ob__rwt">{{item.title}}{{item.changed ? '（你改的）' : ''}}</text>
+          <view class="ob__rwbtn" data-cost="{{item.cost}}" bindtap="onEditReward">改</view>
+        </block>
+      </view>
+    </view>
+  </view>
+
+  <view class="page__hint">
+    改完只是你的版本。妈妈那边还要点一次「我按你的版本来」，两边都确认了才生效 —— 她也不能自己偷偷改。
+  </view>
+
+  <!-- 底部固定：进度 + 开始使用 -->
+  <view class="ob__foot">
+    <view class="tally">
+      <view class="{{amend.point > 0 ? 'on' : ''}}"><text class="tally__n">{{amend.point > 0 ? 1 : 0}}</text><text class="tally__l">改分值</text></view>
+      <view class="{{amend.item > 0 ? 'on' : ''}}"><text class="tally__n">{{amend.item > 0 ? 1 : 0}}</text><text class="tally__l">改行为项</text></view>
+      <view class="{{amend.reward > 0 ? 'on' : ''}}"><text class="tally__n">{{amend.reward > 0 ? 1 : 0}}</text><text class="tally__l">改奖励</text></view>
+    </view>
+    <button class="btn btn--primary btn--block mt-3" disabled="{{!canFinish}}" bindtap="onFinish">{{finishTxt}}</button>
+  </view>
+</view>

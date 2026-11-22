@@ -1,0 +1,19 @@
+{
+  "product": "罗森塔尔 Rosenthal · 单文件家庭版",
+  "scope": "single/",
+  "updated": "2026-11-16",
+  "rule": "界面文案（single/src/*）不得出现红线词；构建产物内联的引擎（miniprogram/utils/store.js 等）沿用小程序侧 redline-declaration.json 的既有声明，此处不重复计数。",
+  "banned_words": ["扣分", "删除", "排名", "比较", "负分", "监视", "查岗", "撤回"],
+  "ui_copy_files": [
+    "single/src/app.js",
+    "single/src/print.js",
+    "single/src/pin.js",
+    "single/src/style.css",
+    "single/src/shell.html"
+  ],
+  "ui_copy_counts": {
+    "扣分": 0, "删除": 0, "排名": 0, "比较": 0, "负分": 0, "监视": 0, "查岗": 0, "撤回": 0
+  },
+  "engine_inline_note": "single/罗森塔尔.html 由 single/build.mjs 从 miniprogram/utils/{templates,compat,store}.js 生成，其中引擎文案（如 addPoints 的拒绝理由）原样继承，计数见 miniprogram/redline-declaration.json。",
+  "verify": "node single/_smoke.mjs（E1 段扫描界面源码红线词；A 段校验产物无外链/无占位符）"
+}

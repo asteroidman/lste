@@ -1,0 +1,37 @@
+{
+  "pages": [
+    "pages/today/index",
+    "pages/growth/index",
+    "pages/week/index",
+    "pages/shop/index",
+    "pages/me/index",
+    "pages/parent/index",
+    "pages/repair/index",
+    "pages/rules/index",
+    "pages/intro/index",
+    "pages/onboarding/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "罗森塔尔",
+    "navigationBarBackgroundColor": "#F6F1E8",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#F6F1E8",
+    "backgroundTextStyle": "light"
+  },
+  "tabBar": {
+    "color": "#9498A0",
+    "selectedColor": "#D97A3D",
+    "backgroundColor": "#F6F1E8",
+    "borderStyle": "white",
+    "list": [
+      { "pagePath": "pages/today/index",  "text": "今天",   "iconPath": "assets/tab-today.png",  "selectedIconPath": "assets/tab-today-on.png" },
+      { "pagePath": "pages/growth/index", "text": "成长",   "iconPath": "assets/tab-growth.png", "selectedIconPath": "assets/tab-growth-on.png" },
+      { "pagePath": "pages/week/index",   "text": "周复盘", "iconPath": "assets/tab-week.png",   "selectedIconPath": "assets/tab-week-on.png" },
+      { "pagePath": "pages/shop/index",   "text": "兑换",   "iconPath": "assets/tab-shop.png",   "selectedIconPath": "assets/tab-shop-on.png" },
+      { "pagePath": "pages/me/index",     "text": "我的",   "iconPath": "assets/tab-me.png",     "selectedIconPath": "assets/tab-me-on.png" }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

@@ -1,0 +1,79 @@
+{
+  "description": "罗森塔尔 · 微信小程序测试环境（DevTools 项目根）。源码经 miniprogram/ 目录联接（junction）指向 ../miniprogram —— 单一真源，不复制代码。",
+  "miniprogramRoot": "miniprogram/",
+  "compileType": "miniprogram",
+  "appid": "wxaf8dd701665d2ad6",
+  "libVersion": "3.5.5",
+  "setting": {
+    "urlCheck": true,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true,
+    "bigPackageSizeSupport": false,
+    "ignoreDevUnusedFiles": false,
+    "ignoreUploadUnusedFiles": true,
+    "checkInvalidKey": true,
+    "coverView": true,
+    "lazyloadPlaceholderEnable": false,
+    "preloadBackgroundData": false,
+    "autoAudits": false,
+    "uglifyFileName": false,
+    "uploadWithSourceMap": true,
+    "packNpmManually": false,
+    "packNpmRelationList": [],
+    "minifyWXSS": true,
+    "minifyWXML": true,
+    "showShadowRootInWxmlPanel": true,
+    "useCompilerPlugins": false,
+    "compileHotReLoad": true,
+    "disableUseStrict": false,
+    "useApiHook": true,
+    "useApiHostProcess": true,
+    "condition": false
+  },
+  "simulatorType": "wechat",
+  "simulatorPluginLibVersion": {},
+  "condition": {},
+  "packOptions": {
+    "ignore": [
+      {
+        "type": "folder",
+        "value": "node_modules"
+      },
+      {
+        "type": "folder",
+        "value": "tests"
+      },
+      {
+        "type": "folder",
+        "value": "tools"
+      },
+      {
+        "type": "folder",
+        "value": "typings"
+      },
+      {
+        "type": "file",
+        "value": "package.json"
+      },
+      {
+        "type": "file",
+        "value": "package-lock.json"
+      },
+      {
+        "type": "file",
+        "value": "jest.config.js"
+      },
+      {
+        "type": "file",
+        "value": "tsconfig.json"
+      }
+    ],
+    "include": []
+  },
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
+  }
+}

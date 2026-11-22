@@ -1,0 +1,24 @@
+{
+  "name": "rosenthal-website",
+  "version": "0.1.0",
+  "private": true,
+  "description": "罗森塔尔 · 网页版（Node.js + MySQL，宝塔部署）。保留只加分 / 必改3项 / 双签 / 家长不可删 红线。",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "express-mysql-session": "^3.0.3",
+    "express-session": "^1.18.1",
+    "mysql2": "^3.11.5"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  }
+}

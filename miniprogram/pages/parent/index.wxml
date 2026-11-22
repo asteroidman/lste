@@ -1,0 +1,190 @@
+<!-- 罗森塔尔 · pages/parent/index.wxml（家长端 · navigateTo，非 tab）
+     外层闸门与其它页一致（wx:if="{{onboarded}}"），内层再按 signed 分签署屏 / 完整家长端。 -->
+<view wx:if="{{onboarded}}" class="ob-wrap">
+
+<!-- ============ 规则双签：没签字之前只显示这一屏 ============
+     这一页是签署入口，所以 guard 放行它（否则她改完提案、全站被拦，家长却进不来签字）。 -->
+<view wx:if="{{!signed}}" class="page-root stage-{{stage}}">
+
+  <view class="page__hint">
+    她已经把规则改成了她自己的版本。按约定，这一版要你点一次才算生效 ——
+    你签的是「我按你的版本来」，不是「我批准」。签完你仍然不能删她的记录、不能撤回已发出的券。
+  </view>
+
+  <view class="card">
+    <view class="row row--between">
+      <view class="card__t">规则 v1.{{sig.ruleVersion}} · 待你签署</view>
+      <text class="chip chip--amber">待生效</text>
+    </view>
+    <view class="card__d mt-2">她改了 {{sig.amended}} 处，下面是具体改了什么：</view>
+
+    <view class="sig__list mt-3">
+      <view wx:for="{{amendList}}" wx:key="text" class="sig__i">
+        <text class="sig__k">{{item.kind}}</text>
+        <text class="sig__t">{{item.text}}{{item.active ? '' : '（她删掉了）'}}</text>
+      </view>
+      <view wx:if="{{amendList.length === 0}}" class="sig__i">
+        <text class="sig__t">这一版还没有她改动的内容</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="card card--flat">
+    <view class="card__t">签了之后</view>
+    <view class="card__d mt-2">· 从今天起按这一版执行，往后的变更都要再签一次；</view>
+    <view class="card__d">· 你仍然只能看到她做到的事，不能删除、不能撤回、不能单方改分；</view>
+    <view class="card__d">· 她那边也会看到「妈妈已确认」，这是双向的。</view>
+  </view>
+
+  <button class="btn btn--primary btn--block" bindtap="onAgree">我按你的版本来</button>
+
+  <view class="todo">
+    这一页不受闸门拦截：否则她改完提案全站被拦，你却进不来签字。
+    签完之后这一页会显示完整的家长端（待确认 / 鼓励 / 报告）。
+  </view>
+</view>
+
+<!-- ============ 已双签：完整家长端 ============ -->
+<view wx:if="{{signed}}" class="page-root stage-{{stage}}">
+
+  <view class="page__hint">
+    这里只显示她**做到过**的事。她没做的，这一页看不到，也不该看到。
+  </view>
+
+  <!-- 角色切换：低段家长常拿着手机，给一个明确的来回切换 -->
+  <view class="row row--between p__bar">
+    <text class="card__d">家长端 · 只读正向记录，不可删除</text>
+    <button class="btn btn--sm btn--ghost" bindtap="goChild">回到孩子端</button>
+  </view>
+
+  <!-- 子页签 -->
+  <view class="subtabs">
+    <view wx:for="{{tabs}}" wx:key="k" class="subtabs__i {{tab === item.k ? 'on' : ''}}"
+          data-k="{{item.k}}" bindtap="onTab">
+      {{item.n}}<text wx:if="{{item.k === 'todo' && todoCount > 0}}" class="subtabs__dot">{{todoCount}}</text>
+    </view>
+  </view>
+
+  <!-- ① 待确认 -->
+  <block wx:if="{{tab === 'todo'}}">
+    <view wx:if="{{todo.length === 0}}" class="card">
+      <view class="card__d">没有待确认的记录。她今天还没有打卡，等她自己来。</view>
+    </view>
+    <view wx:else>
+      <view class="row row--between p__bar">
+        <text class="card__d">待确认 {{todoCount}} 条</text>
+        <button class="btn btn--sm btn--ghost" bindtap="onConfirmAll">全部确认</button>
+      </view>
+      <view wx:for="{{todo}}" wx:key="uid" class="card">
+        <view class="row row--between">
+          <view class="card__t">{{item.name}}</view>
+          <text class="chip chip--amber">+{{item.points}}</text>
+        </view>
+        <view class="card__d mt-1">{{item.dim}} · {{item.dateTxt}}<text wx:if="{{item.byParent}}"> · 家长代记</text></view>
+        <view wx:if="{{item.praise}}" class="p__praise">照这句念给她听：{{item.praise}}</view>
+        <button class="btn btn--sm btn--primary mt-3" data-uid="{{item.uid}}" bindtap="onConfirm">确认并鼓励</button>
+      </view>
+    </view>
+  </block>
+
+  <!-- ② 鼓励 -->
+  <block wx:elif="{{tab === 'praise'}}">
+    <view class="card">
+      <view class="card__t">具体表扬句式</view>
+      <view class="card__d mt-2">固定用「我看到你……这说明你……」：说过程和策略，不说天赋。</view>
+    </view>
+    <view wx:if="{{praise.length === 0}}" class="card">
+      <view class="card__d">还没有确认过的记录。</view>
+    </view>
+    <view wx:for="{{praise}}" wx:key="uid" class="card">
+      <view class="row row--between">
+        <view class="card__t">{{item.name}}</view>
+        <text class="chip">+{{item.points}}</text>
+      </view>
+      <view class="p__praise">{{item.praise}}</view>
+      <view class="card__d mt-1">{{item.dateTxt}}<text wx:if="{{item.byParent}}"> · 家长代记</text></view>
+    </view>
+    <view class="card card--flat">
+      <view class="card__t">这些话别说</view>
+      <view class="card__d mt-2">下面这些词命中就会被文案引擎拦下来，也请不要口头说：</view>
+      <view class="banned mt-2">
+        <text wx:for="{{banned}}" wx:key="*this" class="banned__w">{{item}}</text>
+      </view>
+    </view>
+  </block>
+
+  <!-- ③ 帮 TA 记一笔（低段）：孩子还小、没法自己操作时，家长代记 -->
+  <block wx:elif="{{tab === 'record'}}">
+    <view class="card">
+      <view class="card__t">帮 TA 记一笔</view>
+      <view class="card__d mt-2">{{recordNote}}</view>
+
+      <block wx:if="{{canRecord}}">
+        <view wx:for="{{recordItems}}" wx:key="k">
+          <view class="card__t mt-4">{{item.n}}</view>
+          <button wx:for="{{item.items}}" wx:for-item="row" wx:key="id"
+                  class="item mt-2" data-id="{{row.id}}" bindtap="onRecord">
+            <view class="item__p">+{{row.points}}</view>
+            <view class="item__b"><text class="item__n">{{row.name}}</text></view>
+            <view class="p__add">＋</view>
+          </button>
+        </view>
+      </block>
+    </view>
+    <view class="card card--flat">
+      <view class="card__d">记完会算进她的今天，也出现在「待确认」里。你仍然不能删她的记录、不能改分。</view>
+    </view>
+  </block>
+
+  <!-- ④ 报告：只讲做到了什么 -->
+  <block wx:else>
+    <view class="card">
+      <view class="card__t">这周她做到了</view>
+      <view class="r__grid mt-3">
+        <view class="r__c"><view class="r__n">{{report.streak}}</view><view class="r__l">连续有记录（天）</view></view>
+        <view class="r__c"><view class="r__n">{{report.weekScore}}</view><view class="r__l">本周得分</view></view>
+        <view class="r__c"><view class="r__n">{{report.lifetime}}</view><view class="r__l">累计获得</view></view>
+        <view class="r__c"><view class="r__n">{{report.couponCount}}</view><view class="r__l">待兑现的券</view></view>
+      </view>
+      <view class="card__d mt-3">已确认比例 {{report.confirmedRatio}}%（这是给我自己看的：我有没有及时回应她）</view>
+      <view wx:if="{{report.hidden > 0}}" class="card__d mt-1">
+        另有 {{report.hidden}} 条她设成了「仅自己可见」—— 这一页不会显示它们的内容，也不该显示。
+      </view>
+    </view>
+
+    <view class="card">
+      <view class="card__t">按维度分布</view>
+      <view wx:for="{{report.dims}}" wx:key="n" class="r__row">
+        <text class="r__k">{{item.n}}</text>
+        <view class="bar r__bar"><view style="width:{{report.lifetime ? item.v / report.lifetime * 100 : 0}}%"></view></view>
+        <text class="r__v">{{item.v}}</text>
+      </view>
+    </view>
+
+    <view class="card">
+      <view class="card__t">这七天</view>
+      <view class="r__week mt-3">
+        <view wx:for="{{report.week}}" wx:key="date" class="r__day">
+          <view class="r__dn">{{item.sc}}</view>
+          <view class="r__dd">{{item.date}}</view>
+        </view>
+      </view>
+      <view class="card__d mt-3">这一页没有「她没做」的清单，也没有和别人的比较。</view>
+    </view>
+
+    <view class="card card--flat">
+      <view class="card__t">我的能力边界</view>
+      <view class="card__d mt-2">
+        我能做：确认、补充鼓励、参与规则双签、看汇总。<text class="p__no">我不能做：删除她的记录、撤回已发出的券、改她定下的分值。</text>
+      </view>
+    </view>
+  </block>
+
+  <view class="todo">
+    确认与鼓励已接真实引擎（store 只暴露 confirmEntries 与 parentAgree，没有删除接口）。
+    规则双签已落地：孩子改完提案 → 这一页签署 → 规则生效（v1.{{sig.ruleVersion}}，{{sig.agreedDate}}）。
+    周报导出、家长端推送属于后续版本。
+  </view>
+</view>
+
+</view>

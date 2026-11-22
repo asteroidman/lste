@@ -1,0 +1,67 @@
+<!-- 罗森塔尔 · pages/shop/index.wxml（兑换） -->
+<view wx:if="{{onboarded}}" class="page-root stage-{{stage}}">
+
+  <!-- 钱包 -->
+  <view class="wallet">
+    <view class="wallet__c">
+      <view class="wallet__n">{{balance}}</view>
+      <view class="wallet__l">可用余额</view>
+    </view>
+    <view class="wallet__c">
+      <view class="wallet__n">{{lifetime}}</view>
+      <view class="wallet__l">累计获得（不会因兑换变少）</view>
+    </view>
+  </view>
+
+  <!-- 离下一档还差 -->
+  <view class="card">
+    <view class="row row--between">
+      <view class="card__t">离下一档还差</view>
+      <text class="chip chip--amber">{{nextTxt}}</text>
+    </view>
+    <view class="bar mt-2">
+      <view style="width:{{nextPct}}%"></view>
+    </view>
+    <view class="card__d mt-2">奖励由你选，定了就不改；家长不能临时加码，也不能反悔。</view>
+  </view>
+
+  <!-- 奖励档位 -->
+  <view wx:for="{{rewards}}" wx:key="cost" class="card reward {{item.enough ? '' : 'reward--lock'}}">
+    <view class="row row--between">
+      <text class="chip">{{item.tier}}</text>
+      <view class="reward__cost">{{item.cost}} 分</view>
+    </view>
+    <view class="reward__t">{{item.title}}</view>
+    <view class="card__d">{{item.desc}}<text wx:if="{{item.customBy}}"> · 这条是你自己改的</text></view>
+    <view class="row row--between mt-3">
+      <text class="reward__lack">{{item.enough ? '现在就能兑' : '还差 ' + item.lack + ' 分'}}</text>
+      <button class="btn btn--sm {{item.enough ? 'btn--primary' : ''}}" disabled="{{!item.enough}}"
+              data-idx="{{item.idx}}" bindtap="onRedeem">兑换</button>
+    </view>
+  </view>
+
+  <!-- 我的券 -->
+  <view class="card__t mt-4 shop__h">我的券</view>
+  <view wx:if="{{couponHint}}" class="card card--flat">
+    <view class="card__d">{{couponHint}}</view>
+  </view>
+
+  <view wx:for="{{coupons}}" wx:key="code" class="coupon {{item.cls}}">
+    <view class="coupon__l">
+      <view class="coupon__code">{{item.code}}</view>
+      <view class="coupon__t">{{item.title}}</view>
+      <view class="coupon__m">{{item.cost}} 分 · 有效期到 {{item.exp}}</view>
+    </view>
+    <view class="coupon__r">
+      <text class="chip">{{item.state}}</text>
+      <button wx:if="{{!item.used && !item.expired}}" class="btn btn--sm btn--ghost mt-1"
+              data-code="{{item.code}}" bindtap="onUseCoupon">核销</button>
+    </view>
+  </view>
+
+  <view class="todo">
+    余额、档位进度、兑换发券、券码唯一性与核销都已接真实引擎，
+    store 里**没有**任何删除券的接口（家长端因此无撤回能力）。惊喜卡（连续 7 天自选 1 张）
+    导出见成长页（一周一页 / 流水 CSV）。
+  </view>
+</view>

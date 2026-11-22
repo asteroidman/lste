@@ -1,0 +1,10 @@
+# 测试环境依赖 —— 只落在 lste-wx，不影响 miniprogram/（保持零依赖）
+node_modules/
+coverage/
+*.log
+
+# ../miniprogram 的只读镜像（由 tools/sync-source.mjs 生成，别提交、别在这里改代码）
+miniprogram/
+
+# 开发者工具本地私有配置（每台机器不同，别提交）
+project.private.config.json

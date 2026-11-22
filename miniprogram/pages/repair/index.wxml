@@ -1,0 +1,45 @@
+<!-- 罗森塔尔 · pages/repair/index.wxml（修复行动） -->
+<view wx:if="{{onboarded}}" class="page-root stage-{{stage}}">
+
+  <view class="page__hint">这里不扣分。没做到，我们只调方法，或者约一个更小的一步。</view>
+
+  <!-- 四类模板 -->
+  <view class="card">
+    <view class="card__t">选一类</view>
+    <view class="tpls mt-3">
+      <view wx:for="{{templates}}" wx:key="k" class="tpl {{item.on ? 'tpl--on' : ''}}"
+            data-k="{{item.k}}" bindtap="onPick">
+        <view class="tpl__t">{{item.t}}</view>
+        <view class="tpl__d">{{item.d}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 写一句自我提醒 -->
+  <view wx:if="{{pickedTpl}}" class="card">
+    <view class="card__t">下一小步</view>
+    <view class="card__d mt-2">{{pickedTpl.act}}</view>
+    <input class="field mt-3" value="{{note}}" maxlength="60"
+           placeholder="写一句：我下次怎么提醒自己" bindinput="onNoteInput" />
+    <button class="btn btn--sm btn--primary mt-3" bindtap="onSave">记下这一步（不给负分）</button>
+  </view>
+
+  <!-- 我记下的 -->
+  <view class="card">
+    <view class="card__t">我记下的修复</view>
+    <view wx:if="{{mine.length === 0}}" class="card__d mt-2">还没有。卡住的时候回来记一条就好。</view>
+    <view wx:for="{{mine}}" wx:key="id" class="fix {{item.done ? 'fix--done' : ''}}">
+      <view class="fix__b">
+        <view class="fix__t">{{item.title}}</view>
+        <view class="fix__m">{{item.dateTxt}} · {{item.note}}</view>
+      </view>
+      <text wx:if="{{item.done}}" class="chip chip--jade">已完成</text>
+      <button wx:else class="btn btn--sm btn--ghost" data-id="{{item.id}}" bindtap="onDone">完成了</button>
+    </view>
+  </view>
+
+  <view class="todo">
+    四类模板、自我提醒、完成留痕都已接 store；修复行动**不产生任何负分**，
+    完成时只做一次正向记录。10 分钟启动计时器、次日自动减少手机时长属于后续版本。
+  </view>
+</view>

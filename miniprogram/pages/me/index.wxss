@@ -1,0 +1,37 @@
+/* 罗森塔尔 · pages/me/index.wxss（我的） */
+.avatar{
+  flex: none;
+  width: 92rpx; height: 92rpx;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--r-sm);
+  background: rgba(217,122,61,.13);
+  color: #A85624;
+  font-size: 36rpx;
+  font-family: var(--f-display);
+}
+.me__id{ flex: 1; min-width: 0; }
+.me__nick{
+  font-family: var(--f-display);
+  font-size: 38rpx; font-weight: 600; letter-spacing: .02em;
+  margin: 0;
+}
+.me__menu{ padding: var(--sp-2); }
+.me__item{ margin-bottom: var(--sp-2); border: 0; background: transparent; }
+.me__item:last-child{ margin-bottom: 0; }
+.me__item--ready{ background: var(--gold-soft); }
+
+/* 惊喜卡卡池：自选列表，不是转盘 */
+.cards{ display: flex; flex-direction: column; gap: var(--sp-2); }
+.cards__i{
+  padding: var(--sp-3);
+  border: 2rpx solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--paper-hi);
+}
+.cards__t{ display: block; font-size: 27rpx; }
+.cards__m{ display: block; font-size: 21rpx; color: var(--ink-3); margin-top: 4rpx; }
+
+/* 我的数据：导出 / 指标 / 删除 */
+.data__row{ display: flex; gap: var(--sp-2); }
+.data__btn{ flex: 1; }
+.data__danger{ color: #A85624; border-color: rgba(217,122,61,.45); width: 100%; }

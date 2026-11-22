@@ -1,0 +1,3305 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>罗森塔尔 · 家庭版</title>
+<style>
+/* ============================================================
+   罗森塔尔 · 单文件家庭版 · 样式
+   暖纸底色 + 圆角卡片，与产品整体的温和语气一致。
+   打印时只显示 #print-root。
+   ============================================================ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --paper: #f7f4ee;
+  --card: #ffffff;
+  --ink: #3d3a34;
+  --muted: #8a857c;
+  --line: #ece7dd;
+  --green: #2f7d6d;
+  --green-soft: #e7f2ee;
+  --amber: #b97e2c;
+  --amber-soft: #fbf3e4;
+  --danger: #b04a3a;
+  --radius: 14px;
+}
+html, body { height: 100%; }
+body {
+  font-family: system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.55;
+  padding-bottom: 76px;
+}
+button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+input, select, textarea {
+  font: inherit; color: inherit;
+  border: 1px solid var(--line); border-radius: 10px;
+  padding: 9px 12px; background: #fffdf9; outline: none; width: 100%;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--green); }
+
+/* —— 页头 —— */
+.top {
+  position: sticky; top: 0; z-index: 5;
+  background: var(--paper); border-bottom: 1px solid var(--line);
+  padding: 12px 16px 10px;
+}
+.top-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.who { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.stats { text-align: right; color: var(--muted); font-size: 12.5px; }
+.stats b { color: var(--ink); font-size: 15px; }
+.chip {
+  display: inline-block; font-size: 11.5px; font-weight: 500;
+  background: var(--green-soft); color: var(--green);
+  border-radius: 999px; padding: 2px 9px; vertical-align: 2px;
+}
+.chip.gray { background: #eeeae2; color: var(--muted); }
+.chip.on { background: var(--green); color: #fff; }
+
+/* —— 主体 —— */
+.tabs-body { padding: 12px 12px 4px; display: grid; gap: 12px; max-width: 560px; margin: 0 auto; }
+.card {
+  background: var(--card); border-radius: var(--radius);
+  padding: 14px 14px 12px; box-shadow: 0 1px 3px rgba(61, 58, 52, .06);
+}
+.card h3 { font-size: 14px; color: var(--muted); font-weight: 600; margin-bottom: 8px; }
+.row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px dashed var(--line); }
+.row:first-of-type { border-top: none; }
+.rowmain { flex: 1; min-width: 0; }
+.rname { font-weight: 600; }
+.rmeta { font-size: 12.5px; color: var(--muted); margin-top: 1px; }
+.rpraise { font-size: 13px; color: var(--green); margin-top: 3px; }
+.rowops { display: flex; gap: 6px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
+.muted { color: var(--muted); font-size: 13px; }
+.tiny { color: var(--muted); font-size: 12px; margin-top: 8px; }
+b { font-weight: 700; }
+
+/* —— 按钮 —— */
+.btn {
+  border-radius: 10px; padding: 8px 14px; font-size: 14px;
+  background: #f1ede5; color: var(--ink); border: 1px solid var(--line);
+  white-space: nowrap;
+}
+.btn.primary { background: var(--green); color: #fff; border-color: var(--green); }
+.btn.danger { background: #fbeeec; color: var(--danger); border-color: #ecd3cf; }
+.btn.small { padding: 5px 11px; font-size: 13px; border-radius: 9px; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btnrow { display: flex; gap: 10px; margin-top: 14px; }
+.btnrow .btn { flex: 1; }
+.printrow { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.inrow { display: flex; gap: 8px; margin-top: 6px; }
+.inrow input, .inrow select { flex: 1; min-width: 0; }
+
+/* —— 横幅 / 余额 —— */
+.banner { border-radius: 12px; padding: 10px 13px; font-size: 13px; }
+.banner.ok { background: var(--green-soft); color: var(--green); }
+.banner.warn { background: var(--amber-soft); color: var(--amber); }
+.balancecard {
+  background: var(--green); color: #fff; border-radius: var(--radius);
+  padding: 18px; text-align: center;
+}
+.bal-n { font-size: 42px; font-weight: 800; line-height: 1.1; }
+.bal-t { font-size: 12.5px; opacity: .85; margin-top: 2px; }
+
+/* —— 首次使用 —— */
+.onboard { max-width: 560px; margin: 0 auto; padding: 40px 20px 30px; }
+.onboard h1 { font-size: 30px; letter-spacing: 2px; }
+.lead { color: var(--muted); margin: 10px 0 24px; font-size: 14.5px; }
+.onboard h3 { font-size: 15px; margin-bottom: 10px; }
+.stagegrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.stagecard {
+  text-align: left; background: var(--card); border: 2px solid var(--line);
+  border-radius: var(--radius); padding: 13px;
+}
+.stagecard.on { border-color: var(--green); }
+.sc-n { font-weight: 700; font-size: 16px; }
+.sc-g { font-size: 12px; color: var(--muted); margin-top: 1px; }
+.sc-sub { font-size: 12.5px; margin-top: 7px; }
+.sc-perm { font-size: 11.5px; color: var(--green); margin-top: 5px; }
+
+/* —— 周复盘候选 —— */
+.chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.chips .chip { padding: 6px 12px; font-size: 13px; background: #f1ede5; color: var(--ink); border: 1px solid var(--line); border-radius: 999px; }
+.chips .chip.on { background: var(--green); color: #fff; border-color: var(--green); }
+
+/* —— 底部标签栏 —— */
+.tabbar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 5;
+  display: flex; justify-content: center; gap: 2px;
+  background: var(--card); border-top: 1px solid var(--line);
+  padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+}
+.tab {
+  flex: 1; max-width: 110px; text-align: center; padding: 8px 0;
+  border-radius: 10px; font-size: 13.5px; color: var(--muted);
+}
+.tab.on { background: var(--green-soft); color: var(--green); font-weight: 700; }
+
+/* —— 模态框 —— */
+.mask {
+  position: fixed; inset: 0; z-index: 20;
+  background: rgba(50, 45, 38, .45);
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+}
+.modal {
+  background: var(--card); border-radius: var(--radius);
+  padding: 20px 18px 16px; width: 100%; max-width: 380px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, .18);
+}
+.modal h3 { font-size: 17px; margin-bottom: 8px; }
+.modal .muted { margin-bottom: 10px; }
+.modal input { margin-top: 8px; }
+.err { color: var(--danger); font-size: 13px; margin-top: 8px; min-height: 1em; }
+.reccode {
+  font-family: ui-monospace, Consolas, monospace; font-size: 22px; letter-spacing: 2px;
+  background: var(--amber-soft); color: var(--amber);
+  border-radius: 10px; padding: 14px; text-align: center; margin-top: 6px; user-select: all;
+}
+
+/* —— 提示条 —— */
+#toast {
+  position: fixed; left: 50%; bottom: 92px; transform: translateX(-50%) translateY(8px);
+  background: rgba(61, 58, 52, .92); color: #fff;
+  border-radius: 999px; padding: 9px 18px; font-size: 13.5px;
+  opacity: 0; pointer-events: none; transition: all .22s; z-index: 30;
+  max-width: 86vw; text-align: center;
+}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ---------------- 打印版面 ---------------- */
+#print-root { display: none; }
+.pt-page { max-width: 700px; margin: 0 auto; color: #222; }
+.pt-head { border-bottom: 2px solid #333; padding-bottom: 8px; margin-bottom: 12px; }
+.pt-title { font-size: 22px; font-weight: 800; letter-spacing: 1px; }
+.pt-sub { font-size: 13px; color: #555; margin-top: 3px; }
+.pt-stats { margin: 8px 0; font-size: 14px; }
+.pt-sec { font-weight: 700; margin: 14px 0 6px; font-size: 15px; }
+.pt-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.pt-table th, .pt-table td { border: 1px solid #bbb; padding: 5px 8px; text-align: left; }
+.pt-table th { background: #f0efe9; }
+.pt-num { text-align: right; white-space: nowrap; }
+.pt-list { list-style: none; }
+.pt-list li { padding: 5px 0; border-bottom: 1px dashed #ccc; font-size: 13.5px; }
+.pt-time { color: #666; font-size: 12px; margin-right: 6px; }
+.pt-pr { color: #2f7d6d; margin-top: 2px; padding-left: 4px; }
+.pt-chips .pt-chip {
+  display: inline-block; border: 1px solid #bbb; border-radius: 999px;
+  padding: 3px 10px; font-size: 12.5px; margin: 2px 4px 2px 0;
+}
+.pt-muted { color: #888; font-size: 13px; }
+.pt-blank { border: 1px dashed #aaa; border-radius: 6px; min-height: 52px; padding: 8px; color: #999; font-size: 13px; }
+.pt-sign { margin-top: 18px; font-size: 13px; }
+.pt-signrow { margin-top: 10px; }
+.pt-quote { margin-top: 16px; padding: 10px 12px; background: #f0efe9; border-radius: 8px; font-size: 13px; color: #444; }
+@media print {
+  #root, #toast, .tabbar, #modal-root { display: none !important; }
+  body { background: #fff; padding: 0; }
+  #print-root { display: block !important; }
+}
+
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div id="print-root"></div>
+<div id="modal-root"></div>
+<script>
+"use strict";
+const __mods = Object.create(null);
+function __def(name, factory) { __mods[name] = { factory: factory, inst: null }; }
+function __req(name) {
+  const m = __mods[name];
+  if (!m) throw new Error("module not found: " + name);
+  if (m.inst) return m.inst.exports;
+  const mod = { exports: {} };
+  m.inst = mod;
+  m.factory(__req, mod, mod.exports);
+  return mod.exports;
+}
+__def("./templates.js", function (require, module, exports) {
+/* ============================================================
+   罗森塔尔 Rosenthal · utils/templates.js
+   规则库与学段模板 —— 从 prototype/app.js 1:1 移植，不改任何分值。
+
+   移植原则（对应 README-小程序移植指南 §5.1）：
+   · 本文件是**纯数据 + 纯函数**，零 DOM、零 wx API，可在 Node 里直接 require 做回归；
+   · 小程序里建议把这四套模板上云（stage_template 集合），本文件作为离线兜底；
+   · 「只加分」的红线不在数据里，而在 utils/store.js 的 addPoints —— 唯一写入口。
+   ============================================================ */
+'use strict';
+
+/* 五个维度：与 app.wxss 的 --dim-* 令牌一一对应 */
+const DIMS = [
+  { k: 'study',  n: '学习力', c: 'var(--dim-study)'  },
+  { k: 'life',   n: '生活力', c: 'var(--dim-life)'   },
+  { k: 'body',   n: '身心力', c: 'var(--dim-body)'   },
+  { k: 'social', n: '社交力', c: 'var(--dim-social)' },
+  { k: 'self',   n: '自主力', c: 'var(--dim-self)'   },
+];
+
+/* 初中 26 条：题目最细、最贴近学科节奏（首发落地用户所在学段） */
+const ITEMS = [
+  { id:'s1', dim:'study', name:'放学后 30 分钟内主动开始作业', points:2, limit:1, p:'放学回家后半小时内就坐到了书桌前', t:'你越来越会给自己按下启动键' },
+  { id:'s2', dim:'study', name:'专注学习 25 分钟，不玩手机',   points:2, limit:4, p:'这 25 分钟里没有碰手机', t:'你管住了最容易分心的那一下' },
+  { id:'s3', dim:'study', name:'作业独立完成并自查',           points:3, limit:1, p:'作业是自己做完的，最后还检查了一遍', t:'你在为自己的结果负责' },
+  { id:'s4', dim:'study', name:'整理 / 重做 1 道错题',          points:3, limit:3, p:'把这周的错题重新做了一遍', t:'你在把不会的地方，变成会的地方' },
+  { id:'s5', dim:'study', name:'主动问老师或同学问题',         points:3, limit:2, p:'遇到不会的题，你开口问了', t:'你知道求助也是一种能力' },
+  { id:'s6', dim:'study', name:'阅读 30 分钟',                 points:2, limit:2, p:'连续读了 30 分钟的书', t:'你在给自己的世界添东西' },
+  { id:'s7', dim:'study', name:'完成周复盘或下周计划',         points:5, limit:1, p:'坐下来把这周复盘完、把下周写出来了', t:'你在用计划安排自己的节奏' },
+  { id:'s8', dim:'study', name:'小测 / 默写达成本周小目标',     points:5, limit:1, p:'这周的默写目标你达成了', t:'你把一个大目标拆成了做得到的小步' },
+  { id:'l1', dim:'life',  name:'按时起床',                     points:1, limit:1, p:'闹钟响了就起来了', t:'你在练习自己叫醒自己' },
+  { id:'l2', dim:'life',  name:'整理床铺 / 书桌',              points:1, limit:2, p:'床铺和书桌都收拾干净了', t:'你让身边的地方变得清爽' },
+  { id:'l3', dim:'life',  name:'提前整理书包',                 points:1, limit:1, p:'睡前就把书包收好了', t:'你在给明天的自己省事' },
+  { id:'l4', dim:'life',  name:'帮忙家务',                     points:2, limit:2, p:'主动搭手做了家务', t:'你是这个家里能靠得住的人' },
+  { id:'l5', dim:'life',  name:'手机按约定使用',               points:2, limit:1, p:'今天手机用完就放下了，没有超时', t:'你守住了自己定的那条线' },
+  { id:'l6', dim:'life',  name:'22:30 前睡觉',                 points:2, limit:1, p:'22:30 前躺下了', t:'你把睡觉当成一件正事' },
+  { id:'b1', dim:'body',  name:'运动 30 分钟',                 points:2, limit:1, p:'运动了 30 分钟', t:'你在照顾自己的身体' },
+  { id:'b2', dim:'body',  name:'户外活动 / 护眼',              points:1, limit:3, p:'出去走了走，让眼睛离开了屏幕', t:'你知道要给眼睛留点余地' },
+  { id:'b3', dim:'body',  name:'写情绪日记或主动倾诉',         points:2, limit:1, p:'把心里的情绪写下来、说出去了', t:'你没有把它一个人扛着' },
+  { id:'b4', dim:'body',  name:'遇到冲突先冷静再表达',         points:3, limit:2, p:'生气的时候先停了一下才开口', t:'你在学着不被情绪推着走' },
+  { id:'o1', dim:'social',name:'主动感谢 / 问候家人',          points:1, limit:3, p:'主动跟家人说了谢谢、问了声好', t:'你把在意说出口了' },
+  { id:'o2', dim:'social',name:'与同学合作或化解矛盾',         points:2, limit:2, p:'和同学一起把事情做完了 / 说开了', t:'你会和人一起把事办成' },
+  { id:'o3', dim:'social',name:'守诺，答应的事做到',           points:3, limit:2, p:'答应过的事，你做到了', t:'你说的话有分量' },
+  { id:'o4', dim:'social',name:'主动关心家人',                 points:2, limit:2, p:'你注意到家人的状态，还问了一句', t:'你心里装着别人' },
+  { id:'a1', dim:'self',  name:'自己定计划并完成',             points:3, limit:1, p:'计划是你自己定的，也自己完成了', t:'你是自己节奏的主人' },
+  { id:'a2', dim:'self',  name:'先做难的任务',                 points:2, limit:1, p:'最不想做的那件事，你先做了', t:'你懂得先啃硬骨头' },
+  { id:'a3', dim:'self',  name:'自己解决一个小问题',           points:3, limit:2, p:'这件事你自己想办法解决了', t:'你能靠自己找到出口' },
+  { id:'a4', dim:'self',  name:'零花钱记账',                   points:2, limit:1, p:'今天花的钱记下来了', t:'你对钱有数' },
+];
+
+/* 学段模型：同一套内核，随年龄变的是自主权梯度、抽象层级、计分尺度 */
+const STAGES = [
+  { k:'p12',  n:'小学低段', g:'1–3 年级 · 6–9 岁',   cap:8,  nick:'宝贝',
+    perm:'家长陪记 · 可代打卡 · 每晚一起看',
+    sub:'今天做到一件就很棒，妈妈陪你一起记。',
+    tone:'短句 + 具体 + 立刻兑现' },
+  { k:'p36',  n:'小学高段', g:'4–6 年级 · 9–12 岁',  cap:10, nick:'小满',
+    perm:'她自己打卡 · 家长确认 · 可补记',
+    sub:'今天不用全做完，挑你最重要的那几件。',
+    tone:'具体肯定 + 开始给自主空间' },
+  { k:'mid',  n:'初中',     g:'7–9 年级 · 12–15 岁', cap:12, nick:'月亮',
+    perm:'她自己打卡 · 家长不可删除 · 可设仅自己可见',
+    sub:'今天不用做完全部，挑你最重要的那几件就好。',
+    tone:'尊重 + 自主 + 不比较' },
+  { k:'high', n:'高中',     g:'10–12 年级 · 15–18 岁', cap:12, nick:'月亮',
+    perm:'默认只看周报 · 流水由她自己管 · 兑换仍必须兑现',
+    sub:'今天只要有一件事是往前走的，就够了。',
+    tone:'像对话，不像考核；允许休息' },
+];
+
+const TEMPLATES = {
+  mid: ITEMS,
+
+  /* 小学低段：全部是可看见的动作，家长陪记 */
+  p12: [
+    { id:'p1', dim:'study', name:'回家先洗手喝水，然后开始写作业', points:1, limit:1, p:'回家收拾好自己就坐到桌前写作业了', t:'你会给自己做准备了' },
+    { id:'p2', dim:'study', name:'专心写作业 15 分钟（不玩橡皮）',   points:1, limit:2, p:'这 15 分钟一直坐在座位上写', t:'你的专注在变长' },
+    { id:'p3', dim:'study', name:'大声读 10 分钟',                 points:1, limit:1, p:'大声读了 10 分钟', t:'你把声音放出来了' },
+    { id:'p4', dim:'study', name:'读绘本 / 亲子共读 15 分钟',       points:2, limit:1, p:'和大人一起读了 15 分钟书', t:'你在往脑子里装新故事' },
+    { id:'p5', dim:'life',  name:'按时起床，自己穿衣服',           points:1, limit:1, p:'自己起来、自己穿好了衣服', t:'你在练习照顾自己' },
+    { id:'p6', dim:'life',  name:'自己刷牙洗脸',                   points:1, limit:2, p:'自己把牙刷了、脸洗了', t:'这些事你不用人催了' },
+    { id:'p7', dim:'life',  name:'自己整理书包 / 收拾玩具',        points:1, limit:2, p:'把书包和玩具都收好了', t:'你让东西回到了自己的位置' },
+    { id:'p8', dim:'life',  name:'帮家里做一件小事',               points:1, limit:2, p:'帮家里摆了碗筷 / 浇了花', t:'你是家里的小帮手' },
+    { id:'p9', dim:'body',  name:'户外玩 / 运动 30 分钟',          points:2, limit:1, p:'出去跑了 30 分钟', t:'你在让身体变有力气' },
+    { id:'p10',dim:'body',  name:'把不开心说出来',                 points:2, limit:1, p:'把不开心的事说出来了', t:'你没有把它憋在心里' },
+    { id:'p11',dim:'body',  name:'9 点前上床睡觉',                 points:2, limit:1, p:'9 点前就躺下了', t:'你在长身体' },
+    { id:'p12',dim:'social',name:'说了谢谢 / 对不起',              points:1, limit:2, p:'主动说了谢谢 / 对不起', t:'你把礼貌变成了习惯' },
+    { id:'p13',dim:'self',  name:'自己选一件事做完',               points:2, limit:1, p:'这件事是你自己选的，也做完了', t:'你能自己做决定了' },
+  ],
+
+  /* 小学高段：从“动作”过渡到“自己安排” */
+  p36: [
+    { id:'q1', dim:'study', name:'放学 30 分钟内开始写作业',       points:2, limit:1, p:'放学回家半小时内就开始写了', t:'你越来越会给自己按下启动键' },
+    { id:'q2', dim:'study', name:'专注 20 分钟不分心',             points:2, limit:2, p:'这 20 分钟没有分心', t:'你的专注又长了一点' },
+    { id:'q3', dim:'study', name:'作业自己检查一遍',               points:2, limit:1, p:'写完还自己检查了一遍', t:'你在为自己的结果负责' },
+    { id:'q4', dim:'study', name:'整理 1 道错题',                  points:2, limit:2, p:'把错题重新做了一遍', t:'你在把不会的变成会的' },
+    { id:'q5', dim:'study', name:'不会的先自己想办法，再问人',     points:2, limit:2, p:'先自己想了办法，才去问人', t:'你学会了先自己试一次' },
+    { id:'q6', dim:'study', name:'阅读 20 分钟',                   points:2, limit:1, p:'读了 20 分钟书', t:'你在给自己的世界添东西' },
+    { id:'q7', dim:'life',  name:'按时起床',                       points:1, limit:1, p:'闹钟响了就起来了', t:'你在练习自己叫醒自己' },
+    { id:'q8', dim:'life',  name:'整理书桌 / 床铺',                points:1, limit:1, p:'书桌和床铺都收拾好了', t:'你让身边的地方变清爽了' },
+    { id:'q9', dim:'life',  name:'提前收好书包',                   points:1, limit:1, p:'睡前把书包收好了', t:'你在给明天的自己省事' },
+    { id:'q10',dim:'life',  name:'帮忙家务',                       points:1, limit:2, p:'主动帮家里做了家务', t:'你是能靠得住的人' },
+    { id:'q11',dim:'life',  name:'手机 / 平板按约定时间用',        points:2, limit:1, p:'时间到了就放下了', t:'你守住了自己定的线' },
+    { id:'q12',dim:'life',  name:'21:30 前睡觉',                   points:2, limit:1, p:'21:30 前躺下了', t:'你把睡觉当成了正事' },
+    { id:'q13',dim:'body',  name:'运动 30 分钟',                   points:2, limit:1, p:'运动了 30 分钟', t:'你在照顾自己的身体' },
+    { id:'q14',dim:'social',name:'和同学好好商量 / 化解一次别扭',  points:2, limit:2, p:'和同学把事情说开了', t:'你会和人一起把事办好' },
+    { id:'q15',dim:'social',name:'答应的事做到',                   points:3, limit:2, p:'答应过的事你做到了', t:'你说的话有分量' },
+    { id:'q16',dim:'self',  name:'自己列今天要做的事',             points:2, limit:1, p:'今天的清单是你自己列的', t:'你开始自己安排自己了' },
+  ],
+
+  /* 高中：从“行为”转向“目标、压力与自我认同” */
+  high: [
+    { id:'h1', dim:'study', name:'按今天的计划完成主要任务',        points:3, limit:1, p:'今天的计划你自己完成了', t:'你在按自己的节奏推进' },
+    { id:'h2', dim:'study', name:'深度专注 45 分钟（不碰手机）',    points:3, limit:3, p:'这 45 分钟完全没有分心', t:'你守住了自己的注意力' },
+    { id:'h3', dim:'study', name:'针对弱项补 30 分钟',              points:3, limit:2, p:'专门补了最薄的那一块', t:'你在对着问题下手，而不是对着时间' },
+    { id:'h4', dim:'study', name:'主动问老师 / 找同学讨论',         points:3, limit:2, p:'不会的地方你去问了、去讨论了', t:'你知道求助是效率，不是软弱' },
+    { id:'h5', dim:'study', name:'今日复盘 5 分钟（写下明天第一件事）', points:2, limit:1, p:'花 5 分钟复盘，还写下了明天的第一件事', t:'你在给明天的自己铺路' },
+    { id:'h6', dim:'life',  name:'睡前 30 分钟不碰手机',            points:2, limit:1, p:'睡前半小时把手机放下了', t:'你在保护自己的睡眠' },
+    { id:'h7', dim:'life',  name:'23:00 前睡觉',                    points:2, limit:1, p:'23:00 前睡了', t:'你知道身体是长期战的本钱' },
+    { id:'h8', dim:'life',  name:'为自己做一顿饭 / 照顾好自己',      points:2, limit:1, p:'给自己弄了吃的 / 照顾好了自己', t:'你能把自己照顾好' },
+    { id:'h9', dim:'life',  name:'零花钱 / 时间记账',               points:2, limit:1, p:'今天的花销或时间你记下来了', t:'你对消耗有数' },
+    { id:'h10',dim:'body',  name:'运动 30 分钟',                    points:2, limit:1, p:'运动了 30 分钟', t:'你在给大脑换气' },
+    { id:'h11',dim:'body',  name:'情绪低落时用有效的方式调节',       points:3, limit:2, p:'心情不好的时候，你用了对自己有用的办法', t:'你有自己的恢复方式' },
+    { id:'h12',dim:'body',  name:'压力大时主动说出来 / 求助',        points:3, limit:1, p:'压力大的时候你说出来了', t:'你不打算一个人扛着' },
+    { id:'h13',dim:'body',  name:'允许自己休息一次',                points:2, limit:1, p:'你给自己留了休息的时间', t:'你懂得持续比冲刺更重要' },
+    { id:'h14',dim:'social',name:'守住自己的边界 / 拒绝不合理的要求', points:3, limit:1, p:'你拒绝了一次不合理的要求', t:'你知道自己的边界在哪' },
+    { id:'h15',dim:'social',name:'主动关心家人',                    points:2, limit:2, p:'你注意到了家人的状态', t:'你心里装着别人' },
+    { id:'h16',dim:'social',name:'答应的事做到',                    points:3, limit:1, p:'答应过的事你做到了', t:'你说的话有分量' },
+    { id:'h17',dim:'self',  name:'为升学 / 选科做一件具体的事',      points:3, limit:1, p:'为将来查了资料 / 问了人 / 写了清单', t:'你在为自己的选择做准备' },
+    { id:'h18',dim:'self',  name:'写下自己想成为的样子',            points:2, limit:1, p:'把想成为的样子写下来了', t:'你心里有个方向' },
+  ],
+};
+
+/* 奖励随学段调整：档位金额与内容都变（小学便宜、高中更自主） */
+const REWARD_BY_STAGE = {
+  p12: [
+    { cost:10,  tier:'小确幸', title:'一颗星星贴纸 / 一张贴纸',        desc:'当天就能拿到' },
+    { cost:20,  tier:'特权',   title:'今晚吃什么，你说了算',            desc:'一次点餐权' },
+    { cost:30,  tier:'亲子',   title:'和爸爸妈妈专属 30 分钟（不看手机）', desc:'时间要真的空出来' },
+    { cost:40,  tier:'物质',   title:'小玩具 / 绘本一本',              desc:'≤ 50 元，你自己挑' },
+    { cost:60,  tier:'娱乐',   title:'去公园 / 游乐场玩一次',          desc:'周末兑现' },
+    { cost:80,  tier:'社交',   title:'约小伙伴来家里玩一次',           desc:'你自己邀约' },
+    { cost:120, tier:'大奖励', title:'心愿礼物 ≤ 100 元',              desc:'月度兑换' },
+    { cost:160, tier:'特别',   title:'一次短途出游 / 动物园',          desc:'提前一起计划' },
+  ],
+  p36: [
+    { cost:20,  tier:'小确幸', title:'小文具 / 贴纸 / 奶茶小料',        desc:'随时兑现' },
+    { cost:40,  tier:'特权',   title:'免家务券 1 次 / 周末晚睡 30 分钟', desc:'二选一' },
+    { cost:60,  tier:'娱乐',   title:'自选电影或综艺 1 次 + 零食',       desc:'约一个时间' },
+    { cost:80,  tier:'自主',   title:'周末半天自由安排 / 约同学',        desc:'内容由你定' },
+    { cost:120, tier:'亲子',   title:'和爸爸或妈妈单独出去一次',         desc:'项目你挑' },
+    { cost:160, tier:'物质',   title:'心愿小礼物 ≤ 80 元',              desc:'你选品' },
+    { cost:220, tier:'大奖励', title:'大心愿 ≤ 200 元 / 短途游',         desc:'月度兑换' },
+    { cost:300, tier:'特别',   title:'家庭旅行目的地投票权',            desc:'一起规划' },
+  ],
+  high: [
+    { cost:20,  tier:'小确幸', title:'一杯奶茶 / 一次外带',             desc:'放学路上就兑' },
+    { cost:40,  tier:'特权',   title:'免家务 1 次 / 一晚自由安排',       desc:'不解释去向' },
+    { cost:60,  tier:'娱乐',   title:'一部电影 / 和朋友出门一次',        desc:'自己约' },
+    { cost:80,  tier:'自主',   title:'半天完全自由（不报备细节）',       desc:'家长不追问' },
+    { cost:120, tier:'亲子',   title:'和父母单独吃一顿饭（约定不谈成绩）', desc:'由你发起' },
+    { cost:160, tier:'物质',   title:'心愿好物 ≤ 150 元（耳机 / 球鞋 / 书）', desc:'你选型号' },
+    { cost:220, tier:'大奖励', title:'大件 ≤ 500 元 / 演唱会或展览',     desc:'月度兑换' },
+    { cost:300, tier:'特别',   title:'一次只属于你的旅行 / 毕业心愿',    desc:'提前两个月计划' },
+  ],
+};
+
+/* 初中默认 8 档（首发学段） */
+const REWARDS = [
+  { cost:20,  tier:'小确幸', title:'小文具 / 贴纸 / 奶茶小料',        desc:'随时兑现，48 小时内' },
+  { cost:40,  tier:'特权',   title:'免家务券 1 次 / 周末晚睡 30 分钟', desc:'二选一，生成券后 30 天有效' },
+  { cost:60,  tier:'娱乐',   title:'自选电影或综艺 1 次 + 零食',       desc:'需要提前约一个时间' },
+  { cost:80,  tier:'自主',   title:'周末半天自由安排 / 约闺蜜',        desc:'内容由你定，家长不干涉' },
+  { cost:120, tier:'亲子',   title:'和爸爸或妈妈单独约会（美甲/烘焙/书店/散步）', desc:'人由你指定，项目由你挑' },
+  { cost:160, tier:'物质',   title:'心愿小礼物 ≤ 80 元',              desc:'你选品，家长不评价' },
+  { cost:220, tier:'大奖励', title:'大心愿 ≤ 200 元 / 短途游 / 主题乐园', desc:'月度兑换日兑现' },
+  { cost:300, tier:'特别',   title:'家庭旅行目的地投票权 / 一次特别体验', desc:'需提前 2 周一起规划' },
+];
+
+/* 修复行动：四类模板，全部不产生负分 */
+const REPAIRS = [
+  { k:'phone', t:'手机超时', d:'第二天减少相应时间，并写一句“我下次怎么提醒自己”', act:'写一句自我提醒 + 次日自动减少时长' },
+  { k:'angry', t:'发脾气',   d:'冷静后道歉，一起想下次的暂停信号',               act:'和妈妈约定一个“暂停信号”' },
+  { k:'delay', t:'作业拖延', d:'不贴“懒”的标签，只调整方法：先做 10 分钟',        act:'开一个 10 分钟启动计时器' },
+  { k:'broke', t:'没做到约定', d:'不扣分，重新约定更小的一步',                    act:'把目标改小，写进下周计划' },
+];
+
+/* 惊喜卡池：连续 7 天达成后**自选**一张，零随机、零概率（合规红线，见移植指南 §八） */
+const CARDS = [
+  { t:'妈妈无条件陪逛 1 小时', d:'不看手机，路线你定', e:14 },
+  { t:'今晚点餐权',           d:'今晚吃什么你说了算', e:7  },
+  { t:'免唠叨券 1 次',        d:'一次“快去写作业”免疫', e:30 },
+  { t:'和闺蜜视频 30 分钟',   d:'不计入手机时长', e:14 },
+];
+
+/* 文案引擎的肯定语备选：按维度给第二句，避免千篇一律 */
+const PRAISE_ALT = {
+  study:  ['你越来越会给自己安排学习','你把主动权拿回了自己手里','你在用方法，而不是靠硬撑'],
+  life:   ['你在把自己照顾得有条理','你让日子变得更顺了一点','你在练习为自己负责'],
+  body:   ['你在认真对待自己的身体','你越来越知道怎么让自己稳下来','你在照顾那个要陪你很久的身体'],
+  social: ['你在把关系放在心里','你越来越会和人相处','你的在意，别人收到了'],
+  self:   ['你越来越能靠自己往前走','你在成为自己生活的主人','你找到适合自己的节奏了'],
+  bonus:  ['你把这周坚持下来了','你已经在自动运转了','这种持续，比一时的努力更难得'],
+};
+
+/* 禁用词库：命中即拦截（对应 PRD §6.3 与德韦克成长型思维要求） */
+const BANNED = ['你真聪明','真聪明','真乖','真棒','就是懒','粗心','不自律','你怎么又这样','别人都能做到','你为什么不行','退步','失败','笨'];
+
+const stageOf = k => STAGES.find(s => s.k === k) || STAGES[2];
+const templateOf = k => TEMPLATES[k] || ITEMS;
+const dimOf = k => DIMS.find(d => d.k === k) || DIMS[0];
+
+module.exports = {
+  DIMS, ITEMS, STAGES, TEMPLATES, REWARD_BY_STAGE, REWARDS,
+  REPAIRS, CARDS, PRAISE_ALT, BANNED,
+  stageOf, templateOf, dimOf,
+};
+
+});
+__def("./compat.js", function (require, module, exports) {
+/* ============================================================
+   罗森塔尔 Rosenthal · utils/compat.js
+   基础库兼容层：把「这个工程最低要多少基础库」变成一份可测试的声明。
+
+   为什么要单独写：用比用户设备更新的接口，在真机上会直接抛错或静默失效，
+   而这台机器上没有开发者工具、测不出来。所以把结论写成数据 + 断言：
+
+   · MIN_BASE_LIB 是**运行时可用的最低基础库**，取自工程里用到的最高版本要求；
+   · 每个需要较新基础库的能力都在 API 表里写明，并有降级路径（fallbacks()）；
+   · 探针接口（windowInfo）是唯一直接读 wx 的地方 —— 它必须能在没有 wx 的
+     Node 环境里安全返回默认值，这条也有断言守着。
+
+   工程里实际用到的 19 个接口，最高的两项要求是：
+     wx.getWindowInfo            2.20.1  → 有降级（wx.getSystemInfoSync）
+     wx.showModal editable       2.17.1  → 有降级（不带输入框的弹窗）
+     其余全部 ≤ 2.16.1
+   所以 MIN_BASE_LIB = "2.20.1"。
+   ============================================================ */
+'use strict';
+
+const MIN_BASE_LIB = '2.20.1';
+
+/**
+ * 工程用到的 wx 接口清单（线上传前用它核对是否有超出最低版本的新接口）。
+ * since 为该接口的最低基础库版本；fallback 说明低版本时怎么办。
+ */
+const API_TABLE = [
+  { api: 'wx.getStorageSync', since: '1.0.0', use: '本地状态读取', fallback: null },
+  { api: 'wx.setStorageSync', since: '1.0.0', use: '本地状态落盘', fallback: null },
+  { api: 'wx.showToast', since: '1.0.0', use: '轻提示', fallback: null },
+  { api: 'wx.showModal', since: '1.0.0', use: '确认弹窗', fallback: null },
+  { api: 'wx.showModal editable', since: '2.17.1', use: '规则页改奖励内容（带输入框）', fallback: '低版本退回不带输入框的弹窗，改奖励只能整条替换' },
+  { api: 'wx.navigateTo', since: '1.0.0', use: '进二级页', fallback: null },
+  { api: 'wx.navigateBack', since: '1.0.0', use: '介绍页从「我的」进入后返回', fallback: null },
+  { api: 'wx.redirectTo', since: '1.0.0', use: '替换当前页', fallback: null },
+  { api: 'wx.switchTab', since: '1.0.0', use: '切 tab', fallback: null },
+  { api: 'wx.reLaunch', since: '1.0.0', use: '闸门跳转（清页面栈）', fallback: null },
+  { api: 'wx.setClipboardData', since: '1.0.0', use: '导出交付（一周一页 / CSV / 备份）', fallback: null },
+  { api: 'wx.stopPullDownRefresh', since: '1.0.0', use: '下拉刷新收尾', fallback: null },
+  { api: 'wx.createSelectorQuery', since: '1.4.0', use: '查 canvas 节点', fallback: null },
+  { api: 'wx.createOffscreenCanvas', since: '2.16.1', use: '离屏 canvas 出图（导出/打印）', fallback: null },
+  { api: 'wx.canvasToTempFilePath', since: '1.9.0', use: '把画布导出成图片文件', fallback: null },
+  { api: 'wx.previewImage', since: '1.0.0', use: '预览 / 保存导出图片', fallback: null },
+  { api: 'wx.getSystemInfoSync', since: '1.0.0', use: '取 pixelRatio / windowWidth（降级用）', fallback: null },
+  { api: 'wx.getWindowInfo', since: '2.20.1', use: '取 pixelRatio / windowWidth（首选）', fallback: '退到 wx.getSystemInfoSync（已废弃但仍可用）' },
+  { api: 'wx.cloud', since: '2.2.3', use: '云开发（可选能力）', fallback: '未开通云开发时整个云层降级为未连接，本地功能不受影响' },
+];
+
+/** 需要较新基础库的接口（其余都是老接口，不必逐个探测） */
+const NEEDS_PROBE = ['getWindowInfo'];
+
+const hasWx = () => typeof wx !== 'undefined' && !!wx;
+
+/** 取要探测的宿主对象：默认全局 wx，也允许显式传入（便于在 Node 里注入桩测试） */
+const hostOf = (wxApi) => wxApi || (hasWx() ? wx : null);
+
+/** 运行时探测：优先用 wx.canIUse，取不到就退回 typeof 判断 */
+function supports(api, wxApi) {
+  const host = hostOf(wxApi);
+  if (!host) return false;
+  try {
+    if (typeof host.canIUse === 'function') {
+      const ok = host.canIUse(api);
+      if (ok !== undefined && ok !== null) return !!ok;
+    }
+  } catch (e) { /* canIUse 本身有问题时退回 typeof */ }
+  const name = String(api).replace(/^wx\./, '').split('.')[0];
+  return typeof host[name] !== 'undefined';
+}
+
+/**
+ * 窗口信息探针：低版本自动降级，且在没有 wx 的环境（Node）里安全返回默认值。
+ * @param {object} [wxApi] 可选的宿主对象（不传就用全局 wx）；
+ *   组件里显式把 wx 传进来，测试时就能注入桩，不必污染全局。
+ */
+function windowInfo(wxApi) {
+  const fallback = { pixelRatio: 2, windowWidth: 375, windowHeight: 667 };
+  const host = hostOf(wxApi);
+  if (!host) return fallback;
+  try {
+    if (typeof host.getWindowInfo === 'function') {
+      const i = host.getWindowInfo();
+      if (i && i.windowWidth) {
+        return { pixelRatio: i.pixelRatio || 2, windowWidth: i.windowWidth, windowHeight: i.windowHeight || 667 };
+      }
+    }
+    if (typeof host.getSystemInfoSync === 'function') {
+      const i = host.getSystemInfoSync();
+      if (i && i.windowWidth) {
+        return { pixelRatio: i.pixelRatio || 2, windowWidth: i.windowWidth, windowHeight: i.windowHeight || 667 };
+      }
+    }
+  } catch (e) { /* 任何异常都退回默认值，不能因为取尺寸失败而白屏 */ }
+  return fallback;
+}
+
+/** 这份清单的最低要求 = 表里最高的 since */
+function requiredBaseLib() {
+  return API_TABLE.reduce((max, row) => (row.since > max ? row.since : max), '0.0.0');
+}
+
+/** 低版本时的降级说明（给人看的） */
+function fallbacks() {
+  return API_TABLE.filter(r => r.fallback).map(r => ({ api: r.api, since: r.since, fallback: r.fallback }));
+}
+
+module.exports = { MIN_BASE_LIB, API_TABLE, NEEDS_PROBE, supports, windowInfo, requiredBaseLib, fallbacks };
+
+});
+__def("./store.js", function (require, module, exports) {
+/* ============================================================
+   罗森塔尔 Rosenthal · utils/store.js
+   规则引擎 + 状态 + 持久化 —— 从 prototype/app.js 抽取的**唯一写入口**。
+
+   三条硬约束在这里落地，且只在这里落地（README §10 验收清单第 1–3 条）：
+   1. 只加分：addPoints 拒绝 points <= 0，全文件不存在任何写负分的路径；
+   2. 日上限随学段：capNow() 取自当前学段模板，在**引擎层**强制，前端置灰只是提示；
+   3. 必改 3 项：amend 计数满 3 才算完成共建，未满时 onboarded 不能被置为 true。
+
+   本文件零 DOM 依赖。所有 wx.* 调用都包在 try/catch 里并带 Node 兜底，
+   因此同一个文件既能被小程序 require，也能被 node _smoke_s1.js 直接跑。
+   ============================================================ */
+'use strict';
+
+const T = require('./templates.js');
+
+const KEY = 'rosenthal.miniprogram.v1';
+const COUPON_DAYS = 30;
+/* 免费试运行：导出免费次数上限。用满后前端提示「内测中」（阶段 B 换成云权益）。 */
+const EXPORT_FREE_LIMIT = 3;
+
+/* ---------------- 1. 存储适配层（小程序 Storage / Node 内存兜底） ---------------- */
+
+const mem = {};
+function rawGet(k) {
+  try {
+    if (typeof wx !== 'undefined' && wx && typeof wx.getStorageSync === 'function') {
+      const v = wx.getStorageSync(k);
+      return v === '' || v === undefined ? null : v;
+    }
+    if (typeof localStorage !== 'undefined') {
+      const v = localStorage.getItem(k);
+      return v === null || v === undefined ? null : v;
+    }
+  } catch (e) { /* 读失败按空处理，不允许中断启动 */ }
+  return k in mem ? mem[k] : null;
+}
+function rawSet(k, v) {
+  try {
+    if (typeof wx !== 'undefined' && wx && typeof wx.setStorageSync === 'function') { wx.setStorageSync(k, v); return true; }
+    if (typeof localStorage !== 'undefined') { localStorage.setItem(k, v); return true; }
+  } catch (e) { /* 存储满或权限问题：内存里继续，不阻断打卡 */ }
+  mem[k] = v; return false;
+}
+
+const dimOf = k => T.dimOf(k);
+
+/**
+ * 流水维度 → 中文标签。
+ * 注意 'bonus'：周结算流水用的维度，不在 5 个行为维度里，
+ * 漏掉它会在流水与肯定卡上显示成笼统的「记录」。
+ */
+function dimLabel(k) {
+  if (k === 'bonus') return '周奖励';
+  const d = T.DIMS.find(x => x.k === k);
+  return d ? d.n : '记录';
+}
+
+/* ---------------- 2. 时间与数值工具（纯函数） ---------------- */
+
+const pad2 = n => String(n).padStart(2, '0');
+const todayKey = (d = new Date()) => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+const dateKey = d => todayKey(d);
+const shiftDay = n => { const d = new Date(); d.setDate(d.getDate() + n); return todayKey(d); };
+const daysInMonth = (y, m) => new Date(y, m, 0).getDate();   // m 为 1–12
+const monthKey = (d = new Date()) => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}`;
+const esc = s => String(s === undefined || s === null ? '' : s)
+  .replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+/* 券码：RS-XXXX-XX，8 位内足够家庭场景唯一，失败重试避免碰撞 */
+function newCouponCode(existing) {
+  const take = () => 'RS-' + Math.random().toString(36).slice(2, 6).toUpperCase() + '-' +
+    String(Math.floor(Math.random() * 90) + 10);
+  let code = take(), guard = 0;
+  while (existing.some(c => c.code === code) && guard++ < 50) code = take();
+  return code;
+}
+
+/* ---------------- 3. 状态构造 ---------------- */
+
+/** 空白状态：第一次启动就是「还没共建过规则」的样子 */
+function blank(stage = 'mid') {
+  const st = T.stageOf(stage);
+  return {
+    stage,
+    nick: st.nick,
+    grade: st.n,
+    role: 'child',
+    onboarded: false,
+    amend: { point: 0, item: 0, reward: 0 },
+    items: T.templateOf(stage).map(i => Object.assign({}, i)),
+    rewards: (T.REWARD_BY_STAGE[stage] || T.REWARDS).map(r => Object.assign({}, r)),
+    log: [],
+    flash: {},
+    coupons: [],
+    /* 兑换记录：**只增不改的明细**，spent 由它派生。
+       为什么不直接存一个 spent 数字见 utils/sync.js 顶部说明：
+       两台设备各自离线兑换时，数字只能取一个、必然少算一次。 */
+    redemptions: [],
+    repairs: [],
+    week: null,
+    weekDraft: null,          // 周复盘走到一半的草稿（换页不丢）
+    parent: { agreedAt: null, version: null },   // 家长对当前规则版本的签署
+    surpriseAt: null,        // 兼容旧数据（新数据用 surpriseClaim 记窗口）
+    surpriseClaim: null,     // { at, start, end }：本窗口领过惊喜卡的凭据
+    spent: 0,
+    ruleVersion: 0,
+    introSeen: false,        // 是否已看过「罗森塔尔效应」首次介绍页
+    exportUsed: 0,           // 已用掉的免费导出次数（试运行：本地计数）
+  };
+}
+
+let S = null;
+
+function load(stage) {
+  let parsed = null;
+  const raw = rawGet(KEY);
+  if (raw) {
+    try { parsed = typeof raw === 'string' ? JSON.parse(raw) : raw; } catch (e) { parsed = null; }
+  }
+  S = parsed && typeof parsed === 'object' ? parsed : blank(stage);
+  if (!S.stage) S.stage = 'mid';
+  if (!S.amend || typeof S.amend !== 'object') S.amend = { point: 0, item: 0, reward: 0 };
+  if (!Array.isArray(S.log)) S.log = [];
+  if (!Array.isArray(S.items)) S.items = T.templateOf(S.stage).map(i => Object.assign({}, i));
+  if (!Array.isArray(S.coupons)) S.coupons = [];
+  if (!Array.isArray(S.repairs)) S.repairs = [];
+  if (!S.flash || typeof S.flash !== 'object') S.flash = {};
+  if (typeof S.spent !== 'number') S.spent = 0;
+  /* 老存档没有 introSeen：补 false，这样老用户也会**看到一次**介绍页
+     （他们从没看过；看完就置 true，之后不再打断）。 */
+  if (typeof S.introSeen !== 'boolean') S.introSeen = false;
+  if (typeof S.exportUsed !== 'number' || S.exportUsed < 0) S.exportUsed = 0;
+  /* 迁移：老数据里只有 spent 这个数字，没有兑换明细。
+     补一条 id 固定的 backfill 记录把余额原样接住（金额不变），
+     这样「spent 由明细派生」对老用户也是无缝的。 */
+  if (!Array.isArray(S.redemptions)) {
+    S.redemptions = S.spent > 0
+      ? [{ id: 'backfill-legacy', code: '', cost: S.spent, title: '（历史兑换，迁移自旧版本）', at: 0 }]
+      : [];
+  }
+  return S;
+}
+/**
+ * 落盘。顺便把 `spent` 同步成明细的合计 —— 它只是给外部读的一个**派生缓存**，
+ * 事实来源始终是 `redemptions` 明细（这样合并才有唯一正确答案）。
+ */
+const save = () => {
+  S.spent = (S.redemptions || []).reduce((a, r) => a + (Number(r.cost) || 0), 0);
+  return rawSet(KEY, JSON.stringify(S));
+};
+const resetAll = (stage = 'mid') => { S = blank(stage); save(); return S; };
+const state = () => S;
+
+/* ---------------- 4. 规则引擎 ---------------- */
+
+const capNow = () => T.stageOf(S.stage).cap;
+const itemsOf = () => S.items.filter(i => i.active !== false);
+const itemById = id => S.items.find(i => i.id === id);
+const countOn = (id, date) => S.log.filter(l => l.itemId === id && l.date === date && !l.reversed).length;
+const pointsOn = date => S.log.filter(l => l.date === date && !l.reversed).reduce((a, l) => a + l.points, 0);
+/* 注意：必须按 date 过滤后再取上限。只写 Math.min(capNow(), pointsOn) 会让
+   addPoints 的「已用分数」按全部历史计算，是原型里一个只在同一天出现多条记录时
+   才暴露的隐患；小程序这边按日期收敛。 */
+const dayScore = date => Math.min(capNow(), pointsOn(date));
+const weekDates = () => Array.from({ length: 7 }, (_, i) => shiftDay(-i));
+const weekScore = () => weekDates().reduce((a, d) => a + pointsOn(d), 0);
+const lifetime = () => S.log.filter(l => !l.reversed).reduce((a, l) => a + l.points, 0);
+
+/**
+ * 已花掉的分数 = 兑换明细之和。
+ * **不再单独存一个 spent 数字**：那个数字在「两台设备各自离线兑换」时无法合并
+ * （只能取一个，必然少算一次）。改成从只增不改的 redemptions 明细求和之后，
+ * 合并 = 两条明细取并集，花了多少永远算得对。详见 utils/sync.js 顶部。
+ */
+const spentTotal = () => (S.redemptions || []).reduce((a, r) => a + (Number(r.cost) || 0), 0);
+const balance = () => lifetime() - spentTotal();
+const streak = () => {
+  let n = 0, i = 0;
+  for (;;) {
+    const d = shiftDay(-i);
+    if (pointsOn(d) > 0) { n++; i++; } else if (i === 0) { i++; } else break;
+  }
+  return n;
+};
+const confirmedCount = () => S.log.filter(l => !l.confirmed).length;
+const nextReward = () => {
+  const b = balance();
+  return S.rewards.find(r => r.cost > b) || null;
+};
+
+/** 唯一写入入口：只接受正数，日上限在此强制生效 */
+function addPoints(opt) {
+  const o = opt || {};
+  const points = o.points;
+  if (!(points > 0)) return { ok: false, reason: '系统里没有扣分' };
+  const date = o.date || todayKey();
+  const cap = capNow();
+  const used = dayScore(date);
+  if (used >= cap) return { ok: false, reason: '今天已经很棒了，剩下的留给明天' };
+  const grant = Math.min(points, cap - used);
+  const ts = o.ts || Date.now();
+  const entry = {
+    uid: 'u' + ts + Math.random().toString(36).slice(2, 6),
+    itemId: o.itemId || null, name: o.name || '', dim: o.dim || 'self',
+    points: grant, date, ts, praise: o.praise || '',
+    confirmed: false, overflow: points - grant,
+    /* 家长代记戳：低段家长「帮 TA 记一笔」时带上，纸面上看得出来是谁记的 */
+    byParent: !!o.byParent,
+  };
+  S.log.push(entry);
+  save();
+  return { ok: true, entry, partial: grant < points };
+}
+
+/** 撤销：24 小时内可撤销：不删历史，只打标记（与原型一致，流水永远保留） */
+function undo(uid, now) {
+  const t = now || Date.now();
+  const e = S.log.find(l => l.uid === uid);
+  if (!e) return { ok: false, reason: '没找到这条记录' };
+  if (e.reversed) return { ok: false, reason: '这条已经撤销过了' };
+  if (t - e.ts > 24 * 3600 * 1000) return { ok: false, reason: '超过 24 小时了，留着它也是记录' };
+  e.reversed = true; save();
+  return { ok: true, entry: e };
+}
+
+/**
+ * 家长确认 / 补充鼓励（家长端唯一能改的东西）。
+ * 注意：这里只允许把 confirmed 从 false 置为 true，
+ * 没有任何删除、撤回、改分的路径 —— 对应 PRD §1.4 红线 3。
+ */
+function confirmEntries(uids) {
+  const list = Array.isArray(uids) ? uids : [uids];
+  let n = 0;
+  S.log.forEach(l => {
+    if (list.indexOf(l.uid) >= 0 && !l.confirmed && !l.reversed) { l.confirmed = true; n++; }
+  });
+  if (n) save();
+  return { ok: n > 0, confirmed: n };
+}
+
+/** 兑换：记一条**只增不改的兑换明细**，券与明细一一对应；家长端不可撤回 */
+function redeem(cost, title) {
+  const c = Number(cost);
+  if (!(c > 0)) return { ok: false, reason: '这个奖励不能兑换' };
+  if (balance() < c) return { ok: false, reason: '再攒一点点就够了' };
+  const ts = Date.now();
+  const code = newCouponCode(S.coupons);
+  const coupon = {
+    code: code,
+    title: title || '',
+    cost: c,
+    ts: ts,
+    exp: shiftDay(COUPON_DAYS),
+    used: false,
+  };
+  /* id 用券码派生：两个设备即使各兑一次也不会撞 id，合并时是两条并集而不是覆盖 */
+  S.redemptions.push({ id: 'rd-' + code, code: code, cost: c, title: title || '', at: ts });
+  S.coupons.push(coupon);
+  save();
+  return { ok: true, coupon };
+}
+
+function useCoupon(code) {
+  const c = S.coupons.find(x => x.code === code);
+  if (!c) return { ok: false, reason: '没找到这张券' };
+  c.used = true; save();
+  return { ok: true, coupon: c };
+}
+
+/* ---------------- 5. 规则共建：必改 3 项 ---------------- */
+
+const amendedCount = () => (S.amend.point > 0 ? 1 : 0) + (S.amend.item > 0 ? 1 : 0) + (S.amend.reward > 0 ? 1 : 0);
+/** 契约：三处都改过才允许 onboarded = true */
+const canFinishBuild = () => amendedCount() >= 3;
+
+/**
+ * 规则是否**双方都签过、已经生效**。
+ * PRD §3 表格：规则变更需孩子 + 家长双签，单方修改进入待生效。
+ * 所以「孩子改满 3 处」只是提案完成，还要家长点一次「我按你的版本来」。
+ */
+const isRuleActive = () => !!S.onboarded && !!(S.parent && S.parent.agreedAt);
+
+/**
+ * 任何一处规则改动都要作废上一轮家长签字。
+ * PRD §3：规则变更需双签，单方修改进入待生效。如果只在 finishBuild 里清，
+ * 那么「签完字之后再改一条分值」就会带着旧签字继续生效 —— 等于绕过了双签。
+ */
+function revokeSignature() {
+  if (S.parent && S.parent.agreedAt) {
+    S.parent = { agreedAt: null, version: null };
+  }
+}
+
+function setItemPoints(id, points, date) {
+  const it = itemById(id);
+  const p = Number(points);
+  if (!it || !(p > 0)) return { ok: false, reason: '分值必须是正数' };
+  it.points = p; it.customBy = 'child'; it.stamp = date || todayKey();
+  S.amend.point = Math.max(1, S.amend.point);
+  revokeSignature();
+  save();
+  return { ok: true, item: it };
+}
+
+function addItem(item, date) {
+  const it = Object.assign({ dim: 'self', points: 1, limit: 1 }, item || {});
+  if (!(it.points > 0)) return { ok: false, reason: '新行为项的分值必须是正数' };
+  it.id = it.id || ('c' + Date.now().toString(36));
+  it.customBy = 'child'; it.stamp = date || todayKey();
+  S.items.push(it);
+  S.amend.item = Math.max(1, S.amend.item);
+  revokeSignature();
+  save();
+  return { ok: true, item: it };
+}
+
+/** 孩子删掉一条行为项：软删除（active=false），规则页要能看到「谁改的」 */
+function removeItem(id, date) {
+  const it = itemById(id);
+  if (!it) return { ok: false, reason: '没找到这条行为' };
+  it.active = false; it.customBy = 'child'; it.stamp = date || todayKey();
+  S.amend.item = Math.max(1, S.amend.item);
+  revokeSignature();
+  save();
+  return { ok: true, item: it };
+}
+
+function setRewardTitle(cost, title, date) {
+  const r = S.rewards.find(x => x.cost === Number(cost));
+  const t = String(title || '').trim();
+  if (!r || !t) return { ok: false, reason: '奖励内容不能为空' };
+  r.title = t; r.customBy = 'child'; r.stamp = date || todayKey();
+  S.amend.reward = Math.max(1, S.amend.reward);
+  revokeSignature();
+  save();
+  return { ok: true, reward: r };
+}
+
+/** 改奖励分值（第 3 改的一种）。分值必须为正，且不与其它档位重复。 */
+function setRewardCost(cost, newCost, date) {
+  const r = S.rewards.find(x => x.cost === Number(cost));
+  const c = Number(newCost);
+  if (!r || !(c > 0)) return { ok: false, reason: '分值必须是正数' };
+  if (S.rewards.some(x => x !== r && x.cost === c)) return { ok: false, reason: '已经有同分值的档位了' };
+  r.cost = c; r.customBy = 'child'; r.stamp = date || todayKey();
+  S.amend.reward = Math.max(1, S.amend.reward);
+  revokeSignature();
+  save();
+  return { ok: true, reward: r };
+}
+
+/** 新增一档奖励。分值必须为正，且不与现有档位重复。 */
+function addReward(item, date) {
+  const it = Object.assign({ tier: '自定义', title: '', desc: '' }, item || {});
+  const c = Number(it.cost);
+  if (!(c > 0)) return { ok: false, reason: '分值必须是正数' };
+  if (S.rewards.some(x => x.cost === c)) return { ok: false, reason: '已经有同分值的档位了' };
+  const row = {
+    cost: c, tier: it.tier, title: String(it.title || '').trim() || '自定义奖励',
+    desc: it.desc || '', customBy: 'child', stamp: date || todayKey(),
+  };
+  S.rewards.push(row);
+  S.rewards.sort((a, b) => a.cost - b.cost);
+  S.amend.reward = Math.max(1, S.amend.reward);
+  revokeSignature();
+  save();
+  return { ok: true, reward: row };
+}
+
+/** 删除一档奖励（至少保留一档）。已经发出的券不受影响。 */
+function removeReward(cost, date) {
+  const r = S.rewards.find(x => x.cost === Number(cost));
+  if (!r) return { ok: false, reason: '没找到这档奖励' };
+  if (S.rewards.length <= 1) return { ok: false, reason: '至少要留一档奖励' };
+  S.rewards = S.rewards.filter(x => x !== r);
+  S.amend.reward = Math.max(1, S.amend.reward);
+  revokeSignature();
+  save();
+  return { ok: true };
+}
+
+/**
+ * 周结算专用入账。
+ *
+ * 为什么不能直接复用 addPoints：日上限在 addPoints 里是硬约束（PRD §5 表格：
+ * 「日上限 12 分（引擎级不可绕过）」），而 PRD §4 M5 又要求周复盘提交后
+ * 「自动入账 +10、流水标注周达标奖励」，附录 A.2 的三项加成也是固定的
+ * 10 / 10 / 5。如果周奖励走 addPoints，她今天恰好打满 12 分时这笔奖励就会被
+ * 上限吃掉（原本 +25 只剩 +2），那样「引擎级不可绕过」是守住了，但 PRD 承诺的
+ * 结算就没兑现 —— 两者不能同时满足。
+ *
+ * 取舍：周结算是一次**独立的结算事件**，不是当天的打卡，因此不占当日上限；
+ * 但入账路径依然只有一条约束 —— 只加分。所以这里独立写入，同时：
+ *   · 拒绝任何非正数（只加分红线不破）；
+ *   · 走同一套流水结构与 praise 文案；
+ *   · 与其它流水一样不可删除；
+ *   · 不入计 dayScore（当日得分仍然严格 ≤ 上限）。
+ */
+function addWeeklyPoints(o) {
+  const opt = o || {};
+  const points = Number(opt.points);
+  if (!(points > 0)) return { ok: false, reason: '系统里没有扣分' };
+  const ts = opt.ts || Date.now();
+  const entry = {
+    uid: 'w' + ts + Math.random().toString(36).slice(2, 6),
+    itemId: null,
+    name: opt.name || '周结算奖励',
+    dim: 'bonus',
+    points: points,
+    date: opt.date || todayKey(),
+    ts: ts,
+    praise: opt.praise || '',
+    confirmed: false,
+    overflow: 0,
+    weekly: true,          // 标记为结算流水，与打卡流水区分
+  };
+  S.log.push(entry);
+  save();
+  return { ok: true, entry };
+}
+
+/** 完成共建：不可绕过 —— 未改满 3 处直接拒绝 */
+function finishBuild(date) {
+  if (!canFinishBuild()) {
+    const lack = 3 - amendedCount();
+    return { ok: false, reason: '还差 ' + lack + ' 处' };
+  }
+  S.items.forEach(i => { if (i.customBy === 'child' && !i.stamp) i.stamp = date || todayKey(); });
+  S.onboarded = true;
+  S.ruleVersion = (S.ruleVersion || 0) + 1;
+  /* 孩子一改规则，上一轮家长签过的字就作废 —— 必须重新确认这一版。
+     这正是「单方修改不可生效」：她的提案要等家长再点一次。 */
+  S.parent = { agreedAt: null, version: null };
+  save();
+  return { ok: true, ruleVersion: S.ruleVersion, pendingParent: true };
+}
+
+/**
+ * 家长签署「我按你的版本来」。
+ * 前提是她已经把提案改满 3 处；签完这一版才生效（双签），并记下生效日期。
+ */
+function parentAgree(ts) {
+  if (!S.onboarded) {
+    const lack = 3 - amendedCount();
+    return { ok: false, reason: lack > 0 ? ('孩子那边还差 ' + lack + ' 处没改') : '还没有待确认的规则版本' };
+  }
+  const at = ts || Date.now();
+  S.parent = { agreedAt: at, version: S.ruleVersion || 1 };
+  save();
+  return { ok: true, parent: S.parent, version: S.ruleVersion || 1, agreedDate: todayKey(new Date(at)) };
+}
+
+/* ---------------- 4b. 首次介绍页（罗森塔尔效应） ---------------- */
+
+/** 是否还没看过介绍页 —— 冷启动闸门据此先把理论讲一遍再放人进来 */
+const needsIntro = () => !(S && S.introSeen);
+/** 看过就置位；之后不再自动打断（「我的 → 关于罗森塔尔」仍可随时重看） */
+function markIntroSeen() { if (S) { S.introSeen = true; save(); } return { ok: true }; }
+
+/* ---------------- 4c. 家长代记（低龄孩子无法直接操作） ---------------- */
+
+/**
+ * 低龄孩子没法自己操作手机，所以低段允许家长**代为打卡**。
+ * 这与学段权限一一对应（templates.js 的 perm）：
+ *   · p12 小学低段：家长陪记 · 可代打卡 → 允许；
+ *   · p36 小学高段：她自己打卡 · 家长确认 · 可补记 → 允许（补记）；
+ *   · 初中/高中：她自己打卡 / 流水由她自己管 → 不代记，尊重自主权。
+ * 走的仍是唯一写入口 addPoints：只加分、日上限照旧；只是给流水盖上 byParent 戳。
+ */
+const canParentRecord = () => !!S && (S.stage === 'p12' || S.stage === 'p36');
+
+function parentRecord(itemId, opts) {
+  if (!canParentRecord()) return { ok: false, reason: '这个学段由她自己打卡，家长不代记' };
+  const it = itemById(itemId);
+  if (!it) return { ok: false, reason: '没找到这条行为' };
+  const o = opts || {};
+  const date = o.date || todayKey();
+  /* 与孩子手动打卡同一条规矩：单条每天最多记 limit 次 */
+  if (countOn(it.id, date) >= it.limit) return { ok: false, reason: '今天这项已经记过了' };
+  return addPoints({
+    itemId: it.id, name: it.name, dim: it.dim, points: it.points,
+    praise: praiseOf(it), date: o.date, byParent: true,
+  });
+}
+
+/* ---------------- 4d. 导出配额（免费试运行：本地计数） ---------------- */
+
+/**
+ * 导出的免费额度状态。
+ * 试运行阶段不做支付：免费导出 EXPORT_FREE_LIMIT 次，用满后前端提示「内测中」。
+ * 这是**接口**：阶段 B 接云后，内部换成「云权益 + 免费额度」，页面不用改。
+ */
+function exportQuota() {
+  const used = Number((S && S.exportUsed) || 0);
+  const remain = Math.max(0, EXPORT_FREE_LIMIT - used);
+  return { used, limit: EXPORT_FREE_LIMIT, remain, canExport: remain > 0 };
+}
+
+/** 成功导出一次后计次（失败不计数）。只改计数，不碰任何计分。 */
+function consumeExport() {
+  if (!S) return { ok: false };
+  S.exportUsed = Number(S.exportUsed || 0) + 1;
+  save();
+  return { ok: true, quota: exportQuota() };
+}
+
+/** 规则的签署状态，供三个页面共用 */
+function ruleSignature() {
+  const childDone = !!S.onboarded;
+  const parentDone = !!(S.parent && S.parent.agreedAt);
+  return {
+    childDone: childDone,
+    parentDone: parentDone,
+    active: childDone && parentDone,
+    ruleVersion: S.ruleVersion || 0,
+    agreedDate: parentDone ? todayKey(new Date(S.parent.agreedAt)) : '',
+    waitingFor: !childDone ? 'child' : (!parentDone ? 'parent' : null),
+    amended: amendedCount(),
+  };
+}
+
+/* ---------------- 5b. 周复盘：5 步向导 + 结算 ---------------- */
+
+/** 第 3 步「下周只改一件小事」的拆小建议：与原型一致 */
+const SHRINK_SUGGESTIONS = ['写作业前先把手机放到客厅', '先做 10 分钟，再决定要不要继续'];
+
+/** 第 2 步「想留下来的习惯」候选项：与原型一致 */
+const KEEP_OPTIONS = ['先复习再写作业', '专注 25 分钟不碰手机', '睡前整理书包',
+                      '22:30 前睡觉', '先做最难的那科', '运动 30 分钟'];
+const KEEP_CUSTOM = '我自己想的：______________________';
+
+/** 目标是否「说得太大」：命中就提示拆小（原型用的是同一组特征） */
+const tooBigTarget = text => /小时|每天.*[两三四五六七八九十]|\d{2,}/.test(String(text || ''));
+
+function draftWeek() {
+  return {
+    step: 0,
+    highlights: [],
+    keep: '',
+    next: '',
+    challenge: '',
+    keepCustom: '',
+    nextCustom: '',
+    lastSuggest: '',
+  };
+}
+
+/** 取一份草稿：已有就复用，保证「上一题 / 下一步」来回走不丢答案 */
+function blankWeek() { S.weekDraft = draftWeek(); save(); return S.weekDraft; }
+function weekDraft() { return S.weekDraft || blankWeek(); }
+function dropWeekDraft() { S.weekDraft = null; save(); }
+
+/** 第 1 步的候选：她这周记过、而且带具体反馈的那些条目（正面记录才出现） */
+function weekCandidates(limit) {
+  const dates = weekDates();
+  const seen = {};
+  const out = [];
+  S.log
+    .filter(l => !l.reversed && dates.indexOf(l.date) >= 0 && l.praise)
+    .sort((a, b) => b.ts - a.ts)
+    .forEach(l => {
+      const key = l.name + '|' + l.praise;
+      if (seen[key]) return;
+      seen[key] = 1;
+      out.push({ name: l.name, praise: l.praise, dim: l.dim, date: l.date });
+    });
+  return out.slice(0, limit || 6);
+}
+
+function weekStats() {
+  const dates = weekDates();
+  return {
+    score: weekScore(),
+    days: dates.filter(d => pointsOn(d) > 0).length,
+    streak: streak(),
+    rangeStart: shiftDay(-6),                 // 本周窗口起点，用于结算幂等
+    range: shiftDay(-6) + ' → ' + todayKey(),
+  };
+}
+
+/** 结算：三项加成都是自动算的，谁都不能改 */
+function weekBonus(challenge) {
+  const st = weekStats();
+  return {
+    week50: st.score >= 50,
+    streak7: st.streak >= 7,
+    challenge: !!String(challenge || '').trim(),
+    total: (st.score >= 50 ? 10 : 0) + (st.streak >= 7 ? 10 : 0) + (String(challenge || '').trim() ? 5 : 0),
+  };
+}
+
+function pickHighlight(text) {
+  const v = String(text || '').trim();
+  if (!v) return { ok: false, reason: '写一句就好' };
+  const w = weekDraft();
+  if (w.highlights.indexOf(v) >= 0) return { ok: false, reason: '这条已经选过了' };
+  if (w.highlights.length >= 3) return { ok: false, reason: '三条就够了，挑最重要的' };
+  w.highlights.push(v);
+  save();
+  return { ok: true, highlights: w.highlights.slice() };
+}
+function unpickHighlight(text) {
+  const w = weekDraft();
+  const i = w.highlights.indexOf(String(text || '').trim());
+  if (i < 0) return { ok: false, reason: '没选过这条' };
+  w.highlights.splice(i, 1);
+  save();
+  return { ok: true, highlights: w.highlights.slice() };
+}
+
+function setWeekPatch(patch) {
+  const w = weekDraft();
+  Object.keys(patch || {}).forEach(k => { w[k] = patch[k]; });
+  save();
+  return w;
+}
+
+/** 步骤推进：第 3 步要求写了目标，且目标太大时先给拆小建议 */
+function weekStep(step) {
+  const w = weekDraft();
+  const s = Math.max(0, Math.min(4, Number(step)));
+  if (s === 3) {
+    if (!String(w.next || '').trim()) return { ok: false, reason: '写下你想改的那一件小事' };
+    if (tooBigTarget(w.next) && !w.lastSuggest) {
+      w.lastSuggest = 'shown';
+      save();
+      return { ok: false, big: true, suggestions: SHRINK_SUGGESTIONS };
+    }
+  }
+  if (s === 4) return { ok: false, reason: '结算要按「就这么定」' };
+  w.step = s;
+  save();
+  return { ok: true, step: s };
+}
+
+/**
+ * 结算并生成周报。
+ * 周奖励走 addWeeklyPoints（结算事件，不占当日打卡上限，但同样只加分、不可删）。
+ */
+function finishWeek() {
+  const st = weekStats();
+
+  /* 幂等：同一周只结算一次。
+     没有这道闸，结算后再往前走一遍向导就会再发一次周奖励（连续记录与周达标
+     的条件此时仍然成立），等于凭空多给分。 */
+  if (S.week && S.week.rangeStart === st.rangeStart) {
+    return { ok: false, reason: '这一周已经结算过了', week: S.week, already: true };
+  }
+
+  const w = weekDraft();
+  const bonus = weekBonus(w.challenge);
+  let entry = null;
+  if (bonus.total > 0) {
+    const r = addWeeklyPoints({
+      name: '本周额外奖励（周达标 / 连续记录 / 主动挑战）',
+      points: bonus.total,
+      praise: '我看到你坚持了一整周，这说明你已经在自动运转了。',
+    });
+    entry = r.ok ? r.entry : null;
+  }
+  S.week = {
+    step: 4,
+    highlights: w.highlights.slice(),
+    keep: w.keep,
+    keepCustom: w.keepCustom,
+    next: w.next,
+    nextCustom: w.nextCustom,
+    challenge: w.challenge,
+    bonus: bonus.total,
+    bonusDetail: bonus,
+    score: st.score,
+    days: st.days,
+    streak: st.streak,
+    range: st.range,
+    rangeStart: st.rangeStart,
+    at: Date.now(),
+    entryUid: entry ? entry.uid : null,
+  };
+  S.weekDraft = null;
+  save();
+  return { ok: true, week: S.week };
+}
+
+/**
+ * 「下周继续」：只清掉周报，**不删那条奖励流水**。
+ * 原型在这里会过滤掉 bonus 流水，那是演示重置；真实产品里奖励一旦入账就不能回收
+ * （PRD §1.4 红线 4「兑换履约率 100%」的同类要求）。
+ */
+function resetWeek() {
+  S.week = null;
+  S.weekDraft = null;
+  /* 这里**不能**清掉惊喜卡的领取凭据（surpriseClaim）：
+     否则她走完周复盘点一下「下周继续」，就能在同一周再领一张 ——
+     实测确实能多领，违反了 PRD §4 M6 的「每周最多 1 次」。
+     资格由 surpriseState() 按滚动 7 天窗口自动恢复，不需要在这里清。 */
+  save();
+  return { ok: true };
+}
+
+/* ---------------- 5d. 打印 / 导出：一周一页 ---------------- */
+
+/**
+ * 「一周一页」的可打印文本。
+ *
+ * 移植指南 §三 说打印要走服务端 PDF（`wx.downloadFile` + `wx.openDocument`），
+ * 那需要一个后端接口。本工程先把**同一份内容**在本地生成好、用剪贴板交付
+ * （能贴进备忘录、微信、打印店的文档里，现在就能用）；接上服务端之后
+ * 把 `pdfPayload` 直接 POST 过去即可，内容不用重写。
+ *
+ * 两条规矩：
+ * · 导出的是**她自己**的东西，所以含她标为「仅自己可见」的条目
+ *   （家长端的不可见不适用于她自己的导出），并在纸面上标出来；
+ * · 内容只来自她自己的记录，不掺入排名、比较或「你没做到什么」。
+ */
+function buildWeekPage(opts) {
+  const o = opts || {};
+  const st = weekStats();
+  const dates = weekDates();
+  const nick = o.nick || S.nick || '我';
+
+  /* 这一周做到的事：带具体反馈的打卡记录 */
+  const flashes = S.log
+    .filter(l => !l.reversed && dates.indexOf(l.date) >= 0 && l.praise)
+    .sort((a, b) => b.ts - a.ts)
+    .slice(0, 8)
+    .map(l => ({ date: l.date, name: l.name, praise: l.praise, points: l.points, isPrivate: !!l.private }));
+
+  /* 她手写的闪光点 */
+  const notes = dates
+    .filter(d => S.flash && S.flash[d])
+    .sort()
+    .map(d => ({ date: d, text: S.flash[d] }));
+
+  const byDim = {};
+  S.log.filter(l => !l.reversed && dates.indexOf(l.date) >= 0).forEach(l => {
+    byDim[l.dim] = (byDim[l.dim] || 0) + l.points;
+  });
+  const dims = T.DIMS
+    .map(d => ({ n: d.n, v: byDim[d.k] || 0 }))
+    .filter(d => d.v > 0);
+
+  const week = S.week;
+  const sig = ruleSignature();
+
+  const lines = [];
+  lines.push('罗森塔尔 · 一周一页');
+  lines.push(nick + '的这一周：' + st.range);
+  lines.push('');
+  lines.push('本周得分：' + st.score + ' 分（每天上限 ' + capNow() + ' 分）');
+  lines.push('有记录天数：' + st.days + ' 天　连续记录：' + st.streak + ' 天');
+  lines.push('累计获得：' + lifetime() + ' 分　可用余额：' + balance() + ' 分');
+  if (week && week.bonus > 0 && week.bonusDetail) {
+    const parts = [];
+    if (week.bonusDetail.week50) parts.push('周达标 +10');
+    if (week.bonusDetail.streak7) parts.push('连续 7 天 +10');
+    if (week.bonusDetail.challenge) parts.push('主动挑战 +5');
+    lines.push('周结算奖励：+' + week.bonus + ' 分（' + parts.join('、') + '）');
+  }
+  lines.push('');
+
+  if (dims.length) {
+    lines.push('【这周的力气花在了哪】');
+    dims.forEach(d => lines.push('　' + d.n + '：' + d.v + ' 分'));
+    lines.push('');
+  }
+
+  lines.push('【这一周做到的事】');
+  if (flashes.length === 0) {
+    lines.push('　这一周还没有记录，下周从一件小事开始就好。');
+  } else {
+    flashes.forEach((f, i) => {
+      lines.push('　' + (i + 1) + '. ' + f.date + '　' + f.name + ' +' + f.points +
+                 (f.isPrivate ? '（仅自己可见）' : ''));
+      if (f.praise) lines.push('　　 ' + f.praise);
+    });
+  }
+  lines.push('');
+
+  if (notes.length) {
+    lines.push('【我写下的闪光点】');
+    notes.forEach(n => lines.push('　' + n.date + '　' + n.text));
+    lines.push('');
+  }
+
+  if (week) {
+    lines.push('【印象最深的三件事】');
+    (week.highlights && week.highlights.length ? week.highlights : ['（这一周没写）'])
+      .forEach((h, i) => lines.push('　' + (i + 1) + '. ' + h));
+    lines.push('');
+    lines.push('【我想保留的习惯】');
+    lines.push('　' + (week.keep === KEEP_CUSTOM ? (week.keepCustom || '（待补）') : (week.keep || '（这一周没选）')));
+    lines.push('');
+    lines.push('【下周只改一件小事】');
+    lines.push('　' + (week.next || '（这一周没写）'));
+    if (week.challenge) {
+      lines.push('');
+      lines.push('【我想挑战的新任务】');
+      lines.push('　' + week.challenge + '　+5');
+    }
+    lines.push('');
+  }
+
+  lines.push('【妈妈的一句】');
+  lines.push('　（这里留给家长手写）');
+  lines.push('');
+  lines.push('【双签】');
+  lines.push('　规则版本：v1.' + sig.ruleVersion +
+             (sig.active ? '（' + sig.agreedDate + ' 双签生效）' : '（待家长签署）'));
+  lines.push('　她签名：____________　　家长签名：____________　　日期：____________');
+  lines.push('');
+  lines.push('“你不是被积分管住的人，你是在练习管理自己。每一次小做到，都在证明：我可以。”');
+
+  return {
+    title: '罗森塔尔 · 一周一页',
+    range: st.range,
+    nick: nick,
+    score: st.score,
+    days: st.days,
+    streak: st.streak,
+    cap: capNow(),
+    bonus: week ? week.bonus : 0,
+    dims: dims,
+    flashes: flashes,
+    notes: notes,
+    signature: { ruleVersion: sig.ruleVersion, active: sig.active, agreedDate: sig.agreedDate },
+    text: lines.join('\n'),
+    generatedAt: Date.now(),
+    /* 交给服务端 PDF 的最小载荷；后端就绪后直接 POST 这个对象即可 */
+    pdfPayload: {
+      kind: 'weekly_page',
+      range: st.range,
+      nick: nick,
+      score: st.score,
+      days: st.days,
+      streak: st.streak,
+      cap: capNow(),
+      bonus: week ? week.bonus : 0,
+      dims: dims,
+      flashes: flashes,
+      notes: notes,
+      week: week ? {
+        highlights: week.highlights,
+        keep: week.keep,
+        keepCustom: week.keepCustom,
+        next: week.next,
+        challenge: week.challenge,
+      } : null,
+      signature: { ruleVersion: sig.ruleVersion, active: sig.active, agreedDate: sig.agreedDate },
+    },
+  };
+}
+
+/* ---------------- 5d-2. 打印 / 导出：规则表（罗森塔尔表格） ---------------- */
+
+/**
+ * 「罗森塔尔表格」：把**当前学段**的规则原样导成一张可打印 / 可下载的表。
+ * 四个学段（小学低段 / 小学高段 / 初中 / 高中）共用这一条路径 ——
+ * 内容全部取自 store 的当前状态，所以学段一切换，导出的就是那一套。
+ *
+ * 与 buildWeekPage 同一套交付方式：本地生成文本 + `pdfPayload`，剪贴板交付；
+ * 接上服务端 PDF 后直接 POST `pdfPayload` 即可，内容不用重写。
+ * 另有 buildRuleTableCsv()：同一张表，Excel 双击即开。
+ *
+ * 两条规矩与一周一页一致：
+ * · 导出的是**她自己**的规则，所以「她自己改过」的条目在纸面上标 ★；
+ * · 只导正向内容，不掺排名、比较或「你没做到什么」。
+ */
+function buildRuleTable(opts) {
+  const o = opts || {};
+  const st = T.stageOf(S.stage);
+  const nick = o.nick || S.nick || '我';
+  const sig = ruleSignature();
+  const items = itemsOf();
+
+  const dims = T.DIMS.map(d => ({
+    k: d.k,
+    n: d.n,
+    items: items.filter(i => i.dim === d.k).map(i => ({
+      id: i.id, name: i.name, points: i.points, limit: i.limit,
+      mine: i.customBy === 'child',
+    })),
+  })).filter(d => d.items.length > 0);
+
+  const rewards = S.rewards.map(r => ({
+    cost: r.cost, tier: r.tier, title: r.title, mine: r.customBy === 'child',
+  }));
+
+  const lines = [];
+  lines.push('罗森塔尔 · 规则表');
+  lines.push(nick + '的这一份 · ' + st.n + '（' + st.g + '）');
+  lines.push('每日上限 ' + capNow() + ' 分 · ' + items.length + ' 条行为 · ' + rewards.length + ' 档奖励');
+  lines.push('规则版本 v1.' + sig.ruleVersion + '（' +
+             (sig.active ? sig.agreedDate + ' 双签生效' : '待家长签署') + '）');
+  lines.push('');
+  lines.push('【行为清单】★ 表示她自己改过');
+  dims.forEach(d => {
+    lines.push('· ' + d.n);
+    d.items.forEach(i => {
+      lines.push('　+' + i.points + '　' + i.name +
+                 '（每天最多 ' + i.limit + ' 次）' + (i.mine ? ' ★' : ''));
+    });
+  });
+  lines.push('');
+  lines.push('【奖励档位】');
+  rewards.forEach(r => {
+    lines.push('　' + r.cost + ' 分　' + r.title + '（' + r.tier + '）' + (r.mine ? ' ★' : ''));
+  });
+  lines.push('');
+  lines.push('【说明】只加分，不扣分；每日上限 ' + capNow() + ' 分随学段变；' +
+             '家长不能单方改，改一条要重新双签。');
+  lines.push('她签名：____________　　家长签名：____________　　日期：____________');
+  lines.push('');
+  lines.push('“你不是被积分管住的人，你是在练习管理自己。”');
+
+  return {
+    title: '罗森塔尔 · 规则表',
+    stage: S.stage,
+    stageName: st.n,
+    grade: st.g,
+    nick: nick,
+    cap: capNow(),
+    itemCount: items.length,
+    rewardCount: rewards.length,
+    dims: dims,
+    rewards: rewards,
+    signature: { ruleVersion: sig.ruleVersion, active: sig.active, agreedDate: sig.agreedDate },
+    filename: 'rosenthal-rules-' + S.stage + '-' + todayKey() + '.txt',
+    text: lines.join('\n'),
+    generatedAt: Date.now(),
+    /* 交给服务端 PDF 的最小载荷；后端就绪后直接 POST 这个对象即可 */
+    pdfPayload: {
+      kind: 'rule_table',
+      stage: S.stage,
+      stageName: st.n,
+      grade: st.g,
+      nick: nick,
+      cap: capNow(),
+      dims: dims.map(d => ({
+        n: d.n,
+        items: d.items.map(i => ({ name: i.name, points: i.points, limit: i.limit, mine: i.mine })),
+      })),
+      rewards: rewards.slice(),
+      signature: { ruleVersion: sig.ruleVersion, active: sig.active, agreedDate: sig.agreedDate },
+    },
+  };
+}
+
+/**
+ * 同一张规则表的 CSV（Excel / WPS / Numbers 双击即开）。
+ * 带 UTF-8 BOM，否则 Excel 打开中文会乱码；字段含逗号 / 引号 / 换行时按 CSV 规则转义。
+ */
+function buildRuleTableCsv(opts) {
+  const t = buildRuleTable(opts);
+  const q = v => {
+    const s0 = String(v === undefined || v === null ? '' : v);
+    return /[",\n]/.test(s0) ? ('"' + s0.replace(/"/g, '""') + '"') : s0;
+  };
+  const lines = [['类型', '维度/档位', '内容', '分值', '每日上限', '谁改的'].join(',')];
+  t.dims.forEach(d => d.items.forEach(i => {
+    lines.push(['行为', d.n, i.name, String(i.points), String(i.limit),
+                i.mine ? '她自己改过' : '初始模板'].map(q).join(','));
+  }));
+  t.rewards.forEach(r => {
+    lines.push(['奖励', r.tier, r.title, String(r.cost), '',
+                r.mine ? '她自己改过' : '初始模板'].map(q).join(','));
+  });
+  lines.push('');
+  lines.push(['学段', t.stageName, t.grade, '每日上限', String(t.cap), ''].map(q).join(','));
+  return {
+    filename: 'rosenthal-rules-' + t.stage + '-' + todayKey() + '.csv',
+    text: '\ufeff' + lines.join('\r\n') + '\r\n',
+    rowCount: t.itemCount + t.rewardCount,
+    stage: t.stage,
+    generatedAt: Date.now(),
+  };
+}
+
+/* ---------------- 5e. 里程碑徽章（不可兑换，纯叙事） ---------------- */
+
+/**
+ * 徽章体系。PRD §4 M6 第 3 条：连续 7 天、总分 100/200/300、首次自主挑战、
+ * 首次化解矛盾 → 生成「成长勋章」（不可兑换、纯叙事）。
+ * 移植指南验收清单还要求：**高中段默认隐藏徽章体系**（去游戏化），
+ * 那条规则在 app.wxss 的 `.stage-high .miles{ display:none }` 里。
+ *
+ * 实现取舍：
+ * · 徽章不单独存表，而是**每次从流水推导**（流水只增不删），
+ *   这样撤销 / 改学段历史的情况下也不会出现「徽章和记录对不上」；
+ * · 徽章的**达成日期**按规则回算（例如连续 7 天的达成日是 streak 首次到 7 的那天），
+ *   所以不需要额外的埋点字段；
+ * · 两个阈值 PRD 没给判定口径，本实现取的是可解释的近似（标了 inferred），
+ *   产品若要改成更严格的判定，只改下面这两个函数即可。
+ */
+const MILESTONE_RULES = [
+  { k: 'streak7', n: '连续 7 天', d: '连续 7 天都有记录', points: null },
+  { k: 'score100', n: '累计 100 分', d: '累计获得 100 分', points: 100 },
+  { k: 'score200', n: '累计 200 分', d: '累计获得 200 分', points: 200 },
+  { k: 'score300', n: '累计 300 分', d: '累计获得 300 分', points: 300 },
+  { k: 'challenge', n: '第一次主动挑战', d: '自己给自己加了一件想做的事', inferred: true },
+  { k: 'resolve', n: '第一次化解矛盾', d: '和同学把事情说开了', inferred: true },
+];
+
+/** 截至 endDate，连续记录天数（与 streak() 同口径，但可指定日期） */
+function streakEndingAt(endDate) {
+  const p = String(endDate).split('-');
+  const y = Number(p[0]), mo = Number(p[1]) - 1, d = Number(p[2]);
+  let n = 0, i = 0;
+  for (;;) {
+    const k = dateKey(new Date(y, mo, d - i));
+    if (pointsOn(k) > 0) { n++; i++; } else if (i === 0) { i++; } else break;
+  }
+  return n;
+}
+
+/**
+ * streak 首次达到 7 的那一天（没有就返回空串）。
+ *
+ * 注意日期构造必须走**本地时间**（new Date(y, m, d)）而不是
+ * new Date('2026-10-04T12:00:00')：后者按 UTC 解析，在东八区会整体偏移一天，
+ * 用 dateKey() 读回来就永远对不上。这个 bug 是被回归测试逼出来的。
+ */
+function firstStreak7Date() {
+  const all = S.log.filter(l => !l.reversed).map(l => l.date).sort();
+  if (!all.length) return '';
+  const p = String(all[0]).split('-');
+  const y = Number(p[0]), mo = Number(p[1]) - 1, d = Number(p[2]);
+  const today = todayKey();
+  const guardDays = 400;
+  for (let i = 0; i < guardDays; i++) {
+    const k = dateKey(new Date(y, mo, d + i));   // 月份/年份溢出由 Date 自动进位
+    if (k > today) break;
+    if (streakEndingAt(k) >= 7) return k;
+  }
+  return '';
+}
+
+/** 累计首次达到某个分值的那一天 */
+function firstLifetimeDate(target) {
+  const dated = S.log.filter(l => !l.reversed).slice().sort((a, b) => a.ts - b.ts);
+  let sum = 0;
+  for (let i = 0; i < dated.length; i++) {
+    sum += dated[i].points;
+    if (sum >= target) return dated[i].date;
+  }
+  return '';
+}
+
+/** 第一次满足条件的那条流水 */
+function firstEntryMatching(fn) {
+  const hit = S.log.filter(l => !l.reversed && fn(l)).sort((a, b) => a.ts - b.ts)[0];
+  return hit || null;
+}
+
+function milestones() {
+  const life = lifetime();
+  const ch = firstEntryMatching(l => l.dim === 'bonus' && /挑战/.test(l.name || ''));
+  /* 「化解矛盾」在模板里叫「与同学合作或化解矛盾」，高中段叫「守住自己的边界」，
+     这里用关键词匹配，两个学段都覆盖得到。 */
+  const rs = firstEntryMatching(l => l.dim === 'social' && /化解|说开|商量|合作|矛盾/.test(l.name || ''));
+  const s7 = firstStreak7Date();
+
+  return MILESTONE_RULES.map(r => {
+    let earnedAt = '';
+    let got = false;
+    if (r.k === 'streak7') { got = streak() >= 7 || !!s7; earnedAt = s7; }
+    else if (r.points) { got = life >= r.points; earnedAt = firstLifetimeDate(r.points); }
+    else if (r.k === 'challenge') { got = !!ch; earnedAt = ch ? ch.date : ''; }
+    else if (r.k === 'resolve') { got = !!rs; earnedAt = rs ? rs.date : ''; }
+    return {
+      k: r.k, n: r.n, d: r.d, inferred: !!r.inferred,
+      earned: got, earnedAt: got ? earnedAt : '',
+    };
+  });
+}
+
+/* ---------------- 5f. 导出：Excel 可读的流水 CSV ---------------- */
+
+/**
+ * 流水导出成 CSV（Excel / WPS / Numbers 双击即开）。
+ *
+ * PRD DoD 要求「打印版（一周一页）与 **Excel 导出**可用」，移植指南 §三 也提到
+ * 「打印版改为服务端生成 PDF」——但 Excel 不需要后端：CSV 是纯文本，
+ * 小程序侧生成后用剪贴板或写入 `wx.env.USER_DATA_PATH` 就能交付。
+ *
+ * 规矩：
+ * · 导出的是**她自己**的完整流水，含她标为「仅自己可见」的条目，并在列里标出来；
+ * · 只写正向流水，导出里不会出现负数（全站也没有负数可导）；
+ * · 带 UTF-8 BOM，否则 Excel 打开中文会乱码。
+ */
+function buildLedgerCsv(opts) {
+  const o = opts || {};
+  const rows = S.log
+    .filter(l => !l.reversed || o.includeReversed)
+    .slice()
+    .sort((a, b) => a.ts - b.ts);
+
+  const esc = v => {
+    const t = String(v === undefined || v === null ? '' : v);
+    return /[",\n]/.test(t) ? ('"' + t.replace(/"/g, '""') + '"') : t;
+  };
+  const pad2 = n => String(n).padStart(2, '0');
+
+  const head = ['日期', '时间', '行为', '维度', '分值', '结算奖励', '仅自己可见', '家长已确认', '具体反馈'];
+  const lines = [head.join(',')];
+  rows.forEach(l => {
+    const d = new Date(l.ts);
+    lines.push([
+      l.date,
+      pad2(d.getHours()) + ':' + pad2(d.getMinutes()),
+      l.name,
+      dimLabel(l.dim),
+      String(l.points),
+      l.weekly ? '是' : '',
+      l.private ? '是' : '',
+      l.confirmed ? '是' : '',
+      l.praise,
+    ].map(esc).join(','));
+  });
+
+  const total = rows.filter(l => !l.reversed).reduce((a, l) => a + l.points, 0);
+  lines.push('');
+  lines.push(['合计（不含已撤销）', '', '', '', String(total), '', '', '', ''].join(','));
+
+  const st = weekStats();
+  lines.push(['导出范围', st.range, '连续记录', String(streak()) + ' 天', '累计', String(lifetime()), '余额', String(balance()), '']);
+
+  return {
+    filename: 'rosenthal-ledger-' + todayKey() + '.csv',
+    /* \ufeff 是 UTF-8 BOM，Excel 靠它认出编码，中文才不会乱码 */
+    text: '\ufeff' + lines.join('\r\n') + '\r\n',
+    rowCount: rows.length,
+    total: total,
+    generatedAt: Date.now(),
+  };
+}
+/* ---------------- 5g. 指标契约（PRD §10） ---------------- */
+
+/**
+ * PRD §10 的指标体系，做成**可测试的纯函数**。
+ *
+ * 为什么不做「埋点上报」：上报要落库、要真实 AppID 与云环境，本机做不了；
+ * 而把指标口径先在本地算准，接上任意分析后端时都不用重写 ——
+ * `metrics()` 的返回结构就是可以直接上报的字段表（也便于在「我的」页给她看）。
+ *
+ * 口径说明（PRD 只给了指标名，没给定义，这里把每个口径写死在注释里）：
+ * · 周闭环天数 = 一周 7 天里「当天有打卡 + 当天在记录之外还写了闪光点」的天数；
+ *   PRD 原文是「每日有记录 + 当周完成复盘」，落地成两个可判定的信号；
+ * · 撤销率 / 补记率 = 该现象条数 ÷ 总条数（补记 = 事后补登，用「记录日期早于写入时间」判定）；
+ * · 自主力占比 = 自主力维度的分 ÷ 总分；
+ * · D7 / D30 = 首次使用后第 7 / 第 30 天是否仍有记录（留存代理指标）。
+ */
+const METRIC_DEFS = [
+  { k: 'weekLoopDays', layer: '北极星', n: '周闭环天数', d: '这一周里「每天有记录 + 写了闪光点」的天数' },
+  { k: 'loopRate', layer: '北极星', n: '闭环率', d: '周闭环天数 ÷ 7' },
+  { k: 'activated', layer: '激活', n: '初始化完成', d: '是否已完成「必改 3 项」' },
+  { k: 'signed', layer: '激活', n: '规则已双签', d: '孩子提案 + 家长签署' },
+  { k: 'd7', layer: '留存', n: 'D7 仍有记录', d: '首次使用后第 7 天是否还有记录' },
+  { k: 'd30', layer: '留存', n: 'D30 仍有记录', d: '首次使用后第 30 天是否还有记录' },
+  { k: 'activeDays', layer: '留存', n: '有记录天数', d: '累计有记录的自然日数' },
+  { k: 'streak', layer: '留存', n: '连续记录', d: '当前连续天数' },
+  { k: 'autonomyRatio', layer: '深度', n: '自主力占比', d: '自主力得分 ÷ 总分' },
+  { k: 'customItems', layer: '深度', n: '自定义行为项', d: '她自己加进来的行为项条数' },
+  { k: 'surpriseUsed', layer: '深度', n: '惊喜卡使用率', d: '已核销的惊喜卡 ÷ 已领到的惊喜卡' },
+  { k: 'redemptionRate', layer: '家庭', n: '兑换履约率', d: '已核销的券 ÷ 已发出的券' },
+  { k: 'coSignRate', layer: '家庭', n: '规则双签率', d: '已双签的规则版本 ÷ 提出的版本数' },
+  { k: 'praiseCount', layer: '家庭', n: '家长鼓励条数', d: '家长确认过的记录数' },
+  { k: 'undoRate', layer: '负向', n: '撤销率', d: '已撤销条数 ÷ 总条数' },
+  { k: 'backfillRate', layer: '负向', n: '补记率', d: '事后补登条数 ÷ 总条数' },
+  { k: 'privateRate', layer: '负向', n: '仅自己可见标记率', d: '私密条数 ÷ 总条数' },
+];
+
+/** 某个日期是否算「闭环日」：有打卡分，且写了闪光点 */
+function isLoopDay(date) {
+  return pointsOn(date) > 0 && !!(S.flash && S.flash[date]);
+}
+
+function ratio(n, d) {
+  return d > 0 ? Math.round(n / d * 1000) / 1000 : 0;
+}
+
+/** 首次使用的日期（最早一条流水；没有流水就看草稿时间） */
+function firstUseDate() {
+  const all = S.log.map(l => l.date).sort();
+  return all.length ? all[0] : '';
+}
+
+/** 首次使用后的第 n 天是否仍有记录 */
+function retainedOn(n) {
+  const first = firstUseDate();
+  if (!first) return false;
+  const p = String(first).split('-');
+  const target = dateKey(new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]) + n));
+  return pointsOn(target) > 0;
+}
+
+function metrics() {
+  const active = S.log.filter(l => !l.reversed);
+  const total = S.log.length;
+  const dates = weekDates();
+  const loopDays = dates.filter(isLoopDay).length;
+  const customItems = S.items.filter(i => i.customBy === 'child' && i.active !== false).length;
+
+  const byDim = {};
+  active.forEach(l => { byDim[l.dim] = (byDim[l.dim] || 0) + l.points; });
+  const life = lifetime();
+
+  /* 补记：写入时间比记录日期晚了一天以上（说明是事后补登的） */
+  const backfilled = active.filter(l => {
+    const d = new Date(l.ts);
+    return dateKey(d) !== l.date;
+  }).length;
+
+  const surprises = S.coupons.filter(c => c.surprise);
+  const redeemed = S.coupons.filter(c => !c.surprise);
+  const versions = Math.max(1, S.ruleVersion || 0);
+
+  return {
+    generatedAt: Date.now(),
+    range: weekStats().range,
+    /* 北极星 */
+    weekLoopDays: loopDays,
+    loopRate: ratio(loopDays, 7),
+    /* 激活 */
+    activated: !!S.onboarded,
+    signed: isRuleActive(),
+    /* 留存 */
+    d7: retainedOn(7),
+    d30: retainedOn(30),
+    activeDays: Object.keys(active.reduce((a, l) => { a[l.date] = 1; return a; }, {})).length,
+    streak: streak(),
+    /* 深度 */
+    autonomyRatio: ratio(byDim.self || 0, life),
+    customItems: customItems,
+    surpriseUsed: surprises.length ? ratio(surprises.filter(c => c.used).length, surprises.length) : 0,
+    surpriseCount: surprises.length,
+    /* 家庭 */
+    redemptionRate: redeemed.length ? ratio(redeemed.filter(c => c.used).length, redeemed.length) : 0,
+    coSignRate: isRuleActive() ? 1 : ratio(0, versions),
+    praiseCount: S.log.filter(l => l.confirmed).length,
+    /* 负向 */
+    undoRate: ratio(S.log.filter(l => l.reversed).length, total),
+    backfillRate: ratio(backfilled, Math.max(1, active.length)),
+    privateRate: ratio(S.log.filter(l => l.private).length, total),
+    /* 便于核对口径 */
+    counts: { total: total, active: active.length, coupons: redeemed.length, versions: versions },
+  };
+}
+
+/** 把指标与口径说明一起导出（自查 / 交给分析后端时口径不会走样） */
+function metricsReport() {
+  const m = metrics();
+  const lines = ['罗森塔尔 · 本机指标（PRD §10 口径）', '范围：' + m.range, ''];
+  let layer = '';
+  METRIC_DEFS.forEach(def => {
+    if (def.layer !== layer) { layer = def.layer; lines.push('【' + layer + '】'); }
+    lines.push('　' + def.n + '：' + m[def.k]);
+    lines.push('　　' + def.d);
+  });
+  return { metrics: m, defs: METRIC_DEFS.slice(), text: lines.join('\n') };
+}
+
+/* ---------------- 5h. 数据主权：一键导出 / 彻底删除（PRD §7 非功能需求） ---------------- */
+
+/**
+ * 导出全部本机数据（JSON）。
+ * PRD §7：「支持一键导出/彻底删除」；§4 M4 把导出列为她的权限之一。
+ */
+function exportAll() {
+  const m = metrics();
+  return {
+    filename: 'rosenthal-backup-' + todayKey() + '.json',
+    payload: {
+      app: 'rosenthal-miniprogram',
+      schema: 1,
+      exportedAt: Date.now(),
+      exportedDate: todayKey(),
+      state: JSON.parse(JSON.stringify(S)),   // 深拷贝，导出物不随后续写入变化
+      metrics: m,
+    },
+    text: JSON.stringify({
+      app: 'rosenthal-miniprogram', schema: 1, exportedAt: Date.now(), exportedDate: todayKey(),
+      state: JSON.parse(JSON.stringify(S)), metrics: m,
+    }, null, 2),
+    generatedAt: Date.now(),
+  };
+}
+
+/**
+ * 彻底删除本机全部数据（不可撤销）。
+ *
+ * 注意与「家长端不可删除」不冲突：
+ *  · 那条红线约束的是**家长**不能删她的记录（PRD §1.4 红线 3、§4 M4）；
+ *  · 这里是**数据主人自己**行使 §7 的「彻底删除」权利，两者是不同的主体。
+ * 删除后回到「第一次打开」的状态，因此会重新走一次规则共建（闸门自动生效）。
+ */
+function wipeAll() {
+  S = blank('mid');
+  save();
+  return { ok: true, at: Date.now() };
+}
+
+/**
+ * 用合并后的状态替换本机状态并落盘（供 app.mergeCloud 调用）。
+ * 这里**不做任何合并判定**：策略全在 utils/sync.js 里，
+ * 本函数只负责换入 + 字段归一化（与 load 同一套补全逻辑）。
+ */
+function replaceState(next) {
+  if (!next || typeof next !== 'object') return { ok: false, reason: '状态无效' };
+  S = next;
+  if (!S.stage) S.stage = 'mid';
+  if (!S.amend || typeof S.amend !== 'object') S.amend = { point: 0, item: 0, reward: 0 };
+  if (!Array.isArray(S.log)) S.log = [];
+  if (!Array.isArray(S.items)) S.items = T.templateOf(S.stage).map(i => Object.assign({}, i));
+  if (!Array.isArray(S.coupons)) S.coupons = [];
+  if (!Array.isArray(S.repairs)) S.repairs = [];
+  if (!Array.isArray(S.redemptions)) S.redemptions = [];
+  if (!S.flash || typeof S.flash !== 'object') S.flash = {};
+  save();
+  return { ok: true };
+}
+
+/* ---------------- 5c. 惊喜卡：连续 7 天达成 → 自己挑一张 ---------------- */
+
+/**
+ * 合规红线（移植指南 §八、PRD §4 M6 修订）：
+ * 这是**自选**，不是抽奖 —— 零随机、零概率。她连续记录满 7 天，就从固定卡池里
+ * 自己挑 1 张。所以这里没有任何 random，只有「能不能领」和「挑哪一张」。
+ *
+ * 「每周最多 1 次」的判定用**滚动 7 天窗口**（与 weekStats 的 rangeStart 同一口径），
+ * 而不是一个简单的「领过没有」布尔值：后者会被 resetWeek() 一并清掉，
+ * 于是她走完周复盘点一下「下周继续」就能在同一周再领一张（实测确实能多领）。
+ */
+const dateAfter = (a, b) => String(a) > String(b);
+const datePlus = (dateStr, n) => {
+  const p = String(dateStr).split('-');
+  return dateKey(new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]) + n));
+};
+
+/** 当前这张惊喜卡的领取窗口（今天 + 往前 6 天）与下次可领日期 */
+function surpriseWindow() {
+  const start = shiftDay(-6), end = todayKey();
+  return { start: start, end: end, next: datePlus(end, 1) };
+}
+
+function surpriseState() {
+  const st = streak();
+  const w = surpriseWindow();
+  /* 兼容旧数据：以前只存了一个时间戳 surpriseAt */
+  const claim = S.surpriseClaim ||
+    (S.surpriseAt ? { at: S.surpriseAt, start: '', end: '' } : null);
+  /**
+   * 本窗口内领过就不能再领。两种判定：
+   * · 新数据带窗口（start/end）：窗口有交集就算领过；
+   * · 旧数据只有一个时间戳：退化成「7 天内算本窗口」——
+   *   否则老存档会被当成「窗口外」而白送一张（这条迁移路径上的洞我实测确认过）。
+   */
+  let claimedInWindow = false;
+  if (claim) {
+    if (claim.end) {
+      claimedInWindow = !dateAfter(w.start, claim.end);
+    } else if (claim.at) {
+      claimedInWindow = (Date.now() - claim.at) < 7 * 24 * 3600 * 1000;
+    }
+  }
+  const canDraw = st >= 7 && !claimedInWindow;
+  return {
+    streak: st,
+    canDraw: canDraw,
+    claimed: !!claim,
+    claimedAt: claim ? claim.at : null,
+    claimedWindow: claim ? { start: claim.start, end: claim.end } : null,
+    need: Math.max(0, 7 - st),
+    nextClaimDate: claimedInWindow ? w.next : '',
+    cards: T.CARDS.map((c, i) => ({ idx: i, title: c.t, desc: c.d, exp: c.e })),
+  };
+}
+
+/** 挑一张卡：必须满足「连续 7 天 + 本窗口没领过」，且只能从卡池里选 */
+function drawSurprise(idx) {
+  const s = surpriseState();
+  if (!s.canDraw) {
+    return {
+      ok: false,
+      reason: s.claimed ? ('本次窗口已经领过了，' + s.nextClaimDate + ' 之后可以再挑') : ('连续记录满 7 天就能挑一张，现在 ' + s.streak + ' 天'),
+    };
+  }
+  const i = Number(idx);
+  const card = T.CARDS[i];
+  if (!card) return { ok: false, reason: '没有这张卡' };
+
+  const ts = Date.now();
+  const w = surpriseWindow();
+  const coupon = {
+    code: newCouponCode(S.coupons),   // 与兑换券同一套唯一码规则
+    title: card.t,
+    cost: 0,                          // 惊喜卡不扣分：她靠坚持换来的
+    ts: ts,
+    exp: shiftDay(card.e),
+    used: false,
+    surprise: true,
+    desc: card.d,
+  };
+  S.coupons.push(coupon);
+  /* 记「本次窗口」而不是一个布尔值：这样 resetWeek 清不掉资格，一周只发一张 */
+  S.surpriseClaim = { at: ts, start: w.start, end: w.end };
+  save();
+  /* 返回统一后的字段名（title/desc/exp），与 surpriseState() 的卡池形状一致，
+     避免调用方一半读 t 一半读 title。 */
+  return { ok: true, coupon: coupon, card: { idx: i, title: card.t, desc: card.d, exp: card.e } };
+}
+
+/* ---------------- 6. 学段切换 ---------------- */
+
+/** 换学段 = 换模板 + 换上限 + 换奖励 + 重新定一次规则；历史记录全部保留 */
+function applyStage(k) {
+  const st = T.stageOf(k);
+  S.stage = k;
+  S.items = T.templateOf(k).map(i => Object.assign({}, i));
+  const ov = T.REWARD_BY_STAGE[k];
+  S.rewards = (ov || T.REWARDS).map(r => Object.assign({}, r));
+  S.amend = { point: 0, item: 0, reward: 0 };
+  /* 换学段等于重新定一次规则：必须重走「必改 3 项」。
+     这里不只把计数清零，还要把 onboarded 与家长签署一起撤掉 —— 否则计数归零了，
+     用户却仍然能直接打卡，闸门就形同虚设（README §10 验收清单明确要求）。 */
+  S.onboarded = false;
+  S.parent = { agreedAt: null, version: null };
+  S.nick = st.nick;
+  S.grade = st.n;
+  S.week = null;
+  S.weekDraft = null;
+  save();
+  return S;
+}
+
+/* ---------------- 7. 其他写入 ---------------- */
+
+function setFlash(text, date) {
+  const d = date || todayKey();
+  const t = String(text || '').trim();
+  if (t) S.flash[d] = t; else delete S.flash[d];
+  save();
+  return { ok: true, flash: S.flash };
+}
+
+/**
+ * 修复行动：不产生负分。
+ * 完成时按模板给一次**正向**留痕（可在 UI 上选择是否计入积分），绝不写负数。
+ */
+function addRepair(kind, note) {
+  const tpl = T.REPAIRS.find(r => r.k === kind);
+  if (!tpl) return { ok: false, reason: '没有这类模板' };
+  const r = { id: 'r' + Date.now().toString(36), kind, note: note || tpl.act, ts: Date.now(), done: false };
+  S.repairs.push(r); save();
+  return { ok: true, repair: r };
+}
+
+function doneRepair(id) {
+  const r = S.repairs.find(x => x.id === id);
+  if (!r) return { ok: false, reason: '没找到这条修复行动' };
+  r.done = true; save();
+  return { ok: true, repair: r };
+}
+
+/** 文案引擎：禁用词命中即拦截（PRD §6.3） */
+function checkPraise(text) {
+  const t = String(text || '');
+  const hit = T.BANNED.filter(b => t.indexOf(b) >= 0);
+  return { ok: hit.length === 0, hit };
+}
+
+/** 生成一句具体反馈：强制「我看到你……这说明你……」句式，且过禁用词库 */
+function praiseOf(item) {
+  const line = '我看到你' + (item.p || '做到了这件事') + '，这说明' + (item.t || '你在往前走') + '。';
+  return checkPraise(line).ok ? line : '';
+}
+
+/**
+ * 得分环直径：设计稿 112px → 当前设备 px。
+ * canvas 是原生组件，只认 px 不认 rpx；而 750rpx = 屏幕宽，所以
+ *   当前 px = 112 × 屏幕宽 / 750
+ * 这样环在任何屏幕上都是 112px 的设计稿尺寸，与原型 1:1。
+ * 放在 store 里是为了能被 Node 回归直接测（组件里没法注入 windowWidth）。
+ */
+function calcRingPx(info) {
+  let w = 0;
+  if (info && info.windowWidth) {
+    w = info.windowWidth;
+  } else {
+    /* 走 compat 探针：它自己处理「低版本没有 wx.getWindowInfo」的降级，
+       兼容判断只留一处，避免散落在各个文件里各写一遍。 */
+    try {
+      w = require('./compat.js').windowInfo().windowWidth || 0;
+    } catch (e) { w = 0; }
+  }
+  return w > 0 ? Math.round(112 * w / 750) : 112;   // 取不到就退回设计稿尺寸
+}
+
+/** 把已生成的一句反馈拆成「事实 / 特质」两段，供肯定卡分色显示 */
+function splitPraise(line) {
+  const t = String(line || '');
+  const fact = (t.match(/^我看到你(.*?)，这说明/) || [, ''])[1];
+  const trait = (t.match(/这说明(.*?)。?$/) || [, ''])[1];
+  return { fact, trait };
+}
+
+/**
+ * 「换一句」：从该维度的备选句里换一个特质描述。
+ * 走禁用词库校验，命中就继续抽，避免把不合规的句子送出去。
+ */
+function altPraise(dim, seed) {
+  const bank = T.PRAISE_ALT[dim] || T.PRAISE_ALT.self;
+  const start = typeof seed === 'number' ? Math.abs(seed) % bank.length : Math.floor(Math.random() * bank.length);
+  for (let i = 0; i < bank.length; i++) {
+    const line = bank[(start + i) % bank.length];
+    if (checkPraise(line).ok) return line;
+  }
+  return '';
+}
+
+/**
+ * 隐私标记：「这条只有我自己能看到」。
+ *
+ * PRD §2.1 把她定义为**数据主人**，§4 M4「她可以设置仅自己可见」，
+ * 家长端的能力边界也写着「不可查看被标『仅自己可见』的内容」。
+ * 所以这个标记必须在**引擎层**生效 —— 家长端的查询函数直接不返回这些条目，
+ * 而不是靠页面自己记得过滤（页面少写一个 filter 就是隐私泄露）。
+ */
+function setEntryPrivate(uid, isPrivate, ts) {
+  const e = S.log.find(l => l.uid === uid);
+  if (!e) return { ok: false, reason: '没找到这条记录' };
+  const next = isPrivate === undefined ? !e.private : !!isPrivate;
+  e.private = next;
+  e.privateAt = next ? (ts || Date.now()) : null;
+  save();
+  return { ok: true, entry: e, private: next };
+}
+
+/**
+ * 家长可见的流水：**排除**她标为「仅自己可见」的条目。
+ * 家长端所有列表都必须走这个函数，禁止直接读 state().log。
+ */
+function visibleToParent(log) {
+  const list = Array.isArray(log) ? log : S.log;
+  return list.filter(l => !l.private);
+}
+
+/** 她自己的流水（含私密条目，她自己当然看得到全部） */
+function visibleToChild(log) {
+  const list = Array.isArray(log) ? log : S.log;
+  return list.slice();
+}
+
+/**
+ * 被收起来的条数：家长端可以知道「有几条我没看到」，但拿不到内容。
+ * 只报数不报内容 —— 让她知道自己收了多少，而不是让家长去猜。
+ */
+function hiddenCount() {
+  return S.log.filter(l => l.private).length;
+}
+
+/** 把某条记录的自述存回去（对应原型「我自己说一句」） */function setEntryPraise(uid, text) {
+  const t = String(text || '').trim();
+  if (!t) return { ok: false, reason: '写一句就好' };
+  const chk = checkPraise(t);
+  if (!chk.ok) return { ok: false, reason: '换个说法吧，这句会伤人', hit: chk.hit };
+  const e = S.log.find(l => l.uid === uid);
+  if (!e) return { ok: false, reason: '没找到这条记录' };
+  e.praise = t;
+  e.selfPraise = true;
+  save();
+  return { ok: true, entry: e };
+}
+
+module.exports = {
+  /* 常量与透视 */
+  KEY, COUPON_DAYS, DIMS: T.DIMS, STAGES: T.STAGES, TEMPLATES: T.TEMPLATES,
+  BANNED: T.BANNED, CARDS: T.CARDS, REPAIRS: T.REPAIRS,
+  /* 时间/工具 */
+  todayKey, dateKey, shiftDay, daysInMonth, monthKey, esc, newCouponCode, dimLabel,
+  /* 模板透视：页面显示「当前是哪个学段」时要用（onboarding 页曾经因为漏了它而直接报错） */
+  stageOf: T.stageOf, templateOf: T.templateOf, dimOf: T.dimOf,
+  /* 状态 */
+  blank, load, save, resetAll, state,
+  /* 引擎 */
+  capNow, itemsOf, itemById, countOn, pointsOn, dayScore,
+  weekDates, weekScore, lifetime, balance, streak, confirmedCount, nextReward,
+  addPoints, undo, confirmEntries, redeem, useCoupon, addWeeklyPoints,
+  spentTotal,
+  /* 共建 */
+  amendedCount, canFinishBuild, setItemPoints, addItem, removeItem,
+  setRewardTitle, setRewardCost, addReward, removeReward, finishBuild, parentAgree, isRuleActive, ruleSignature,
+  /* 学段与其他 */
+  applyStage, setFlash, addRepair, doneRepair, checkPraise, praiseOf,
+  splitPraise, altPraise, setEntryPraise, calcRingPx,
+  /* 首次介绍页 + 家长代记（低龄） */
+  needsIntro, markIntroSeen, canParentRecord, parentRecord,
+  /* 导出配额（免费试运行） */
+  EXPORT_FREE_LIMIT, exportQuota, consumeExport,
+  setEntryPrivate, visibleToParent, visibleToChild, hiddenCount,
+  /* 周复盘 */
+  SHRINK_SUGGESTIONS, KEEP_OPTIONS, KEEP_CUSTOM, tooBigTarget,
+  weekDraft, blankWeek, dropWeekDraft, weekCandidates, weekStats, weekBonus,
+  pickHighlight, unpickHighlight, setWeekPatch, weekStep, finishWeek, resetWeek,
+  buildWeekPage, buildRuleTable, buildRuleTableCsv,
+  /* 惊喜卡（自选，非抽奖） */
+  surpriseState, drawSurprise, surpriseWindow,
+  /* 里程碑徽章 · 流水 CSV 导出 */
+  milestones, MILESTONE_RULES, buildLedgerCsv,
+  /* 指标契约（PRD §10）· 数据主权（PRD §7） */
+  metrics, metricsReport, METRIC_DEFS, exportAll, wipeAll, replaceState,
+};
+
+});
+const RosStore = __req("./store.js");
+(function () {
+/* ============================================================
+   罗森塔尔 · 单文件家庭版 · 家长管理密码（纯本地）
+   - 数据只在浏览器 localStorage 里，没有任何网络请求；
+   - PIN 是 4–8 位数字，只存 PBKDF2 哈希，不存明文；
+   - 首次设置时生成一组离线恢复码（LST-XXXX-XXXX），忘了密码凭它重设；
+   - 本文件零 DOM 依赖（只用 localStorage 与 crypto），可在 Node 直接测试。
+   ============================================================ */
+'use strict';
+
+const PIN_KEY = 'rosenthal-single-pin-v1';          // PIN 元数据（哈希、盐、恢复码哈希）
+const META_KEY = 'rosenthal-single-meta-v1';         // 其它本地元数据（上次备份时间等）
+
+/* ---------- localStorage 安全包装（测试环境可换掉全局） ---------- */
+function lsGet(k) {
+  try {
+    if (typeof localStorage !== 'undefined') { const v = localStorage.getItem(k); return v === null ? null : v; }
+  } catch (e) { /* 隐私模式下读不到：按未设置处理 */ }
+  return null;
+}
+function lsSet(k, v) {
+  try {
+    if (typeof localStorage !== 'undefined') { localStorage.setItem(k, v); return true; }
+  } catch (e) { /* 存不进去：返回失败，由调用方提示 */ }
+  return false;
+}
+
+/* ---------- 哈希 ----------
+   优先 WebCrypto 的 PBKDF2（file:// 打开时属于安全上下文，可用）。
+   没有 subtle 的极老环境退化为迭代混淆哈希：本地家庭数据够用，注释写明，不冒充加密。 */
+function subtleOk() {
+  return typeof crypto !== 'undefined' && crypto && crypto.subtle &&
+         typeof crypto.subtle.importKey === 'function';
+}
+const enc = s => new TextEncoder().encode(String(s));
+function bytesToHex(u8) {
+  let s = '';
+  for (let i = 0; i < u8.length; i++) s += ('0' + u8[i].toString(16)).slice(-2);
+  return s;
+}
+function weakMix(s) {
+  let h1 = 0x811c9dc5, h2 = 0x01000193;
+  for (let i = 0; i < s.length; i++) {
+    const c = s.charCodeAt(i);
+    h1 = Math.imul(h1 ^ c, 16777619) >>> 0;
+    h2 = Math.imul(h2 + c, 2246822519) >>> 0;
+  }
+  for (let r = 0; r < 4; r++) {
+    h1 = Math.imul(h1 ^ (h2 >>> 3), 2654435761) >>> 0;
+    h2 = Math.imul(h2 ^ (h1 >>> 5), 3266489917) >>> 0;
+  }
+  return ('0000000' + h1.toString(16)).slice(-8) + ('0000000' + h2.toString(16)).slice(-8);
+}
+async function derive(secret, saltBytes, iters) {
+  if (subtleOk()) {
+    const key = await crypto.subtle.importKey('raw', enc(secret), 'PBKDF2', false, ['deriveBits']);
+    const bits = await crypto.subtle.deriveBits(
+      { name: 'PBKDF2', hash: 'SHA-256', salt: saltBytes, iterations: iters }, key, 256);
+    return bytesToHex(new Uint8Array(bits));
+  }
+  let h = String(secret) + ':' + bytesToHex(saltBytes);
+  const n = Math.max(1, Math.min(Number(iters) || 1000, 2000));
+  for (let i = 0; i < n; i++) h = weakMix(h + ':' + i);
+  return h;
+}
+function randHex(nBytes) {
+  const a = new Uint8Array(nBytes);
+  (typeof crypto !== 'undefined' && crypto.getRandomValues)
+    ? crypto.getRandomValues(a)
+    : a.forEach((_, i) => { a[i] = Math.floor(Math.random() * 256); });
+  return bytesToHex(a);
+}
+
+/* ---------- 恢复码 ---------- */
+const REC_ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';   // 去掉 0/O/1/I，手抄不出错
+function genRecoveryCode() {
+  const g = () => {
+    const a = new Uint8Array(4);
+    (typeof crypto !== 'undefined' && crypto.getRandomValues)
+      ? crypto.getRandomValues(a)
+      : a.forEach((_, i) => { a[i] = Math.floor(Math.random() * REC_ALPHABET.length); });
+    return Array.from(a, x => REC_ALPHABET[x % REC_ALPHABET.length]).join('');
+  };
+  return 'LST-' + g() + '-' + g();
+}
+const normRec = code => String(code || '').trim().toUpperCase().replace(/\s+/g, '');
+
+/* ---------- 元数据 ---------- */
+function readMeta() {
+  const raw = lsGet(PIN_KEY);
+  if (!raw) return null;
+  try { return JSON.parse(raw); } catch (e) { return null; }
+}
+function writeMeta(m) { return lsSet(PIN_KEY, JSON.stringify(m)); }
+
+/* ---------- 对外 API ---------- */
+
+/** 当前 PIN 状态：{has:false} 或 {has:true, since}（async：界面层统一按 Promise 用） */
+async function pinStatus() {
+  const m = readMeta();
+  return m && m.hash ? { has: true, since: m.createdAt || 0 } : { has: false };
+}
+
+/** 设置 PIN（首次或凭恢复码重设）。返回 {ok, recoveryCode} 或 {ok:false, reason} */
+async function setPin(pin) {
+  const p = String(pin || '');
+  if (!/^\d{4,8}$/.test(p)) return { ok: false, reason: '密码是 4–8 位数字' };
+  const salt = randHex(16);
+  const iters = 120000;
+  const hash = await derive(p, new Uint8Array(salt.match(/../g).map(x => parseInt(x, 16))), iters);
+  const recSalt = randHex(16);
+  const code = genRecoveryCode();
+  const recHash = await derive(normRec(code), new Uint8Array(recSalt.match(/../g).map(x => parseInt(x, 16))), iters);
+  const meta = { v: 1, salt, iters, hash, recSalt, recHash, createdAt: Date.now(), changedAt: Date.now() };
+  if (!writeMeta(meta)) return { ok: false, reason: '浏览器不允许写入本地存储' };
+  return { ok: true, recoveryCode: code };
+}
+
+/** 校验 PIN */
+async function verifyPin(pin) {
+  const m = readMeta();
+  if (!m || !m.hash) return false;
+  const h = await derive(String(pin || ''), new Uint8Array(m.salt.match(/../g).map(x => parseInt(x, 16))), m.iters);
+  return h === m.hash;
+}
+
+/** 校验恢复码 */
+async function verifyRecovery(code) {
+  const m = readMeta();
+  if (!m || !m.recHash) return false;
+  const h = await derive(normRec(code), new Uint8Array(m.recSalt.match(/../g).map(x => parseInt(x, 16))), m.iters);
+  return h === m.recHash;
+}
+
+/** 改密码：先验旧 PIN，再换新盐新哈希（恢复码一并换新，随新设置展示一次） */
+async function changePin(oldPin, newPin) {
+  if (!(await verifyPin(oldPin))) return { ok: false, reason: '现在的密码不对' };
+  return setPin(newPin);
+}
+
+/* 上次备份时间（提醒家长定期导出备份） */
+function metaBackupAt() {
+  const raw = lsGet(META_KEY);
+  try { const m = JSON.parse(raw || '{}'); return Number(m.backupAt) || 0; } catch (e) { return 0; }
+}
+function setBackupAt(ts) {
+  lsSet(META_KEY, JSON.stringify({ backupAt: Number(ts) || Date.now() }));
+}
+
+const RosPin = {
+  pinStatus, setPin, verifyPin, verifyRecovery, changePin,
+  metaBackupAt, setBackupAt, normRec, genRecoveryCode, derive,
+};
+
+/* 浏览器：挂到 window；Node 测试：走 module.exports */
+if (typeof module !== 'undefined' && module.exports) module.exports = RosPin;
+else (typeof window !== 'undefined' ? window : globalThis).RosPin = RosPin;
+
+})();
+(function () {
+/* ============================================================
+   罗森塔尔 · 单文件家庭版 · 打印版面（纯字符串，零 DOM 依赖）
+   - todayHtml(data)：今日卡
+   - weekHtml(page)：一周一页（数据来自引擎 buildWeekPage()）
+   返回 HTML 字符串，由 app.js 塞进 #print-root 再 window.print()。
+   文案延续产品红线：只写做到的事，不做横向对照、位次提示，
+   也不出现「你没做到什么」。
+   ============================================================ */
+'use strict';
+
+function printHeader(title, nick, sub) {
+  return '<div class="pt-head"><div class="pt-title">' + title + '</div>' +
+    '<div class="pt-sub">' + nick + (sub ? ' · ' + sub : '') + '</div></div>';
+}
+function printQuote() {
+  return '<div class="pt-quote">“你不是被积分管住的人，你是在练习管理自己。' +
+    '每一次小做到，都在证明：我可以。”</div>';
+}
+function printSign(versionLine) {
+  return '<div class="pt-sign">' +
+    '<div>' + versionLine + '</div>' +
+    '<div class="pt-signrow">她签名：____________　　家长签名：____________　　日期：____________</div>' +
+    '</div>';
+}
+
+/** 今日卡。data = { nick, stageName, date, score, cap, rows:[{name,points,count,limit}], entries:[{time,name,points,praise}], flash } */
+function todayHtml(data) {
+  const d = data || {};
+  const rows = (d.rows || []).map(r =>
+    '<tr><td>' + r.name + '</td><td class="pt-num">+' + r.points + '</td>' +
+    '<td class="pt-num">' + r.count + '/' + r.limit + '</td></tr>').join('');
+  const entries = (d.entries || []).map(e =>
+    '<li><span class="pt-time">' + e.time + '</span> ' + e.name +
+    ' <b>+' + e.points + '</b>' +
+    (e.praise ? '<div class="pt-pr">' + e.praise + '</div>' : '') +
+    '</li>').join('');
+  return '<div class="pt-page">' +
+    printHeader('罗森塔尔 · 今日卡', d.nick || '我', (d.stageName || '') + ' · ' + (d.date || '')) +
+    '<div class="pt-stats">今日 <b>' + (d.score || 0) + '</b> / ' + (d.cap || 0) + ' 分</div>' +
+    (rows ? '<table class="pt-table"><tr><th>行为</th><th>分值</th><th>今天已记</th></tr>' + rows + '</table>' : '') +
+    (entries ? '<div class="pt-sec">今天做到的</div><ul class="pt-list">' + entries + '</ul>' : '<div class="pt-sec">今天做到的</div><div class="pt-muted">（还没有记录，从一件小事开始就好）</div>') +
+    (d.flash ? '<div class="pt-sec">我写下的闪光点</div><div>' + d.flash + '</div>' : '') +
+    '<div class="pt-sec">妈妈的一句</div><div class="pt-blank">（这里留给家长手写）</div>' +
+    printSign('规则版本：v1.' + (d.ruleVersion || 1)) +
+    printQuote() +
+    '</div>';
+}
+
+/** 一周一页。page = 引擎 buildWeekPage() 的返回值 */
+function weekHtml(page) {
+  const p = page || {};
+  const w = (p.pdfPayload && p.pdfPayload.week) || null;
+  const sig = p.signature || {};
+  const dims = (p.dims || []).map(x => '<span class="pt-chip">' + x.n + ' ' + x.v + ' 分</span>').join('');
+  const flashes = (p.flashes || []).map((f, i) =>
+    '<li><span class="pt-time">' + f.date + '</span> ' + f.name + ' <b>+' + f.points + '</b>' +
+    (f.isPrivate ? '（仅自己可见）' : '') +
+    (f.praise ? '<div class="pt-pr">' + f.praise + '</div>' : '') + '</li>').join('');
+  const notes = (p.notes || []).map(n => '<li><span class="pt-time">' + n.date + '</span> ' + n.text + '</li>').join('');
+  let plan = '';
+  if (w) {
+    const hl = (w.highlights && w.highlights.length ? w.highlights : ['（这一周没写）'])
+      .map((x, i) => '<li>' + (i + 1) + '. ' + x + '</li>').join('');
+    const keep = w.keepDisplay !== undefined
+      ? w.keepDisplay
+      : (w.keep === '我自己想的：______________________'
+        ? (w.keepCustom || '（待补）') : (w.keep || '（这一周没选）'));
+    plan =
+      '<div class="pt-sec">印象最深的三件事</div><ul class="pt-list">' + hl + '</ul>' +
+      '<div class="pt-sec">我想保留的习惯</div><div>' + keep + '</div>' +
+      '<div class="pt-sec">下周只改一件小事</div><div>' + (w.next || '（这一周没写）') + '</div>' +
+      (w.challenge ? '<div class="pt-sec">我想挑战的新任务</div><div>' + w.challenge + '　+5</div>' : '');
+  }
+  const bonus = p.bonus > 0 ? '<div class="pt-stats">周结算奖励 +' + p.bonus + ' 分</div>' : '';
+  return '<div class="pt-page">' +
+    printHeader('罗森塔尔 · 一周一页', p.nick || '我', p.range || '') +
+    '<div class="pt-stats">本周 <b>' + p.score + '</b> 分（每天上限 ' + p.cap + '）　有记录 ' + p.days +
+    ' 天　连续 ' + p.streak + ' 天<br>累计 ' + (p.lifetime != null ? p.lifetime : '') +
+    (p.balance != null ? ' 分　可用 ' + p.balance + ' 分' : ' 分') + '</div>' + bonus +
+    (dims ? '<div class="pt-sec">这周的力气花在了哪</div><div class="pt-chips">' + dims + '</div>' : '') +
+    '<div class="pt-sec">这一周做到的事</div>' +
+    (flashes ? '<ul class="pt-list">' + flashes + '</ul>' : '<div class="pt-muted">（这一周还没有记录，下周从一件小事开始就好）</div>') +
+    (notes ? '<div class="pt-sec">我写下的闪光点</div><ul class="pt-list">' + notes + '</ul>' : '') +
+    plan +
+    '<div class="pt-sec">妈妈的一句</div><div class="pt-blank">（这里留给家长手写）</div>' +
+    printSign('规则版本：v1.' + (sig.ruleVersion || 1) +
+      (sig.active ? '（' + sig.agreedDate + ' 生效）' : '（待家长确认）')) +
+    printQuote() +
+    '</div>';
+}
+
+const RosPrint = { todayHtml, weekHtml };
+
+if (typeof module !== 'undefined' && module.exports) module.exports = RosPrint;
+else (typeof window !== 'undefined' ? window : globalThis).RosPrint = RosPrint;
+
+})();
+(function () {
+/* ============================================================
+   罗森塔尔 · 单文件家庭版 · 界面层
+   - 数据全部来自引擎 RosStore（与小程序同一份 store.js），只存本机；
+   - 修改类操作（改规则 / 改奖励 / 周结算 / 代记 / 导出备份 / 换学段）
+     走家长密码 PIN；打卡、兑换、用券、打印不需要；
+   - 单文件版刻意跳过「共建双签」流程（更简单），其余红线不变：
+     只加分、日上限、流水不可改、奖励档位由引擎管。
+   ============================================================ */
+(function () {
+  'use strict';
+
+  const St = (typeof RosStore !== 'undefined') ? RosStore : null;
+  const Pin = (typeof window !== 'undefined' && window.RosPin) || null;
+  const Pr = (typeof window !== 'undefined' && window.RosPrint) || null;
+  if (!St || !Pin || !Pr) { document.body.textContent = '文件不完整，请重新导出整份 HTML。'; return; }
+
+  const $ = s => document.querySelector(s);
+  const esc = St.esc;
+  const pad2 = n => String(n).padStart(2, '0');
+  const timeHM = ts => { const d = new Date(ts); return pad2(d.getHours()) + ':' + pad2(d.getMinutes()); };
+  const today = () => St.todayKey();
+
+  let tab = 'today';
+  let chosenStage = '';
+  let pendingPin = null;      // { purpose, fn }
+  let pending = {};           // 模态框指向的目标：{ item, rewardCost, redeem }
+  let pinMode = 'verify';     // verify | create | reset | recover
+  let weekBigShown = false;   // 周目标「说得太大」提示已经给过
+
+  /* ---------------- 提示条 ---------------- */
+  let toastTimer = null;
+  function toast(msg) {
+    let t = $('#toast');
+    if (!t) { t = document.createElement('div'); t.id = 'toast'; document.body.appendChild(t); }
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+  }
+
+  /* ---------------- 模态框 ----------------
+     注意：不要在 .modal 上 stopPropagation —— 事件统一在 document 上分发，
+     拦掉冒泡会让模态框里的所有按钮失灵；遮罩关闭改为在分发器里判断。 */
+  function openModal(html) {
+    const root = $('#modal-root');
+    root.innerHTML = '<div class="mask"><div class="modal">' + html + '</div></div>';
+    const first = root.querySelector('input');
+    if (first) setTimeout(() => first.focus(), 30);
+    return root;
+  }
+  function closeModal() { $('#modal-root').innerHTML = ''; }
+
+  /* ---------------- 家长密码 ---------------- */
+  function requirePin(purpose, fn) {
+    Pin.pinStatus().then(st => {
+      pendingPin = { purpose: purpose, fn: fn };
+      if (!st.has) {
+        pinMode = 'create';
+        openModal(
+          '<h3>设置家长密码</h3>' +
+          '<p class="muted">' + esc(purpose) + '<br>这是第一次，请设置一个只有家长知道的 4–8 位数字密码。孩子日常打卡不需要它。</p>' +
+          '<input id="pin-in" type="password" inputmode="numeric" maxlength="8" autocomplete="off" placeholder="输入密码（4–8 位数字）">' +
+          '<input id="pin-in2" type="password" inputmode="numeric" maxlength="8" autocomplete="off" placeholder="再输一遍">' +
+          '<div class="err" id="pin-err"></div>' +
+          '<div class="btnrow"><button class="btn primary" data-act="pin-go">保存并继续</button>' +
+          '<button class="btn" data-act="modal-close">取消</button></div>');
+        return;
+      }
+      pinMode = 'verify';
+      openModal(
+        '<h3>家长密码</h3>' +
+        '<p class="muted">' + esc(purpose) + '</p>' +
+        '<input id="pin-in" type="password" inputmode="numeric" maxlength="8" autocomplete="off" placeholder="4–8 位数字">' +
+        '<div class="err" id="pin-err"></div>' +
+        '<div class="btnrow"><button class="btn primary" data-act="pin-go">确认</button>' +
+        '<button class="btn" data-act="modal-close">取消</button></div>' +
+        '<p class="tiny"><a href="javascript:void(0)" data-act="pin-forgot">忘了密码？用恢复码重设</a></p>');
+    });
+  }
+
+  async function pinGo() {
+    const err = $('#pin-err');
+    const showErr = m => { if (err) err.textContent = m; };
+    const v1 = (($('#pin-in') || {}).value || '');
+    if (pinMode === 'verify') {
+      if (await Pin.verifyPin(v1)) {
+        const fn = pendingPin && pendingPin.fn;
+        closeModal();
+        if (fn) await fn();
+      } else showErr('密码不对，再试一次');
+      return;
+    }
+    if (pinMode === 'create' || pinMode === 'reset') {
+      const v2 = (($('#pin-in2') || {}).value || '');
+      if (!/^\d{4,8}$/.test(v1)) return showErr('密码是 4–8 位数字');
+      if (v1 !== v2) return showErr('两次输入的不一样');
+      const r = await Pin.setPin(v1);
+      if (!r.ok) return showErr(r.reason || '没能保存');
+      showRecoveryModal(r.recoveryCode);
+      return;
+    }
+  }
+
+  function showRecoveryModal(code) {
+    openModal(
+      '<h3>把恢复码抄在纸上</h3>' +
+      '<p class="muted">忘了家长密码时，凭它重设。它只显示这一次，关掉页面就再也看不到了。</p>' +
+      '<div class="reccode">' + esc(code) + '</div>' +
+      '<div class="btnrow"><button class="btn primary" data-act="rec-ack">我已抄下来了</button></div>');
+  }
+  function recAck() {
+    const fn = pendingPin && pendingPin.fn;
+    closeModal();
+    toast('家长密码已保存');
+    if (fn) fn();
+  }
+
+  function pinForgot() {
+    pinMode = 'recover';
+    openModal(
+      '<h3>用恢复码重设</h3>' +
+      '<p class="muted">输入首次设置时抄下来的恢复码（形如 LST-XXXX-XXXX）。数据不会受影响。</p>' +
+      '<input id="rec-in" type="text" autocomplete="off" placeholder="LST-XXXX-XXXX">' +
+      '<div class="err" id="pin-err"></div>' +
+      '<div class="btnrow"><button class="btn primary" data-act="rec-verify">下一步</button>' +
+      '<button class="btn" data-act="modal-close">取消</button></div>');
+  }
+  async function recVerify() {
+    const code = (($('#rec-in') || {}).value || '');
+    if (!(await Pin.verifyRecovery(code))) { const e2 = $('#pin-err'); if (e2) e2.textContent = '恢复码不对'; return; }
+    pinMode = 'reset';
+    openModal(
+      '<h3>设置新的家长密码</h3>' +
+      '<p class="muted">会同时生成一组新的恢复码，抄好它。</p>' +
+      '<input id="pin-in" type="password" inputmode="numeric" maxlength="8" autocomplete="off" placeholder="新密码（4–8 位数字）">' +
+      '<input id="pin-in2" type="password" inputmode="numeric" maxlength="8" autocomplete="off" placeholder="再输一遍">' +
+      '<div class="err" id="pin-err"></div>' +
+      '<div class="btnrow"><button class="btn primary" data-act="pin-go">保存并继续</button>' +
+      '<button class="btn" data-act="modal-close">取消</button></div>');
+  }
+
+  /** 需要家长密码的修改类操作：引擎返回 {ok, reason}；成功后顺带让家长版本生效 */
+  function guarded(purpose, fn) {
+    requirePin(purpose, async () => {
+      try {
+        const r = await fn();
+        if (r && r.ok) {
+          const a = St.parentAgree();
+          render();
+          if (!r.silent) toast(r.msg || (a.ok ? '已更新' : '已保存'));
+        } else {
+          toast((r && r.reason) || '没能完成');
+        }
+      } catch (e2) { toast('出了点问题：' + e2.message); }
+    });
+  }
+
+  /* ---------------- 首次使用 ---------------- */
+  function needsOnboarding(s) { return !s.introSeen; }
+
+  function onboardingHtml() {
+    const cards = St.STAGES.map(st =>
+      '<button class="stagecard' + (st.k === chosenStage ? ' on' : '') + '" data-act="stage-pick" data-k="' + esc(st.k) + '">' +
+      '<div class="sc-n">' + esc(st.n) + '</div><div class="sc-g">' + esc(st.g) + '</div>' +
+      '<div class="sc-sub">' + esc(st.sub) + '</div><div class="sc-perm">' + esc(st.perm) + '</div>' +
+      '</button>').join('');
+    return '<div class="onboard">' +
+      '<h1>罗森塔尔</h1>' +
+      '<p class="lead">「每天看到做到的小事，人就会朝被肯定的方向长。」<br>' +
+      '在这张纸上记下她做到的每一件小事，给一句具体的话。</p>' +
+      '<h3>她在哪个学段？</h3>' +
+      '<div class="stagegrid">' + cards + '</div>' +
+      '<p class="tiny">所有数据只保存在这台设备的浏览器里，不会上传到任何服务器。记得在「家长」页导出备份。</p>' +
+      '</div>';
+  }
+  function stagePick(k) {
+    chosenStage = k;
+    const st = St.stageOf(k);
+    openModal(
+      '<h3>怎么称呼她？</h3>' +
+      '<input id="nick-in" type="text" maxlength="12" value="' + esc(st.nick) + '" placeholder="昵称">' +
+      '<div class="btnrow"><button class="btn primary" data-act="family-start">开始使用</button>' +
+      '<button class="btn" data-act="modal-close">先不改</button></div>');
+  }
+  function familyStart() {
+    const nick = ((($('#nick-in') || {}).value) || '').trim();
+    St.load(chosenStage || 'mid');
+    const s = St.state();
+    s.nick = nick || St.stageOf(s.stage).nick;
+    s.onboarded = true;
+    s.ruleVersion = (s.ruleVersion || 0) + 1;
+    s.parent = { agreedAt: Date.now(), version: s.ruleVersion };
+    s.introSeen = true;
+    St.save();
+    closeModal();
+    tab = 'today';
+    render();
+    toast('好了！先从一件小事开始');
+  }
+  /** 单文件版：换学段/改规则后直接让家长版本生效（跳过双签，保持简单） */
+  function autoAgree() {
+    const s = St.state();
+    s.onboarded = true;
+    s.ruleVersion = (s.ruleVersion || 0) + 1;
+    s.parent = { agreedAt: Date.now(), version: s.ruleVersion };
+    St.save();
+  }
+
+  /* ---------------- 页头 / 标签栏 ---------------- */
+  function headerHtml(s) {
+    const st = St.stageOf(s.stage);
+    return '<header class="top"><div class="top-row"><div class="who">' + esc(s.nick || '我') +
+      '<span class="chip">' + esc(st.n) + '</span></div>' +
+      '<div class="stats">今日 <b>' + St.dayScore(today()) + '</b>/' + St.capNow() +
+      '　连续 <b>' + St.streak() + '</b> 天<br>累计 <b>' + St.lifetime() + '</b>　可用 <b>' + St.balance() + '</b></div></div></header>';
+  }
+  function tabbarHtml() {
+    const tabs = [['today', '今日'], ['rules', '规则'], ['rewards', '奖励'], ['week', '周复盘'], ['parent', '家长']];
+    return '<nav class="tabbar">' + tabs.map(t =>
+      '<button class="tab' + (tab === t[0] ? ' on' : '') + '" data-act="tab" data-tab="' + t[0] + '">' + t[1] + '</button>'
+    ).join('') + '</nav>';
+  }
+
+  /* ---------------- 今日 ---------------- */
+  function todayView(s) {
+    const t = today();
+    const cap = St.capNow();
+    const full = St.dayScore(t) >= cap;
+    const canProxy = St.canParentRecord();
+    const groups = St.DIMS.map(d => ({ n: d.n, items: St.itemsOf().filter(i => i.dim === d.k) }))
+      .filter(g => g.items.length);
+    const sec1 = groups.map(g => '<section class="card"><h3>' + esc(g.n) + '</h3>' +
+      g.items.map(it => {
+        const c = St.countOn(it.id, t);
+        const dis = full || c >= it.limit;
+        return '<div class="row"><div class="rowmain"><div class="rname">' + esc(it.name) + '</div>' +
+          '<div class="rmeta">+' + it.points + ' 分 · 今天已记 ' + c + '/' + it.limit + '</div></div>' +
+          '<div class="rowops">' +
+          '<button class="btn small primary" data-act="checkin" data-id="' + esc(it.id) + '"' + (dis ? ' disabled' : '') + '>记一笔</button>' +
+          (canProxy ? '<button class="btn small" data-act="proxy" data-id="' + esc(it.id) + '"' + (dis ? ' disabled' : '') + '>代记</button>' : '') +
+          '</div></div>';
+      }).join('') + '</section>').join('');
+
+    const entries = s.log.filter(l => l.date === t).sort((a, b) => b.ts - a.ts);
+    const sec2 = '<section class="card"><h3>今天做到的</h3>' + (entries.length ?
+      entries.map(e => '<div class="row"><div class="rowmain">' +
+        '<div class="rname">' + esc(e.name) + ' <b>+' + e.points + '</b>' + (e.reversed ? '<span class="chip gray">已撤销</span>' : '') + '</div>' +
+        '<div class="rmeta">' + timeHM(e.ts) + (e.byParent ? ' · 家长代记' : '') +
+        (e.overflow ? ' · 超出今天的 ' + e.overflow + ' 分算明天的' : '') + '</div>' +
+        (e.praise ? '<div class="rpraise">' + esc(e.praise) + '</div>' : '') + '</div>' +
+        (!e.reversed ? '<button class="btn small" data-act="undo" data-uid="' + esc(e.uid) + '">撤销</button>' : '') +
+        '</div>').join('')
+      : '<p class="muted">今天还没有记录，挑一件小事开始就好。</p>') + '</section>';
+
+    const sec3 = '<section class="card"><h3>今天的闪光点</h3>' +
+      '<div class="inrow"><input id="flash-in" value="' + esc((s.flash && s.flash[t]) || '') + '" placeholder="今天有什么想说的一句？">' +
+      '<button class="btn small primary" data-act="flash-save">记下</button></div></section>';
+
+    const coupons = s.coupons.filter(c => !c.used);
+    const sec4 = '<section class="card"><h3>券包</h3>' + (coupons.length ?
+      coupons.map(c => '<div class="row"><div class="rowmain">' +
+        '<div class="rname">' + esc(c.title || '奖励') + '</div>' +
+        '<div class="rmeta">' + esc(c.code) + ' · 花了 ' + c.cost + ' 分 · ' +
+        (c.exp >= t ? '有效期到 ' + c.exp : '已过有效期，和家长说一声还能用吗') + '</div></div>' +
+        '<button class="btn small primary" data-act="usecoupon" data-code="' + esc(c.code) + '">用掉</button></div>').join('')
+      : '<p class="muted">还没有券，攒一攒就来换。</p>') + '</section>';
+
+    return sec1 + sec2 + sec3 + sec4 +
+      '<div class="printrow"><button class="btn" data-act="print-today">打印今日卡</button>' +
+      '<button class="btn" data-act="tab" data-tab="rewards">去兑换 →</button></div>';
+  }
+
+  function doCheckin(id) {
+    const it = St.itemById(id);
+    if (!it) return;
+    const r = St.addPoints({ itemId: it.id, name: it.name, dim: it.dim, points: it.points, praise: St.praiseOf(it) });
+    if (r.ok) {
+      render();
+      toast(r.partial ? '+' + r.entry.points + ' 分（今天满了，多的算明天）' : '+' + r.entry.points + ' 分');
+    } else toast(r.reason);
+  }
+
+  /* ---------------- 规则 ---------------- */
+  function rulesView(s) {
+    const sig = St.ruleSignature();
+    const banner = '<div class="banner ' + (sig.active ? 'ok' : 'warn') + '">' +
+      (sig.active ? '规则 v1.' + sig.ruleVersion + ' · ' + sig.agreedDate + ' 生效'
+        : '规则改过了，家长确认后生效（不影响打卡）') + '</div>';
+    const groups = St.DIMS.map(d => ({ n: d.n, items: St.itemsOf().filter(i => i.dim === d.k) }))
+      .filter(g => g.items.length);
+    const body = groups.map(g => '<section class="card"><h3>' + esc(g.n) + '</h3>' +
+      g.items.map(it => '<div class="row"><div class="rowmain">' +
+        '<div class="rname">' + esc(it.name) + (it.customBy === 'child' ? '<span class="chip">自己改的</span>' : '') + '</div>' +
+        '<div class="rmeta">+' + it.points + ' 分 · 每天 ' + it.limit + ' 次</div></div>' +
+        '<div class="rowops"><button class="btn small" data-act="item-cost" data-id="' + esc(it.id) + '">改分值</button>' +
+        '<button class="btn small" data-act="item-remove" data-id="' + esc(it.id) + '">移除</button></div></div>').join('') +
+      '</section>').join('');
+    return banner + body +
+      '<div class="printrow"><button class="btn primary" data-act="item-add">新增一项</button>' +
+      '<button class="btn" data-act="print-rules">打印规则表</button></div>' +
+      '<p class="tiny">规则是全家一起定的：改这里的每一处都会记下是谁改的。行为项移除后随时可以再加回来，已记录的分数不受影响。</p>';
+  }
+
+  function itemCostModal(id) {
+    const it = St.itemById(id);
+    if (!it) return;
+    pending.item = id;
+    openModal(
+      '<h3>改分值</h3><p class="muted">' + esc(it.name) + '（现在是 +' + it.points + ' 分）</p>' +
+      '<input id="pts-in" type="number" min="1" step="1" value="' + it.points + '">' +
+      '<div class="btnrow"><button class="btn primary" data-act="item-cost-go">保存</button>' +
+      '<button class="btn" data-act="modal-close">取消</button></div>');
+  }
+  function itemAddGo() {
+    const name = (($('#na-name') || {}).value || '').trim();
+    const dim = (($('#na-dim') || {}).value) || 'self';
+    const pts = Number(($('#na-pts') || {}).value || 0);
+    const limit = Number(($('#na-limit') || {}).value || 1);
+    if (!name) { toast('先写清这件事'); return false; }
+    return St.addItem({ name: name, dim: dim, points: pts, limit: limit });
+  }
+  function itemCostGo() {
+    const pts = Number(($('#pts-in') || {}).value || 0);
+    closeModal();
+    guarded('改分值需要家长密码', async () => {
+      const r = St.setItemPoints(pending.item, pts);
+      return r.ok ? { ok: true, msg: '已更新，新分值 +' + pts } : r;
+    });
+  }
+  function itemRemoveGo() {
+    closeModal();
+    guarded('移除行为项需要家长密码', async () => {
+      const r = St.removeItem(pending.item);
+      return r.ok ? { ok: true, msg: '已移除，随时可以再加回来' } : r;
+    });
+  }
+  function itemRemoveModal(id) {
+    const it = St.itemById(id);
+    if (!it) return;
+    pending.item = id;
+    openModal(
+      '<h3>移除这一项？</h3><p class="muted">' + esc(it.name) + '<br>移除后随时可以再加回来，已记录的分数不受影响。</p>' +
+      '<div class="btnrow"><button class="btn primary" data-act="item-remove-go">移除</button>' +
+      '<button class="btn" data-act="modal-close">先留着</button></div>');
+  }
+  function itemAddModal() {
+    const opts = St.DIMS.map(d => '<option value="' + esc(d.k) + '">' + esc(d.n) + '</option>').join('');
+    openModal(
+      '<h3>新增一项</h3>' +
+      '<input id="na-name" type="text" maxlength="30" placeholder="写清这件事，越具体越好">' +
+      '<div class="inrow"><select id="na-dim">' + opts + '</select>' +
+      '<input id="na-pts" type="number" min="1" step="1" value="1" title="分值">' +
+      '<input id="na-limit" type="number" min="1" step="1" value="1" title="每天次数"></div>' +
+      '<p class="tiny">分值是每天最多能记的分，每天次数是这一项一天最多记几回。</p>' +
+      '<div class="btnrow"><button class="btn primary" data-act="item-add-go">保存</button>' +
+      '<button class="btn" data-act="modal-close">取消</button></div>');
+  }
+  function itemAddGo() {
+    const name = (($('#na-name') || {}).value || '').trim();
+    const dim = (($('#na-dim') || {}).value) || 'self';
+    const pts = Number(($('#na-pts') || {}).value || 0);
+    const limit = Number(($('#na-limit') || {}).value || 1);
+    if (!name) { toast('先写清这件事'); return false; }
+    return St.addItem({ name: name, dim: dim, points: pts, limit: limit });
+  }
+
+  /* ---------------- 奖励 ---------------- */
+  function rewardsView(s) {
+    const bal = St.balance();
+    const rows = s.rewards.map(r => {
+      const can = bal >= r.cost;
+      return '<div class="row"><div class="rowmain">' +
+        '<div class="rname">' + esc(r.title) + (r.customBy === 'child' ? '<span class="chip">自己改的</span>' : '') + '</div>' +
+        '<div class="rmeta">' + esc(r.tier || '') + ' · ' + r.cost + ' 分</div></div>' +
+        '<div class="rowops"><button class="btn small primary" data-act="redeem" data-cost="' + r.cost + '" data-title="' + esc(r.title) + '"' + (can ? '' : ' disabled') + '>兑换</button>' +
+        '<button class="btn small" data-act="reward-title" data-cost="' + r.cost + '">改内容</button>' +
+        '<button class="btn small" data-act="reward-cost" data-cost="' + r.cost + '">改分值</button>' +
+        '<button class="btn small" data-act="reward-remove" data-cost="' + r.cost + '">移除</button></div></div>';
+    }).join('');
+    return '<div class="balancecard"><div class="bal-n">' + bal + '</div><div class="bal-t">可用积分</div></div>' +
+      '<section class="card"><h3>奖励档位</h3>' + rows + '</section>' +
+      '<div class="printrow"><button class="btn primary" data-act="reward-add">加一档奖励</button></div>' +
+      '<p class="tiny">兑换会用掉积分、发一张券；券 30 天内有效，用掉或过期都不退分——这正是「说话算数」的练习。</p>';
+  }
+  function redeemGo(cost, title) {
+    pending.redeem = { cost: cost, title: title };
+    openModal(
+      '<h3>兑换</h3><p class="muted">花 ' + cost + ' 分换「' + esc(title) + '」？会发一张券，30 天内有效。</p>' +
+      '<div class="btnrow"><button class="btn primary" data-act="redeem-go">换！</button>' +
+      '<button class="btn" data-act="modal-close">再想想</button></div>');
+  }
+  function rewardTitleModal(cost) {
+    const r = St.state().rewards.find(x => x.cost === Number(cost));
+    if (!r) return;
+    pending.rewardCost = cost;
+    openModal(
+      '<h3>改奖励内容</h3>' +
+      '<input id="rw-title" type="text" maxlength="30" value="' + esc(r.title) + '">' +
+      '<div class="btnrow"><button class="btn primary" data-act="reward-title-go">保存</button>' +
+      '<button class="btn" data-act="modal-close">取消</button></div>');
+  }
+  function rewardCostModal(cost) {
+    const r = St.state().rewards.find(x => x.cost === Number(cost));
+    if (!r) return;
+    pending.rewardCost = cost;
+    openModal(
+      '<h3>改奖励分值</h3><p class="muted">' + esc(r.title) + '（现在是 ' + r.cost + ' 分）</p>' +
+      '<input id="rw-cost" type="number" min="1" step="1" value="' + r.cost + '">' +
+      '<div class="btnrow"><button class="btn primary" data-act="reward-cost-go">保存</button>' +
+      '<button class="btn" data-act="modal-close">取消</button></div>');
+  }
+  function rewardRemoveModal(cost) {
+    const r = St.state().rewards.find(x => x.cost === Number(cost));
+    if (!r) return;
+    pending.rewardCost = cost;
+    openModal(
+      '<h3>移除这一档？</h3><p class="muted">' + esc(r.title) + '（' + r.cost + ' 分）<br>至少要留一档；已经发出的券不受影响。</p>' +
+      '<div class="btnrow"><button class="btn primary" data-act="reward-remove-go">移除</button>' +
+      '<button class="btn" data-act="modal-close">先留着</button></div>');
+  }
+  function rewardAddModal() {
+    openModal(
+      '<h3>加一档奖励</h3>' +
+      '<input id="rw-title" type="text" maxlength="30" placeholder="奖励内容，越具体越好">' +
+      '<div class="inrow"><input id="rw-cost" type="number" min="1" step="1" placeholder="分值">' +
+      '<input id="rw-tier" type="text" maxlength="10" placeholder="档位名（可选）"></div>' +
+      '<div class="btnrow"><button class="btn primary" data-act="reward-add-go">保存</button>' +
+      '<button class="btn" data-act="modal-close">取消</button></div>');
+  }
+  function rewardAddGo() {
+    const title = (($('#rw-title') || {}).value || '').trim();
+    const cost = Number(($('#rw-cost') || {}).value || 0);
+    const tier = (($('#rw-tier') || {}).value || '').trim();
+    if (!title) { toast('先写清奖励是什么'); return { ok: false }; }
+    return St.addReward({ cost: cost, title: title, tier: tier || '自定义' });
+  }
+
+  /* ---------------- 周复盘 ---------------- */
+  function weekView(s) {
+    const st = St.weekStats();
+    const settled = s.week && s.week.rangeStart === st.rangeStart;
+    const head = '<section class="card"><h3>这一周（' + esc(st.range) + '）</h3>' +
+      '<div class="stats big">本周 <b>' + st.score + '</b> 分　有记录 <b>' + st.days + '</b> 天　连续 <b>' + st.streak + '</b> 天</div></section>';
+
+    if (settled) {
+      const w = s.week;
+      const bd = w.bonusDetail || {};
+      return head +
+        '<section class="card"><h3>已结算</h3>' +
+        '<div class="rmeta">周奖励 +' + w.bonus + ' 分' +
+        (bd.week50 ? '（周达标 +10' : '') + (bd.streak7 ? (bd.week50 ? '、' : '（') + '连续 7 天 +10' : '') +
+        (bd.challenge ? (bd.week50 || bd.streak7 ? '、' : '（') + '主动挑战 +5' : '') +
+        ((bd.week50 || bd.streak7 || bd.challenge) ? '）' : '') + '</div>' +
+        '<div class="printrow"><button class="btn primary" data-act="print-week">打印一周一页</button>' +
+        '<button class="btn" data-act="week-continue">下周继续 →</button></div></section>';
+    }
+
+    const w = St.weekDraft();
+    const cands = St.weekCandidates(6);
+    const sel = (w.highlights || []).map(h =>
+      '<button class="chip on" data-act="week-unpick" data-v="' + esc(h) + '">' + esc(h) + ' ✕</button>').join('');
+    const cand = cands.filter(c => w.highlights.indexOf(c.praise) < 0).map(c =>
+      '<button class="chip" data-act="week-pick" data-k="' + esc(c.praise) + '">+ ' + esc(c.name) + '</button>').join('');
+    const keeps = St.KEEP_OPTIONS.map(k =>
+      '<button class="chip' + (w.keep === k ? ' on' : '') + '" data-act="week-keep" data-v="' + esc(k) + '">' + esc(k) + '</button>').join('') +
+      '<div class="inrow"><input id="keep-custom" value="' + esc(w.keep === St.KEEP_CUSTOM ? (w.keepCustom || '') : '') + '" placeholder="我自己想的：…">' +
+      '<button class="btn small" data-act="week-keep-custom">就这个</button></div>';
+    const bonus = St.weekBonus(w.challenge);
+    const bonusTxt = '预计周奖励 +' + bonus.total + ' 分（' +
+      ['周达标 +10（本周 ≥50 分）', '连续 7 天 +10', '主动挑战 +5']
+        .filter((_, i) => [bonus.week50, bonus.streak7, bonus.challenge][i]).join('、') + '）';
+
+    return head +
+      '<section class="card"><h3>印象最深的三件事</h3>' +
+      '<div class="chips">' + (sel || '') + (cand || '') + '</div>' +
+      (w.highlights.length ? '' : '<p class="tiny">从这周记过的事里挑，最多三条。</p>') + '</section>' +
+      '<section class="card"><h3>想保留的习惯</h3><div class="chips">' + keeps + '</div></section>' +
+      '<section class="card"><h3>下周只改一件小事</h3>' +
+      '<div class="inrow"><input id="week-next" value="' + esc(w.next || '') + '" placeholder="越小越做得到，比如：睡前把书包收好">' +
+      '<button class="btn small primary" data-act="week-next-save">保存</button></div>' +
+      (weekBigShown ? '<p class="tiny">试试更小的：' + St.SHRINK_SUGGESTIONS.map(esc).join('；') + '</p>' : '') + '</section>' +
+      '<section class="card"><h3>我想挑战的新任务</h3>' +
+      '<div class="inrow"><input id="week-chal" value="' + esc(w.challenge || '') + '" placeholder="这周没做过的、想试的事（+5）">' +
+      '<button class="btn small primary" data-act="week-chal-save">保存</button></div>' +
+      '<p class="tiny">' + esc(bonusTxt) + '</p></section>' +
+      '<div class="printrow"><button class="btn primary" data-act="week-finish">就这么定（结算）</button>' +
+      '<button class="btn" data-act="print-week">打印一周一页</button></div>';
+  }
+  function weekFinish() {
+    const w = St.weekDraft();
+    if (!String(w.next || '').trim()) { toast('先写下想改的那一件小事'); return; }
+    if (St.tooBigTarget(w.next) && !weekBigShown) { weekBigShown = true; render(); toast('目标有点大，换个小一点的？'); return; }
+    guarded('周结算会发周奖励，需要家长密码', async () => {
+      const r = St.finishWeek();
+      if (r.ok) return { ok: true, msg: '结算好了，这一周辛苦啦' };
+      if (r.already) { render(); return { ok: true, silent: true }; }
+      return r;
+    });
+  }
+
+  /* ---------------- 家长 ---------------- */
+  async function parentView(s) {
+    const st = await Pin.pinStatus();
+    const last = Pin.metaBackupAt();
+    const days = last ? Math.floor((Date.now() - last) / 86400000) : -1;
+    const backupWarn = (!last || days > 7)
+      ? '<div class="banner warn">' + (last ? '距离上次备份已经 ' + days + ' 天了。' : '还没有备份过。') +
+        '数据只存在这台设备里，清缓存或换设备就没了——建议现在导出一份备份。</div>'
+      : '<div class="banner ok">上次备份：' + new Date(last).toLocaleDateString() + '，很安心。</div>';
+    const stages = St.STAGES.map(x =>
+      '<button class="btn small' + (x.k === s.stage ? ' primary' : '') + '" data-act="stage-switch" data-k="' + esc(x.k) + '">' +
+      esc(x.n) + '</button>').join('');
+    return backupWarn +
+      '<section class="card"><h3>家长密码</h3>' +
+      '<p class="muted">改规则、改奖励、周结算、代记、导出备份都要它。孩子日常打卡不需要。</p>' +
+      '<div class="printrow">' +
+      (st.has
+        ? '<button class="btn" data-act="pin-change">修改密码</button><button class="btn" data-act="pin-forgot-page">用恢复码重设</button>'
+        : '<button class="btn primary" data-act="pin-setup">设置家长密码</button>') +
+      '</div></section>' +
+      '<section class="card"><h3>导出（需要密码）</h3><div class="printrow">' +
+      '<button class="btn" data-act="export-rules">规则表 CSV</button>' +
+      '<button class="btn" data-act="export-ledger">打卡记录 CSV</button>' +
+      '<button class="btn primary" data-act="export-backup">全量备份 JSON</button></div></section>' +
+      '<section class="card"><h3>恢复备份（需要密码）</h3>' +
+      '<p class="muted">用之前导出的备份文件覆盖当前数据。操作前请先再导出一份当前备份。</p>' +
+      '<div class="printrow"><button class="btn" data-act="import-backup">选择备份文件</button>' +
+      '<input id="imp-file" type="file" accept="application/json,.json" hidden></div></section>' +
+      '<section class="card"><h3>学段</h3><p class="muted">换学段会换一套模板规则，已有记录保留。</p>' +
+      '<div class="chips">' + stages + '</div></section>' +
+      '<section class="card"><h3>数据说明</h3>' +
+      '<p class="tiny">这个文件不联网：所有数据只存在这台设备的浏览器里（localStorage），任何人都拿不到，' +
+      '包括我们。也因此：清浏览器缓存、换设备或换浏览器都会「看不到」数据——请定期用「全量备份 JSON」导出，' +
+      '在新设备上「恢复备份」即可继续。想彻底从头来过，用下面的清空。</p>' +
+      '<div class="printrow"><button class="btn danger" data-act="wipe">清空所有数据</button></div></section>';
+  }
+  function pinChangeModal() {
+    openModal(
+      '<h3>修改家长密码</h3>' +
+      '<input id="pin-old" type="password" inputmode="numeric" maxlength="8" placeholder="现在的密码">' +
+      '<input id="pin-new" type="password" inputmode="numeric" maxlength="8" placeholder="新密码（4–8 位数字）">' +
+      '<input id="pin-new2" type="password" inputmode="numeric" maxlength="8" placeholder="再输一遍">' +
+      '<div class="err" id="pin-err"></div>' +
+      '<div class="btnrow"><button class="btn primary" data-act="pin-change-go">保存</button>' +
+      '<button class="btn" data-act="modal-close">取消</button></div>');
+  }
+  async function pinChangeGo() {
+    const err = $('#pin-err');
+    const old = (($('#pin-old') || {}).value || '');
+    const n1 = (($('#pin-new') || {}).value || '');
+    const n2 = (($('#pin-new2') || {}).value || '');
+    const showErr = m => { if (err) err.textContent = m; };
+    if (!/^\d{4,8}$/.test(n1)) return showErr('新密码是 4–8 位数字');
+    if (n1 !== n2) return showErr('两次输入的不一样');
+    const r = await Pin.changePin(old, n1);
+    if (!r.ok) return showErr(r.reason || '没能修改');
+    showRecoveryModal(r.recoveryCode);
+  }
+
+  /* ---------------- 导出 / 恢复 ---------------- */
+  function download(filename, text, mime) {
+    const blob = new Blob([text], { type: mime || 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 600);
+  }
+  function exportRulesCsv() {
+    guarded('导出规则表需要家长密码', async () => {
+      const r = St.buildRuleTableCsv({});
+      download(r.filename, r.text, 'text/csv;charset=utf-8');
+      return { ok: true, msg: '已下载 ' + r.filename };
+    });
+  }
+  function exportLedgerCsv() {
+    guarded('导出打卡记录需要家长密码', async () => {
+      const r = St.buildLedgerCsv({ includeReversed: true });
+      download(r.filename, r.text, 'text/csv;charset=utf-8');
+      return { ok: true, msg: '已下载 ' + r.filename };
+    });
+  }
+  function exportBackup() {
+    guarded('导出备份需要家长密码', async () => {
+      const payload = {
+        app: 'rosenthal-single',
+        schema: 1,
+        exportedAt: Date.now(),
+        exportedDate: today(),
+        state: JSON.parse(JSON.stringify(St.state())),
+        metrics: St.metrics(),
+      };
+      const filename = 'rosenthal-backup-' + today() + '.json';
+      download(filename, JSON.stringify(payload, null, 2), 'application/json');
+      Pin.setBackupAt();
+      render();
+      return { ok: true, silent: true, msg: '已下载 ' + filename };
+    });
+  }
+  function importBackup() {
+    guarded('恢复会覆盖当前数据', async () => {
+      const f = $('#imp-file');
+      if (f) f.click();
+      return { ok: true, silent: true };
+    });
+  }
+  async function onImportFile(e2) {
+    const f = e2.target.files && e2.target.files[0];
+    e2.target.value = '';
+    if (!f) return;
+    let payload = null;
+    try { payload = JSON.parse(await f.text()); } catch (err) { toast('这个文件读不了：不是有效的备份'); return; }
+    if (!payload || !payload.state || (payload.app !== 'rosenthal-single' && payload.app !== 'rosenthal-miniprogram')) {
+      toast('这不是本家庭的备份文件'); return;
+    }
+    const r = St.replaceState(payload.state);
+    if (r.ok) { Pin.setBackupAt(); tab = 'today'; render(); toast('已恢复' + (payload.exportedDate ? ' ' + payload.exportedDate : '') + '的备份'); }
+    else toast(r.reason || '没能恢复');
+  }
+  function wipeAsk() {
+    openModal(
+      '<h3>清空所有数据？</h3><p class="muted">这会抹掉这台设备上的全部记录，且无法找回。' +
+      '如果想保留，请先去导出一份全量备份。</p>' +
+      '<div class="btnrow"><button class="btn danger" data-act="wipe-go">确定清空</button>' +
+      '<button class="btn" data-act="modal-close">先不清</button></div>');
+  }
+  function wipeGo() {
+    closeModal();
+    guarded('清空数据需要家长密码', async () => {
+      St.wipeAll();
+      tab = 'today';
+      render();
+      return { ok: true, silent: true };
+    });
+  }
+
+  /* ---------------- 打印 ---------------- */
+  function printToday() {
+    const s = St.state();
+    const t = today();
+    const rows = St.itemsOf().map(it => ({
+      name: it.name, points: it.points, count: St.countOn(it.id, t), limit: it.limit,
+    }));
+    const entries = s.log.filter(l => l.date === t).sort((a, b) => a.ts - b.ts)
+      .map(l => ({ time: timeHM(l.ts), name: l.name, points: l.points, praise: l.praise }));
+    const data = {
+      nick: s.nick, stageName: St.stageOf(s.stage).n, date: t,
+      score: St.dayScore(t), cap: St.capNow(), rows: rows, entries: entries,
+      flash: (s.flash && s.flash[t]) || '', ruleVersion: St.ruleSignature().ruleVersion,
+    };
+    $('#print-root').innerHTML = Pr.todayHtml(data);
+    window.print();
+  }
+  function printRules() {
+    const page = St.buildRuleTable({});
+    const dims = (page.dims || []).map(d =>
+      '<div class="pt-sec">' + esc(d.n) + '</div><table class="pt-table">' +
+      '<tr><th>行为</th><th>分值</th><th>每天</th></tr>' +
+      d.items.map(i => '<tr><td>' + esc(i.name) + (i.mine ? ' ★' : '') + '</td><td class="pt-num">+' + i.points +
+        '</td><td class="pt-num">' + i.limit + '</td></tr>').join('') + '</table>').join('');
+    const rws = (page.rewards || []).map(r =>
+      '<tr><td>' + esc(r.title) + (r.mine ? ' ★' : '') + '</td><td class="pt-num">' + r.cost + ' 分</td><td class="pt-num">' + esc(r.tier || '') + '</td></tr>').join('');
+    $('#print-root').innerHTML = '<div class="pt-page">' +
+      '<div class="pt-head"><div class="pt-title">罗森塔尔 · 规则表</div>' +
+      '<div class="pt-sub">' + esc(page.nick || '') + ' · ' + esc(page.stageName || '') + '</div></div>' +
+      dims +
+      '<div class="pt-sec">奖励档位</div><table class="pt-table"><tr><th>奖励</th><th>分值</th><th>档位</th></tr>' + rws + '</table>' +
+      '<div class="pt-stats">每天上限 ' + page.cap + ' 分</div>' +
+      '<div class="pt-sign"><div class="pt-signrow">她签名：____________　　家长签名：____________　　日期：____________</div></div>' +
+      '<div class="pt-quote">规则是全家一起定的；改过的地方标 ★。只记做到的事。</div>' +
+      '</div>';
+    window.print();
+  }
+  function printWeek() {
+    const page = St.buildWeekPage({});
+    page.lifetime = St.lifetime();
+    page.balance = St.balance();
+    const wk = page.pdfPayload && page.pdfPayload.week;
+    if (wk) wk.keepDisplay = (wk.keep === St.KEEP_CUSTOM)
+      ? (wk.keepCustom || '（待补）') : (wk.keep || '（这一周没选）');
+    $('#print-root').innerHTML = Pr.weekHtml(page);
+    window.print();
+  }
+
+  /* ---------------- 主渲染 ---------------- */
+  function render() {
+    const s = St.state();
+    const rootEl = $('#root');
+    if (needsOnboarding(s)) { rootEl.innerHTML = onboardingHtml(); return; }
+    let body = '';
+    if (tab === 'today') body = todayView(s);
+    else if (tab === 'rules') body = rulesView(s);
+    else if (tab === 'rewards') body = rewardsView(s);
+    else if (tab === 'week') body = weekView(s);
+    else if (tab === 'parent') { parentView(s).then(html => { rootEl.innerHTML = headerHtml(s) + '<main class="tabs-body">' + html + '</main>' + tabbarHtml(); }); return; }
+    rootEl.innerHTML = headerHtml(s) + '<main class="tabs-body">' + body + '</main>' + tabbarHtml();
+  }
+
+  /* ---------------- 事件分发 ---------------- */
+  document.addEventListener('click', e2 => {
+    /* 点在遮罩上（模态框外）才关闭；点模态框内部继续走 data-act 分发 */
+    if (e2.target && e2.target.classList && e2.target.classList.contains('mask')) { closeModal(); return; }
+    const el = e2.target.closest ? e2.target.closest('[data-act]') : null;
+    if (!el) return;
+    const act = el.getAttribute('data-act');
+    const id = el.getAttribute('data-id');
+    const k = el.getAttribute('data-k');
+    const v = el.getAttribute('data-v');
+    const cost = Number(el.getAttribute('data-cost'));
+    switch (act) {
+      case 'tab': tab = el.getAttribute('data-tab'); closeModal(); render(); break;
+
+      /* 首次 */
+      case 'stage-pick': stagePick(k); break;
+      case 'family-start': familyStart(); break;
+
+      /* 今日 */
+      case 'checkin': doCheckin(id); break;
+      case 'proxy': guarded('家长代记需要密码', async () => St.parentRecord(id)); break;
+      case 'undo': {
+        const r = St.undo(el.getAttribute('data-uid'));
+        if (r.ok) { render(); toast('已撤销'); } else toast(r.reason);
+        break;
+      }
+      case 'flash-save': {
+        const inp = $('#flash-in');
+        const r = St.setFlash(inp ? inp.value : '');
+        if (r.ok) { render(); toast('记下了'); }
+        break;
+      }
+      case 'usecoupon': {
+        const r = St.useCoupon(el.getAttribute('data-code'));
+        if (r.ok) { render(); toast('用掉啦，好好享受'); } else toast(r.reason);
+        break;
+      }
+      case 'print-today': printToday(); break;
+
+      /* 规则 */
+      case 'item-cost': itemCostModal(id); break;
+      case 'item-cost-go': itemCostGo(); break;
+      case 'item-remove': itemRemoveModal(id); break;
+      case 'item-remove-go': itemRemoveGo(); break;
+      case 'item-add': itemAddModal(); break;
+      case 'item-add-go': {
+        const r = itemAddGo();
+        if (r === false) break;
+        closeModal();
+        guarded('新增行为项需要家长密码', async () => r);
+        break;
+      }
+      case 'print-rules': printRules(); break;
+
+      /* 奖励 */
+      case 'redeem': redeemGo(cost, el.getAttribute('data-title')); break;
+      case 'redeem-go': {
+        closeModal();
+        const rd = pending.redeem || { cost: cost, title: '' };
+        const r = St.redeem(rd.cost, rd.title);
+        if (r.ok) { render(); toast('兑好了！券码 ' + r.coupon.code); } else toast(r.reason);
+        break;
+      }
+      case 'reward-title': rewardTitleModal(cost); break;
+      case 'reward-title-go': {
+        const title = (($('#rw-title') || {}).value || '').trim();
+        closeModal();
+        guarded('改奖励需要家长密码', async () => St.setRewardTitle(pending.rewardCost, title));
+        break;
+      }
+      case 'reward-cost': rewardCostModal(cost); break;
+      case 'reward-cost-go': {
+        const nc = Number(($('#rw-cost') || {}).value || 0);
+        closeModal();
+        guarded('改奖励需要家长密码', async () => {
+          const r = St.setRewardCost(pending.rewardCost, nc);
+          return r.ok ? { ok: true, msg: '已更新为 ' + nc + ' 分' } : r;
+        });
+        break;
+      }
+      case 'reward-remove': rewardRemoveModal(cost); break;
+      case 'reward-remove-go':
+        closeModal();
+        guarded('移除奖励档位需要家长密码', async () => {
+          const r = St.removeReward(pending.rewardCost);
+          return r.ok ? { ok: true, msg: '已移除这一档' } : r;
+        });
+        break;
+      case 'reward-add': rewardAddModal(); break;
+      case 'reward-add-go': {
+        const r = rewardAddGo();
+        if (!r || r.ok === false) break;
+        closeModal();
+        guarded('新增奖励需要家长密码', async () => r);
+        break;
+      }
+
+      /* 周复盘 */
+      case 'week-pick': {
+        const r = St.pickHighlight(k || '');
+        if (r.ok) render(); else toast(r.reason);
+        break;
+      }
+      case 'week-unpick': { const r = St.unpickHighlight(v); if (r.ok) render(); else toast(r.reason); break; }
+      case 'week-keep': { St.setWeekPatch({ keep: v }); render(); break; }
+      case 'week-keep-custom': {
+        St.setWeekPatch({ keep: St.KEEP_CUSTOM, keepCustom: (($('#keep-custom') || {}).value || '').trim() });
+        render(); break;
+      }
+      case 'week-next-save': { St.setWeekPatch({ next: (($('#week-next') || {}).value || '').trim() }); render(); toast('记下了'); break; }
+      case 'week-chal-save': { St.setWeekPatch({ challenge: (($('#week-chal') || {}).value || '').trim() }); render(); toast('记下了'); break; }
+      case 'week-finish': weekFinish(); break;
+      case 'week-continue': { St.resetWeek(); weekBigShown = false; render(); toast('新的一周，从一件小事开始'); break; }
+      case 'print-week': printWeek(); break;
+
+      /* 家长 */
+      case 'pin-setup':
+        Pin.pinStatus().then(st2 => {
+          if (st2.has) toast('已经设置过了，用「修改密码」');
+          else requirePin('设置家长密码', () => {});
+        });
+        break;
+      case 'pin-change': pinChangeModal(); break;
+      case 'pin-change-go': pinChangeGo(); break;
+      case 'pin-forgot': pinForgot(); break;
+      case 'pin-forgot-page': pinForgot(); break;
+      case 'rec-verify': recVerify(); break;
+      case 'rec-ack': recAck(); break;
+      case 'pin-go': pinGo(); break;
+      case 'export-rules': exportRulesCsv(); break;
+      case 'export-ledger': exportLedgerCsv(); break;
+      case 'export-backup': exportBackup(); break;
+      case 'import-backup': importBackup(); break;
+      case 'wipe': wipeAsk(); break;
+      case 'wipe-go': wipeGo(); break;
+      case 'stage-switch':
+        closeModal();
+        guarded('切换学段需要家长密码', async () => {
+          St.applyStage(k);
+          autoAgree();
+          return { ok: true, msg: '已切换到' + St.stageOf(k).n };
+        });
+        break;
+      case 'modal-close': closeModal(); break;
+      default: break;
+    }
+  });
+  document.addEventListener('keydown', e2 => {
+    if (e2.key === 'Enter') {
+      const ae = document.activeElement;
+      if (ae && (ae.id === 'pin-in' || ae.id === 'pin-in2')) { e2.preventDefault(); pinGo(); }
+      else if (ae && ae.id === 'rec-in') { e2.preventDefault(); recVerify(); }
+    }
+  });
+  document.addEventListener('change', e2 => {
+    if (e2.target && e2.target.id === 'imp-file') onImportFile(e2);
+  });
+
+  /* ---------------- 启动 ---------------- */
+  /* 尽力申请持久化存储：Android WebView 在低存储压力下更不容易回收本地数据。
+     浏览器不支持时是 no-op，失败也不影响使用（数据主权仍靠导出备份兜底）。 */
+  try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {}); } catch (e3) { /* no-op */ }
+
+  /* Capacitor（Android 壳）里：返回键先关模态框，避免在弹窗中直接退出应用。
+     浏览器里 window.Capacitor 不存在，整段是 no-op。 */
+  const CapApp = (typeof window !== 'undefined' && window.Capacitor &&
+    window.Capacitor.Plugins && window.Capacitor.Plugins.App) || null;
+  if (CapApp && typeof CapApp.addListener === 'function') {
+    CapApp.addListener('backButton', () => {
+      if ($('#modal-root').innerHTML) { closeModal(); return; }
+      if (typeof CapApp.exitApp === 'function') CapApp.exitApp();
+    });
+  }
+
+  St.load('mid');
+  render();
+})();
+
+})();
+</script>
+</body>
+</html>

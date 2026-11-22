@@ -1,0 +1,29 @@
+{
+  "name": "rosenthal-miniprogram-test",
+  "version": "1.0.0",
+  "private": true,
+  "description": "罗森塔尔 · 微信小程序测试环境。DevTools 项目根（miniprogram/ 为指向 ../miniprogram 的目录联接），并在此挂载 Node/Jest 测试工程；npm 依赖只落在本目录，miniprogram/ 保持零依赖。",
+  "scripts": {
+    "sync": "node ./tools/sync-source.mjs",
+    "pretest": "node ./tools/sync-source.mjs",
+    "test": "npm run test:engine && npm run test:unit",
+    "test:engine": "node ./../miniprogram/_smoke_s1.js",
+    "test:unit": "jest",
+    "test:unit:watch": "jest --watch",
+    "devtools:open": "node ./tools/sync-source.mjs && cli open --project .",
+    "devtools:auto": "node ./tools/devtools-smoke.js"
+  },
+  "keywords": [
+    "rosenthal",
+    "miniprogram",
+    "test"
+  ],
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^30.5.2",
+    "miniprogram-api-typings": "^2.8.3-1",
+    "miniprogram-automator": "^0.12.1",
+    "miniprogram-simulate": "^1.6.1"
+  }
+}

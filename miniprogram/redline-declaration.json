@@ -1,0 +1,169 @@
+{
+  "description": "红线概念的**全部出现位置**：每个概念都给出理由、总数、涉及文件（排序）与每个文件的出现次数。这份清单是「既然不能没有，那就逐个点名」——任何新增出现都会让计数变化，测试会报错，逼人重新过一遍并说明它属于哪一类。",
+  "howToUpdate": "改完代码后跑 node _smoke_s1.js；若这条断言报错，逐条确认新增的出现属于「否定式说明 / 拦截守卫 / 用户可见文案」中的哪一类，再把新的计数抄回来。",
+  "scanScope": "全部 .js/.wxml/.json/.wxss，排除 assets、tools、以 _ 开头的开发期文件，以及本文件自身（与套件的扫描范围一致）。",
+  "concepts": {
+    "负分": {
+      "reason": "「不做扣分」的代码约束：全部是否定式说明、guard 名或文案，不存在写负分的路径。",
+      "total": 9,
+      "files": [
+        "cloud/authz.js",
+        "cloud/schema.js",
+        "pages/repair/index.wxml",
+        "utils/store.js",
+        "utils/templates.js"
+      ],
+      "countsByFile": [
+        1,
+        3,
+        2,
+        2,
+        1
+      ]
+    },
+    "扣分": {
+      "reason": "说明「不扣分」的文案与注释（含规则表导出文本、介绍页与出图页脚「只加分，不扣分」），以及 addPoints 里拒绝非正数的实现；没有任何调用方传入负数。",
+      "total": 17,
+      "files": [
+        "cloud/authz.js",
+        "pages/intro/index.wxml",
+        "pages/me/index.wxml",
+        "pages/repair/index.js",
+        "pages/repair/index.wxml",
+        "pages/today/index.js",
+        "pages/today/index.wxml",
+        "pages/week/index.js",
+        "pages/week/index.wxml",
+        "utils/render-image.js",
+        "utils/store.js",
+        "utils/templates.js"
+      ],
+      "countsByFile": [
+        1,
+        1,
+        1,
+        2,
+        1,
+        1,
+        2,
+        1,
+        1,
+        1,
+        4,
+        1
+      ]
+    },
+    "排名": {
+      "reason": "「不做排行榜、不做同龄比较」：出现在否认式文案与红线词表里（含规则表导出注释里「不掺排名」），没有排行逻辑。",
+      "total": 23,
+      "files": [
+        "copy-redlines.json",
+        "pages/growth/index.js",
+        "pages/growth/index.wxml",
+        "pages/week/index.wxml",
+        "utils/store.js"
+      ],
+      "countsByFile": [
+        18,
+        1,
+        1,
+        1,
+        2
+      ]
+    },
+    "比较": {
+      "reason": "「不做同龄比较」：出现在否认式文案、红线词表、规则表导出注释里「不掺比较」，以及 templates 里学段语气说明「不比较」。",
+      "total": 24,
+      "files": [
+        "copy-redlines.json",
+        "pages/growth/index.js",
+        "pages/parent/index.wxml",
+        "pages/week/index.wxml",
+        "utils/store.js",
+        "utils/templates.js"
+      ],
+      "countsByFile": [
+        18,
+        1,
+        1,
+        1,
+        2,
+        1
+      ]
+    },
+    "监视": {
+      "reason": "「不做家长监视面板」：只在红线词表里作为被禁止的语气出现，没有任何实现。",
+      "total": 2,
+      "files": [
+        "copy-redlines.json"
+      ],
+      "countsByFile": [
+        2
+      ]
+    },
+    "查岗": {
+      "reason": "「家长端不做查岗」：只在红线词表里作为被禁止的语气出现，没有任何实现。",
+      "total": 1,
+      "files": [
+        "copy-redlines.json"
+      ],
+      "countsByFile": [
+        1
+      ]
+    },
+    "删除": {
+      "reason": "删除能力只有两类：① 数据主人自己的「彻底删除」（wipeAll + 我的页入口）；② 明确声明「不能删除」的位置（家长端含「帮 TA 记一笔」说明、券、流水）；另有规则页「删除一档奖励」与 store.removeReward（改奖励的一种）。没有任何家长侧删除打卡的接口。",
+      "total": 35,
+      "files": [
+        "app.wxss",
+        "cloud/authz.js",
+        "pages/me/index.js",
+        "pages/me/index.wxml",
+        "pages/me/index.wxss",
+        "pages/parent/index.js",
+        "pages/parent/index.wxml",
+        "pages/rules/index.js",
+        "pages/shop/index.js",
+        "pages/shop/index.wxml",
+        "utils/store.js",
+        "utils/templates.js"
+      ],
+      "countsByFile": [
+        1,
+        1,
+        6,
+        2,
+        1,
+        4,
+        4,
+        1,
+        3,
+        1,
+        10,
+        1
+      ]
+    },
+    "撤回": {
+      "reason": "已发出的券不可撤回：出现在声明文案与「store 不提供该接口」的说明处。",
+      "total": 10,
+      "files": [
+        "cloud/authz.js",
+        "cloud/schema.js",
+        "pages/me/index.js",
+        "pages/parent/index.wxml",
+        "pages/shop/index.js",
+        "pages/shop/index.wxml",
+        "utils/store.js"
+      ],
+      "countsByFile": [
+        1,
+        1,
+        1,
+        3,
+        1,
+        1,
+        2
+      ]
+    }
+  }
+}

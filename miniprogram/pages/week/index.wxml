@@ -1,0 +1,183 @@
+<!-- 罗森塔尔 · pages/week/index.wxml（周复盘）
+     未结算 → 5 步向导；已结算 → 周报。两者共用顶部的这一周概览。 -->
+<view wx:if="{{onboarded}}" class="page-root stage-{{stage}}">
+
+  <!-- 5 步进度 -->
+  <view class="steps">
+    <view wx:for="{{steps}}" wx:key="*this" class="steps__i {{done || item <= step + 1 ? 'on' : ''}}"></view>
+  </view>
+
+  <!-- 这一周（两种状态都显示） -->
+  <view class="card">
+    <view class="row row--between">
+      <view class="card__t">这一周</view>
+      <text class="chip chip--amber">{{weekScore}} 分</text>
+    </view>
+    <view class="w__grid mt-3">
+      <view wx:for="{{weekDays}}" wx:key="date" class="w__d {{item.isToday ? 'w__d--today' : ''}}">
+        <view class="w__wd">周{{item.wd}}</view>
+        <view class="w__sc">{{item.sc}}</view>
+        <view class="w__md">{{item.md}} 日</view>
+      </view>
+    </view>
+    <view class="card__d mt-3">
+      这一周有 {{activeDays}} 天留下了记录，连续 {{streak}} 天。每天上限 {{cap}} 分 ——
+      到顶了也只说「剩下的留给明天」。
+    </view>
+  </view>
+
+  <!-- ============ 已结算：周报 ============ -->
+  <block wx:if="{{done}}">
+    <view class="card report">
+      <view class="report__k">WEEKLY · {{report.range}}</view>
+      <view class="report__t">{{nick}}的这一周</view>
+
+      <view class="report__hl">
+        <view class="report__c"><text class="report__n">{{report.score}}</text><text class="report__l">本周得分</text></view>
+        <view class="report__c"><text class="report__n">{{report.days}}</text><text class="report__l">有记录天数</text></view>
+        <view class="report__c"><text class="report__n">+{{report.bonus}}</text><text class="report__l">周额外奖励</text></view>
+      </view>
+
+      <view class="report__line">
+        <text class="report__b">我印象最深的三件事</text>
+        <view wx:for="{{report.highlights}}" wx:key="*this" class="report__item">{{index + 1}}. {{item}}</view>
+        <view wx:if="{{report.highlights.length === 0}}" class="report__item">这一周先不写也没关系。</view>
+      </view>
+
+      <view class="report__line mt-3">
+        <text class="report__b">我想保留的习惯</text>
+        <view class="report__item">{{report.keep === '我自己想的：______________________' ? report.keepCustom : report.keep}}</view>
+      </view>
+
+      <view class="report__line mt-3">
+        <text class="report__b">下周只改一件小事</text>
+        <view class="report__item">{{report.next}}</view>
+      </view>
+
+      <view wx:if="{{report.challenge}}" class="report__line mt-3">
+        <text class="report__b">我想挑战的新任务</text>
+        <view class="report__item">{{report.challenge}} <text class="chip chip--jade">+5</text></view>
+      </view>
+
+      <view class="report__line mt-3">
+        <text class="report__b">结算明细（自动算，谁都不能改）</text>
+        <view class="report__item">{{report.bonusDetail.week50 ? '✓' : '○'}} 一周积分 ≥ 50　+10</view>
+        <view class="report__item">{{report.bonusDetail.streak7 ? '✓' : '○'}} 连续 7 天有记录　+10</view>
+        <view class="report__item">{{report.bonusDetail.challenge ? '✓' : '○'}} 主动挑战新任务　+5</view>
+      </view>
+
+      <view class="quote mt-4">
+        <view>“你不是被积分管住的人，你是在练习管理自己。</view>
+        <view>每一次小做到，都在证明：我可以。”</view>
+      </view>
+
+      <view class="sheet__btnrow">
+        <button class="btn btn--sm btn--ghost report__btn" bindtap="onExport">导出打印版</button>
+        <button class="btn btn--sm btn--primary report__btn" bindtap="onRestart">下周继续</button>
+      </view>
+    </view>
+  </block>
+
+  <!-- ============ 未结算：5 步向导 ============ -->
+  <block wx:else>
+
+    <!-- ① 想记住的三件事 -->
+    <view wx:if="{{step === 0}}" class="card">
+      <view class="qn">这周，有哪三件事你想记住？</view>
+      <view class="qh">我从你的记录里挑了几个，点一下就能选；也可以自己写。</view>
+
+      <view class="pick">
+        <view wx:for="{{picks}}" wx:key="value" class="pick__i {{item.on ? 'on' : ''}}"
+              data-v="{{item.value}}" data-on="{{item.on}}" bindtap="onPickHighlight">
+          <text class="pick__t">{{item.label}}</text>
+          <text class="pick__m">{{item.dim}}{{item.date ? ' · ' + item.date : ''}}</text>
+        </view>
+      </view>
+      <view wx:if="{{picks.length === 0}}" class="qh">这一周还没有带具体反馈的记录，先自己写一件也行。</view>
+
+      <textarea class="field mt-3" value="{{customHighlight}}" maxlength="60" auto-height
+                placeholder="也可以自己写：例 我把数学最后一题想出来了"
+                bindinput="onCustomHighlight"></textarea>
+      <view class="row row--between mt-2">
+        <text class="qh">最多 3 条</text>
+        <button class="btn btn--sm btn--ghost" bindtap="onAddCustomHighlight">加上这句</button>
+      </view>
+    </view>
+
+    <!-- ② 想留下的一个习惯 -->
+    <view wx:elif="{{step === 1}}" class="card">
+      <view class="qn">哪一个习惯，你最想留下来？</view>
+      <view class="qh">只选一个。留下来的那个，下周会出现在你的首页。</view>
+      <view class="pick">
+        <view wx:for="{{keepOptions}}" wx:key="value" class="pick__i {{item.on ? 'on' : ''}}"
+              data-v="{{item.value}}" bindtap="onPickKeep">
+          <text class="pick__t">{{item.label}}</text>
+        </view>
+      </view>
+      <input wx:if="{{keepCustomOpen}}" class="field mt-3" value="{{keepCustom}}" maxlength="30"
+             placeholder="写你想留下的那个习惯" bindinput="onKeepCustomInput" />
+    </view>
+
+    <!-- ③ 下周只改一件小事 -->
+    <view wx:elif="{{step === 2}}" class="card">
+      <view class="qn">下周，你只想改一件什么小事？</view>
+      <view class="qh">越具体越好，小到「明天就能做到」。</view>
+      <textarea class="field" value="{{nextText}}" maxlength="80" auto-height
+                placeholder="例：写作业前先把手机放到客厅"
+                bindinput="onNextInput"></textarea>
+
+      <view wx:if="{{suggestions.length > 0}}" class="wordwarn mt-2">
+        这个目标有点大，我们拆小一点？
+        <view class="wordwarn__row">
+          <text wx:for="{{suggestions}}" wx:key="*this" class="linkbtn"
+                data-v="{{item}}" bindtap="onUseSuggestion">{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- ④ 想不想挑战一件新事 -->
+    <view wx:elif="{{step === 3}}" class="card">
+      <view class="qn">想不想挑战一件新的事？</view>
+      <view class="qh">做了就有 +5，做不到也不扣分 —— 这条只记录尝试。</view>
+      <textarea class="field" value="{{challengeText}}" maxlength="80" auto-height
+                placeholder="例：这次月考自己定一个复习清单（可留空）"
+                bindinput="onChallengeInput"></textarea>
+    </view>
+
+    <!-- ⑤ 结算 -->
+    <view wx:else class="card">
+      <view class="qn">结算一下这周</view>
+      <view class="qh">下面是自动算出来的，不是谁能改的。</view>
+
+      <view class="report__hl">
+        <view class="report__c"><text class="report__n">{{weekScore}}</text><text class="report__l">本周得分</text></view>
+        <view class="report__c"><text class="report__n">{{activeDays}}</text><text class="report__l">有记录天数</text></view>
+        <view class="report__c"><text class="report__n">+{{bonusPreview.total}}</text><text class="report__l">周额外奖励</text></view>
+      </view>
+
+      <view class="report__line">
+        <view class="report__item">{{bonusPreview.week50 ? '✓' : '○'}} 一周积分 ≥ 50　+10</view>
+        <view class="report__item">{{bonusPreview.streak7 ? '✓' : '○'}} 连续 7 天有记录　+10</view>
+        <view class="report__item">{{bonusPreview.challenge ? '✓' : '○'}} 主动挑战新任务　+5</view>
+      </view>
+    </view>
+
+    <!-- 向导导航 -->
+    <view class="wiz">
+      <button class="btn btn--sm btn--ghost" disabled="{{step === 0}}" bindtap="onPrev">上一题</button>
+      <button wx:if="{{step < 4}}" class="btn btn--sm btn--primary wiz__next" bindtap="onNext">下一步</button>
+      <button wx:else class="btn btn--sm btn--primary wiz__next" bindtap="onFinish">就这么定</button>
+    </view>
+  </block>
+
+  <!-- 维度分布：让人看见力气花在哪（只统计本周） -->
+  <view class="card">
+    <view class="card__t">这周你把力气花在了哪</view>
+    <view wx:for="{{byDim}}" wx:key="n" class="w__row">
+      <text class="w__k">{{item.n}}</text>
+      <view class="bar w__bar"><view style="width:{{weekScore ? item.v / weekScore * 100 : 0}}%"></view></view>
+      <text class="w__v">{{item.v}}</text>
+    </view>
+    <view class="card__d mt-3">这里不排名、不比较，只是让你自己看见分布。</view>
+  </view>
+</view>

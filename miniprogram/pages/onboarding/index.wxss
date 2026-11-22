@@ -1,0 +1,70 @@
+/* 罗森塔尔 · pages/onboarding/index.wxss（规则共建）
+   这一页是全屏闸门，底部进度条固定，保证「还差什么」一直可见。 */
+.ob{ padding-bottom: 240rpx; }
+
+.ob__head{
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: var(--sp-4);
+}
+.ob__t{
+  font-family: var(--f-display);
+  font-size: 46rpx; font-weight: 600; letter-spacing: .04em;
+}
+.ob__em{ color: var(--amber); font-weight: 600; }
+
+.items{ display: flex; flex-direction: column; gap: var(--sp-2); }
+.ob__pm{ display: flex; gap: 8rpx; flex: none; }
+.ob__pmbtn{
+  width: 62rpx; height: 62rpx;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--r-pill);
+  border: 2rpx solid var(--line-2);
+  color: var(--ink);
+  font-size: 32rpx;
+}
+.ob__pmbtn--off{ opacity: .3; }
+
+.pick{ display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+.pick__i{
+  flex: 1 1 46%;
+  padding: var(--sp-3);
+  border: 2rpx solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--paper-hi);
+  font-size: 24rpx;
+  line-height: 1.5;
+}
+
+.ob__rewards{ display: flex; flex-direction: column; gap: var(--sp-3); }
+.ob__rw{ display: flex; align-items: center; gap: var(--sp-2); }
+.ob__rwt{ flex: 1; min-width: 0; font-size: 25rpx; line-height: 1.5; }
+.ob__rwin{ flex: 1; min-height: 66rpx; }
+.ob__rwbtn{
+  flex: none;
+  padding: 12rpx 20rpx;
+  border-radius: var(--r-pill);
+  border: 2rpx solid var(--line-2);
+  color: var(--ink-2);
+  font-size: 22rpx;
+}
+.ob__rwbtn--off{ opacity: .5; }
+
+.ob__foot{
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+  background: var(--paper-hi);
+  border-top: 2rpx solid var(--line);
+  padding: var(--sp-3) var(--sp-4) calc(var(--sp-4) + env(safe-area-inset-bottom));
+  box-shadow: var(--sh-2);
+}
+
+.tally{ display: flex; gap: var(--sp-2); }
+.tally > view{
+  flex: 1; text-align: center;
+  padding: var(--sp-2) 0;
+  border-radius: var(--r-sm);
+  background: var(--paper-lo);
+}
+.tally > view.on{ background: var(--amber-soft); }
+.tally__n{ display: block; font-family: var(--f-num); font-size: 40rpx; }
+.tally__l{ font-size: 20rpx; color: var(--ink-2); }
+.tally > view.on .tally__l{ color: #8C4315; }

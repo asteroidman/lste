@@ -1,0 +1,43 @@
+# ============================================================
+# 罗森塔尔 · 网页版 · Nginx 1.26 站点配置片段
+# 用法：宝塔 → 网站 → 你的站点 → 设置 → 配置文件，
+#      把下面这些 location / root 等放进 server { ... } 里
+#      （保留宝塔自动生成的 listen 443 ssl 与证书行）。
+#
+# 假设：代码在 /www/wwwroot/rosenthal-web
+#       Node 进程监听 127.0.0.1:3000（见 deploy/ecosystem.config.js）
+# ============================================================
+
+# —— 静态前端由 Nginx 直出 ——
+root /www/wwwroot/rosenthal-web/public;
+index index.html;
+
+client_max_body_size 2m;
+
+# —— 后端 API 反代到 Node（^~ 保证不被下面的静态正则抢走）——
+location ^~ /api/ {
+    proxy_pass http://127.0.0.1:3000;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;   # 让 secure cookie 正确判断 HTTPS
+    proxy_read_timeout 60s;
+    proxy_connect_timeout 10s;
+}
+
+# —— 其余按单页应用处理 ——
+location / {
+    try_files $uri $uri/ /index.html;
+}
+
+# —— 压缩 ——
+gzip on;
+gzip_min_length 1024;
+gzip_types text/css application/javascript application/json text/plain image/svg+xml;
+
+# —— 静态资源缓存（可选）——
+location ~* \.(css|js|svg|png|jpg|jpeg|woff2)$ {
+    expires 7d;
+    add_header Cache-Control "public";
+}

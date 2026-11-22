@@ -1,0 +1,43 @@
+/* 罗森塔尔 · pages/today/index.wxss（今天）
+   令牌与通用组件在 app.wxss；这里放本页独有结构（得分环本体在组件里）。 */
+
+.hero{
+  background: var(--paper-hi);
+  border: 2rpx solid var(--line);
+  border-radius: var(--r-md);
+  padding: var(--sp-5);
+  box-shadow: var(--sh-1);
+  margin-bottom: var(--sp-4);
+}
+.hero__top{ display: flex; align-items: center; gap: var(--sp-4); }
+.hero__words{ flex: 1; min-width: 0; }
+.hero__hello{
+  font-family: var(--f-display);
+  font-size: 38rpx;
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+.hero__sub{ color: var(--ink-2); font-size: 24rpx; line-height: 1.7; margin-top: 6rpx; }
+
+.hero__stats{ display: flex; margin-top: var(--sp-4); }
+.stat{ flex: 1; text-align: center; }
+.stat__n{ font-family: var(--f-num); font-size: 40rpx; }
+.stat__l{ font-size: 21rpx; color: var(--ink-3); margin-top: 2rpx; }
+
+.dim__n{
+  font-family: var(--f-display);
+  font-size: 32rpx;
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+
+.items{ display: flex; flex-direction: column; gap: var(--sp-2); }
+.item--done{ opacity: .62; }
+/* 当日到上限后，未记满的卡片置灰但仍可点（点了只提示，不改分） */
+.item--locked{ opacity: .5; }
+.item__go{
+  flex: none;
+  width: 48rpx; text-align: center;
+  color: var(--amber); font-size: 30rpx;
+}
+.item--done .item__go{ color: var(--jade); }
