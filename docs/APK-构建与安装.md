@@ -53,7 +53,7 @@ openssl pkcs12 -export -in cert.pem -inkey key.pem \
 KEYSTORE_BASE64   = keystore 的 base64（单行）
 STORE_PASSWORD    = 生成时设的密码
 KEY_ALIAS         = rosenthal
-KEY_PASSWORD      = 生成时设的密码
+KEY_PASSWORD      = 和 STORE_PASSWORD 相同（PKCS12 格式里两者必须是同一个值）
 ```
 
 ### 4. 离线备份

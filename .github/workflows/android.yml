@@ -81,7 +81,9 @@ jobs:
         env:
           STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          # PKCS12 格式里密钥密码 = keystore 密码，是同一个值；
+          # 无论 Secrets 里 KEY_PASSWORD 存了什么，这里都用 STORE_PASSWORD，避免两者不一致导致签名失败。
+          KEY_PASSWORD: ${{ secrets.STORE_PASSWORD }}
         run: |
           chmod +x ./gradlew
           ./gradlew assembleRelease --no-daemon \
