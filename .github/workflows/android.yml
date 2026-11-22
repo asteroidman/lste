@@ -53,12 +53,12 @@ jobs:
           node mobile/scripts/sync-web.mjs
           node mobile/scripts/verify-web.mjs
 
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
-
-      - uses: android-actions/setup-android@v3
+      # ubuntu-latest 已预装 Android SDK（含 licenses / build-tools），无需再装；
+      # 之前用 android-actions/setup-android@v3 反而在此失败过。
 
       - name: cap sync（把网页与插件同步进 Android 工程）
         working-directory: mobile
@@ -93,6 +93,7 @@ jobs:
           APK=$(find mobile/android/app/build/outputs/apk/release -name '*.apk' | head -1)
           test -n "$APK" || { echo "::error::没找到 APK"; exit 1; }
           unzip -l "$APK" | grep -q 'assets/public/index.html' || { echo "::error::APK 里没有本地网页"; exit 1; }
+          ANDROID_HOME="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
           AAPT=$(find "$ANDROID_HOME/build-tools" -name aapt -type f 2>/dev/null | sort | tail -1)
           if [ -n "$AAPT" ]; then
             echo "—— APK 实际申请的权限 ——"
