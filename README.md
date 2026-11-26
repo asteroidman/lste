@@ -12,6 +12,8 @@
 | [`website/`](website/) | 网页版（Node.js + MySQL，宝塔部署）。**必须登录**；保留只加分/必改3项/双签/家长不可删红线 | **P2 完成**：登录/家庭 + 服务端引擎 + 家长密码门 + 导出免费10次/赞助（收款码+兑换码）+ 奖励CRUD；`npm test` → 36 全绿；部署见 [`website/deploy/DEPLOY-宝塔.md`](website/deploy/DEPLOY-宝塔.md) |
 | [`lste/`](lste/) | **单文件家庭版**：`罗森塔尔.html` 一个文件、零依赖、零联网，数据只存本机 localStorage；家长 4–8 位 PIN（可改，带离线恢复码）管修改类操作；打印（今日卡/规则表/一周一页）免密；导出 CSV/备份 JSON 需密码 | 完成，`node lste/_smoke.mjs` → 82 项断言全绿（含 jsdom 真实点击链路）；重新构建 `node lste/build.mjs` |
 | [`mobile/`](mobile/) | **Android 壳**（Capacitor）：把单文件产物原样套进 APK，零权限、不上架、自己/家人安装；固定签名保证覆盖升级不清数据 | 工程与 GitHub Actions 云构建就绪；出包见 [`docs/APK-构建与安装.md`](docs/APK-构建与安装.md)（iOS 暂不做） |
+| [`docs/使用说明.md`](docs/使用说明.md) | **写给家长的用户手册**：安装、每日打卡、积分与奖励、周复盘、PIN、打印、备份换机、常见问题 | 完成 |
+| [`marketing/`](marketing/) | 小红书推广物料：3 篇成稿笔记（神器分享 / 教育理念 / 亲子仪式感）+ 4 张 3:4 配图（封面插画 / 场景插画 / 三步图解 / 真实界面）+ 发布建议 | 完成，见 [`marketing/小红书/文案.md`](marketing/小红书/文案.md) |
 
 另有两个**历史存档**文件，不是代码：`session.v4.jsonl` 与
 `dsh-session-session-30177102-….zip` —— 上一个会话的导出（`cwd` 指向旧工作区）。
