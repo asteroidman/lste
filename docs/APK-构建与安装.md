@@ -1,6 +1,6 @@
 # 罗森塔尔 · Android APK 构建与安装（自己/家人装，不上架）
 
-这是把 [`single/罗森塔尔.html`](../single/罗森塔尔.html) 套进 Capacitor 的 Android 壳：
+这是把 [`lste/罗森塔尔.html`](../lste/罗森塔尔.html) 套进 Capacitor 的 Android 壳：
 **零联网、零账号、数据只在设备的 WebView 本地存储里**。
 你不需要装 Android Studio，全部在 GitHub Actions 上构建。
 
@@ -26,7 +26,7 @@ git push -u origin main
 ```
 
 > 根 `.gitignore` 已排除 `node_modules/`、`mobile/www/`、`mobile/android/app/src/main/assets/public/`、`*.keystore` 等；**不要**把 keystore 提交进仓库。
-> 仓库里必须包含 `miniprogram/utils/`（引擎源码）、`single/`（单文件版与回归）、`mobile/`（Android 工程）、`.github/workflows/`；不要只推 `mobile/`，否则 CI 第一步就找不到引擎。
+> 仓库里必须包含 `miniprogram/utils/`（引擎源码）、`lste/`（单文件版与回归）、`mobile/`（Android 工程）、`.github/workflows/`；不要只推 `mobile/`，否则 CI 第一步就找不到引擎。
 
 ### 2. 固定签名
 
@@ -75,8 +75,8 @@ git tag v1.0.1 && git push origin v1.0.1
 
 流程会自动：
 
-1. `node single/_smoke.mjs` —— 82 项回归（含 jsdom 真实点击链路），**不全绿就中止**；
-2. `node single/build.mjs` 重新生成单文件产物；
+1. `node lste/_smoke.mjs` —— 82 项回归（含 jsdom 真实点击链路），**不全绿就中止**；
+2. `node lste/build.mjs` 重新生成单文件产物；
 3. 逐字节复制成 `mobile/www/index.html`（校验：同源、零外链、零网络调用）；
 4. `npm ci` → `cap sync android` → JDK 17 → `assembleRelease` 固定签名；
 5. 校验 APK 内含 `assets/public/index.html`、且合并后的 Manifest 不含 `INTERNET`；
@@ -129,8 +129,8 @@ git tag v1.0.1 && git push origin v1.0.1
 
 | 文件 | 作用 |
 | --- | --- |
-| `single/src/*` + `single/build.mjs` | 界面唯一事实来源；改完 `node single/build.mjs` |
-| `single/_smoke.mjs` | 82 项回归，CI 第一关 |
+| `lste/src/*` + `lste/build.mjs` | 界面唯一事实来源；改完 `node lste/build.mjs` |
+| `lste/_smoke.mjs` | 82 项回归，CI 第一关 |
 | `mobile/scripts/sync-web.mjs` | 复制单文件产物 → `www/index.html` |
 | `mobile/scripts/verify-web.mjs` | 产物一致性 / 无外链校验 |
 | `mobile/capacitor.config.json` | appId / appName / webDir |

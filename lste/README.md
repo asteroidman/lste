@@ -31,7 +31,7 @@
 
 ## 开发者
 
-- 重新构建：`node single/build.mjs`（把 `miniprogram/utils/` 的引擎 + `single/src/` 的界面内联成一个 HTML）。
-- 回归：`node single/_smoke.mjs`（82 项：构建产物 / 引擎 / PIN / 打印 / 红线词 / UI 接线 / **jsdom 真实点击链路**——学段选择→打卡→设 PIN→改分值→遮罩关闭全流程）。
-- 改界面源码只动 `single/src/*`；引擎红线与小程序同源，**不要**直接改产物 HTML。
+- 重新构建：`node lste/build.mjs`（把 `miniprogram/utils/` 的引擎 + `lste/src/` 的界面内联成一个 HTML）。
+- 回归：`node lste/_smoke.mjs`（82 项：构建产物 / 引擎 / PIN / 打印 / 红线词 / UI 接线 / **jsdom 真实点击链路**——学段选择→打卡→设 PIN→改分值→遮罩关闭全流程）。
+- 改界面源码只动 `lste/src/*`；引擎红线与小程序同源，**不要**直接改产物 HTML。
 - 想要 Android 安装包：见 [`../docs/APK-构建与安装.md`](../docs/APK-构建与安装.md)（Capacitor + GitHub Actions 云构建，零权限、不上架）。

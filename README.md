@@ -10,7 +10,7 @@
 | [`miniprogram/`](miniprogram/) | 微信小程序工程（S1 + S2 + S3 全部完成） | 进行中，`node _smoke_s1.js` → 741 项断言全绿；**真机未验证** |
 | [`lste-wx/`](lste-wx/) | 微信小程序**测试环境**（DevTools 项目根 + Jest/miniprogram-simulate/automator）。`miniprogram/` 是 `../miniprogram` 的镜像（`npm run sync` 生成） | 起步：`npm test` → 引擎 741 + Jest 16 全绿；工具层待开「服务端口」 |
 | [`website/`](website/) | 网页版（Node.js + MySQL，宝塔部署）。**必须登录**；保留只加分/必改3项/双签/家长不可删红线 | **P2 完成**：登录/家庭 + 服务端引擎 + 家长密码门 + 导出免费10次/赞助（收款码+兑换码）+ 奖励CRUD；`npm test` → 36 全绿；部署见 [`website/deploy/DEPLOY-宝塔.md`](website/deploy/DEPLOY-宝塔.md) |
-| [`single/`](single/) | **单文件家庭版**：`罗森塔尔.html` 一个文件、零依赖、零联网，数据只存本机 localStorage；家长 4–8 位 PIN（可改，带离线恢复码）管修改类操作；打印（今日卡/规则表/一周一页）免密；导出 CSV/备份 JSON 需密码 | 完成，`node single/_smoke.mjs` → 82 项断言全绿（含 jsdom 真实点击链路）；重新构建 `node single/build.mjs` |
+| [`lste/`](lste/) | **单文件家庭版**：`罗森塔尔.html` 一个文件、零依赖、零联网，数据只存本机 localStorage；家长 4–8 位 PIN（可改，带离线恢复码）管修改类操作；打印（今日卡/规则表/一周一页）免密；导出 CSV/备份 JSON 需密码 | 完成，`node lste/_smoke.mjs` → 82 项断言全绿（含 jsdom 真实点击链路）；重新构建 `node lste/build.mjs` |
 | [`mobile/`](mobile/) | **Android 壳**（Capacitor）：把单文件产物原样套进 APK，零权限、不上架、自己/家人安装；固定签名保证覆盖升级不清数据 | 工程与 GitHub Actions 云构建就绪；出包见 [`docs/APK-构建与安装.md`](docs/APK-构建与安装.md)（iOS 暂不做） |
 
 另有两个**历史存档**文件，不是代码：`session.v4.jsonl` 与
@@ -23,7 +23,7 @@ cd prototype   && node _smoke.js        # 网页原型：79 / 79
 cd ../miniprogram && node _smoke_s1.js  # 小程序骨架：741 / 741
 cd ../lste-wx  && npm test              # 测试环境：引擎 741 + Jest 16（详见 lste-wx/README.md）
 cd ../website  && npm test              # 网页版：Jest 36（登录/家庭/引擎/PIN/配额/兑换码，详见 website/README-宝塔部署.md）
-node single/_smoke.mjs                  # 单文件版：82 / 82（构建产物 + 引擎 + PIN + 打印 + 红线词 + jsdom 点击链路）
+node lste/_smoke.mjs                  # 单文件版：82 / 82（构建产物 + 引擎 + PIN + 打印 + 红线词 + jsdom 点击链路）
 cd ../mobile   && npm run preflight       # Android 壳出包前预检：回归 + 重建 + 网页一致性/无外链
 ```
 

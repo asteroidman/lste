@@ -1,8 +1,8 @@
 /* ============================================================
    罗森塔尔 · 单文件家庭版 · 构建脚本
    把 miniprogram 的规则引擎（templates/compat/store）+ 界面源码
-   内联进一个 HTML 文件：single/罗森塔尔.html。
-   用法：node single/build.mjs
+   内联进一个 HTML 文件：lste/罗森塔尔.html。
+   用法：node lste/build.mjs
    ============================================================ */
 'use strict';
 

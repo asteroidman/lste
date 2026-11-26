@@ -11,3 +11,8 @@ android/local.properties
 android/.idea/
 android/captures/
 android/.cxx/
+
+# 本地大文件（安装包 / 存档）
+*.apk
+lste.zip
+Screenshot_*.jpg

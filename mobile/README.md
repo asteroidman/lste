@@ -1,6 +1,6 @@
 # 罗森塔尔 · Android 壳（Capacitor）
 
-把 [`../single/罗森塔尔.html`](../single/罗森塔尔.html) 原样套进 Android APK。
+把 [`../lste/罗森塔尔.html`](../lste/罗森塔尔.html) 原样套进 Android APK。
 **不联网、不申请任何权限、不上架**，自己/家人安装。
 
 - 完整流程见 [`../docs/APK-构建与安装.md`](../docs/APK-构建与安装.md)
@@ -32,4 +32,4 @@ cd android && ./gradlew assembleRelease   # 需 JDK 17 + Android SDK；无签名
 | `android/` | Capacitor 生成的原生工程（Manifest 无权限、build.gradle 固定签名） |
 | `www/` | **生成物**，git 忽略；CI 每次重建 |
 
-改界面只动 `../single/src/*`，不要手改 `www/` 或 APK 里的网页。
+改界面只动 `../lste/src/*`，不要手改 `www/` 或 APK 里的网页。

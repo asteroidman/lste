@@ -6,7 +6,7 @@
   "scripts": {
     "web": "node scripts/sync-web.mjs",
     "verify": "node scripts/verify-web.mjs",
-    "preflight": "node ../single/_smoke.mjs && node ../single/build.mjs && npm run web && npm run verify",
+    "preflight": "node ../lste/_smoke.mjs && node ../lste/build.mjs && npm run web && npm run verify",
     "assets": "npx capacitor-assets generate --android && node scripts/fix-adaptive-icons.mjs",
     "sync": "npm run web && npm run verify && npx cap sync android"
   },

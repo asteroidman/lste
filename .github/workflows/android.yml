@@ -5,8 +5,8 @@
 #   KEYSTORE_BASE64 / STORE_PASSWORD / KEY_ALIAS / KEY_PASSWORD
 #
 # 关键设计：
-# · 先跑 single/_smoke.mjs（含 jsdom 真实点击链路），不全绿就不出包；
-# · www/index.html 由 single/罗森塔尔.html 逐字节复制，唯一事实来源不变；
+# · 先跑 lste/_smoke.mjs（含 jsdom 真实点击链路），不全绿就不出包；
+# · www/index.html 由 lste/罗森塔尔.html 逐字节复制，唯一事实来源不变；
 # · 固定签名覆盖安装，升级不清数据；versionCode 用 run_number 单调递增；
 # · 校验 APK 内含本地网页、且合并后的 Manifest 不含 INTERNET。
 
@@ -45,11 +45,11 @@ jobs:
         run: npm ci --no-audit --no-fund
 
       - name: 回归：单文件版（82 项，含 jsdom 真实点击链路）
-        run: node single/_smoke.mjs
+        run: node lste/_smoke.mjs
 
       - name: 生成网页并复制进 Capacitor
         run: |
-          node single/build.mjs
+          node lste/build.mjs
           node mobile/scripts/sync-web.mjs
           node mobile/scripts/verify-web.mjs
 
